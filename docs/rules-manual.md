@@ -56,6 +56,10 @@ list; entries are never rewritten.
 | `D-12` | **The Cadre model is adopted.** A cadre is an *assignment* of tangible population units, recorded so the engine can report where they are. It is not a kind of being. | Closes the main question of `GAP-32`, which is narrowed to the residual cases. Population units are the only tangible population and are counted once: mass, volume, food, and life support belong to the unit and never to the assignment. `TRNE`, `CNST`, `POL`, `SPAG`, `WRKR`, `RBL`, and `SPY` are cadre; `UEM`, `USK`, `PRO`, and `SOL` are Living types. Pay follows the assignment ([§6.2](#62-consumer-goods-and-pay)). `WRKR` records the direct labor requirements of [§19.4](#194-operating-requirements) being met, and is never an additional requirement. Supplies the rules `D-04` left open for `WRKR` and `RBL`. |
 | `D-13` | **Disbanding a cadre returns its population units to the Living type they were assigned from**, available for reassignment. | Closes residual case (b) of `GAP-32`. Reverses the handbook, which returns special agents to Unskilled although they are drafted from Professionals — a permanent downgrade that penalised the player for having used them. Under `D-12` a cadre is only an assignment, so releasing one cannot destroy skill. Special agents now return to Professionals ([§5.2](#52-living-types-and-cadre-assignments), [§17.2](#172-disband)). Arrest is unaffected: rebels arrested by police still become Unemployables. |
 | `D-14` | **Category migration and cadre assignment are separate mechanisms.** Migration moves a unit between Living types and changes the Living counts; assignment records what a unit is doing and changes no count. | Closes residual case (a) of `GAP-32`: soldiers are a Living type because drafting one *migrates* it out of Unskilled, while drafting police, constructors, or trainees only *assigns* an unskilled unit that is still counted as unskilled. Migration is automatic except for the draft and disband of soldiers. Restructures [§5.2](#52-living-types-and-cadre-assignments) into a Living table and a cadre table, and sharpens [§17.1](#171-draft) and [§17.2](#172-disband), which described both mechanisms as conversion. |
+| `D-15` | **A race is the entire population of one home world at the start of a new game.** Each player begins with exactly one race. The engine assigns each race a sequential `Race ID#`. | Closes most of `GAP-33`, which the handbook left as an undefined glossary term. Matches the backstory, in which each cluster colony was settled by one surviving rebel race. Population units are therefore tracked per race, which is what the `Pick Up` syntax requires. Sequential numbering discloses nothing, because every player already knows how many players and races a game has. `GAP-33` is narrowed to whether races differ in any statistic and how a player comes to hold another race's population. |
+| `D-16` | **Races are identical in every statistic**; they differ only in identity. A player comes to hold population of another race **only by capturing another player's ship or colony**. | Closes `GAP-33` except for the order syntax. Capture is the sole route, so a player's holdings are single-race until it first takes an enemy entity, and the race discriminator does no work before then. Captured population transfers with the entity and keeps its race ([§14.16](#1416-invasion-resolution)); race is fixed for the life of the unit and survives any change of owner. A race-based victory condition is planned (`GAP-54`), which is what makes that permanent provenance load-bearing rather than cosmetic. |
+| `D-17` | **Victory is decided by holding habitable planets.** A race holds a colony through its resident `SOL` or `PRO` units and a planet through a majority of its colonies; a player holds a planet by holding every colony on it. Solo and Race victory each require holding `floor(H × 0.5) + 1` habitable planets while no rival holds more than `ceil(H × 0.1) + 1`. | Replaces the handbook's Domination victory. **Victory points no longer exist**: the per-100,000 rate, the Habitability Factor cap, and the oldest-colony contention rule are all dropped, and `GAP-27` and `GAP-42` are restated without them. Adapted from an earlier version of the game that used "species" for race and interposed a Faction layer between player and entity; Faction is deferred and reads as Player throughout ([§18.2](#182-holding)). Closes `GAP-54`, which is withdrawn. **Correction on record:** the source wrote both thresholds with `ceil`, which is not a majority — `ceil(C × 0.5) + 1` demands 2 colonies on a 1-colony planet, making single-colony planets unholdable and contradicting the every-colony rule for players, and `ceil(H × 0.5) + 1` makes a one-planet cluster unwinnable. `floor` is used instead and yields a true majority at every size. |
+| `D-18` | **A race holds a colony by holding a majority of its population**, `floor(P × 0.5) + 1` of the colony's `P` population units, counting every type. | Replaces the "at least one `SOL` or `PRO` of that race" test taken from the earlier version. A majority is unique, so at most one race holds a colony and no colony is counted toward two races at once ([§18.2](#182-holding)). A colony where no race reaches a majority is held by no race. Race holding is now demographic and type-blind, while player holding still turns on ownership plus a soldier or professional; the asymmetry is intended. |
 
 ### 0.5 Notation and conventions
 
@@ -107,7 +111,7 @@ Planet types:
 | Asteroids   | Not allowed (Habitability 0)       | Allowed           | 0                   |
 
 - **Habitability Factor** is an integer property of a planet. It bounds open colony population, farmland, power plants,
-  and victory points.
+  and whether the planet counts toward victory ([§18.3](#183-solo-victory)).
 - Every planet carries several **resource deposits**.
 
 ### 1.4 Resource deposits
@@ -152,6 +156,7 @@ At game start each player has:
 - One Orbiting Colony in the home planet's orbit, at tactical distance 1 from
   `0/0/0`.
 - Tech Level 1 in every item type, unless the game is configured otherwise.
+- A single race, comprising the whole of that home world's population (`D-15`).
 
 The starting inventory, population, and structure of those two colonies are not specified (`GAP-02`).
 
@@ -396,6 +401,20 @@ Every population unit, of every type:
 | Volume                  | 1 `VU`                                                                  |
 | Stowable                | No (except crated in a cargo hold, [§4.4](#44-cargo-holds))             |
 | Requires                | Food; consumer goods (except Unemployables); life support outside `OPC` |
+| Race                    | Exactly one, fixed for the life of the unit                            |
+
+**Races.** A race is the entire population of one home world at the start of a new game (`D-15`). Each player begins
+with exactly one race, so at game start the number of races equals the number of players. The engine assigns each race
+a sequential `Race ID#`. The numbering is not confidential: every player knows how many players and races a game has,
+so a sequential ID discloses nothing.
+
+Population is tracked per race. A `Pick Up` order names the population type and its race together, in the position
+`Item-TL` occupies for an item ([§9.3](#93-pick-up)).
+
+Races are identical in every statistic and differ only in identity (`D-16`). A player comes to hold population of
+another race only by **capturing another player's ship or colony** ([§14.16](#1416-invasion-resolution)); until a player
+takes an enemy entity, everything it owns is its own race. A unit's race never changes, including when its entity
+changes owner, because race decides the Race victory ([§18.4](#184-race-victory)).
 
 ### 5.2 Living types and cadre assignments
 
@@ -1573,6 +1592,9 @@ soldier can be wounded in ground combat. Whether that is intended is `GAP-22`.
 | Neither side eliminated                                             | The battle continues into the following turn                                                                                                                                   |
 | Multiple simultaneous invaders                                      | One invader wins control. The others continue invading until they order a withdrawal. Supporters remain as long as invaders remain.                                            |
 
+A captured entity's population transfers with it and keeps its race (`D-16`, [§5.1](#51-common-properties)). Capture is
+the only way a player comes to hold population of a race other than its own.
+
 How "largest invading force" is measured is not specified (`GAP-22`).
 
 ### 14.17 Support and withdrawal
@@ -1775,19 +1797,50 @@ characters including spaces.
 
 Eliminate every other player.
 
-### 18.2 Domination victory
+### 18.2 Holding
 
-| Rule                 | Value                                                                                                                |
-|----------------------|----------------------------------------------------------------------------------------------------------------------|
-| Victory point source | Open colonies on planets with a Habitability Factor                                                                  |
-| Rate                 | 1 victory point per 100,000 population units in the open colony                                                      |
-| Cap per planet       | The planet's Habitability Factor                                                                                     |
-| Contention           | If several players have open colonies on one planet, the oldest colony (lowest `S/C ID#`) takes victory points first |
-| Home planet          | Habitability Factor 25                                                                                               |
-| Win condition        | More than half of all available victory points **and** more than twice the second-place player's victory points      |
+**Holding** is computed from occupation every turn. It is unrelated to the `Control Planet` order
+([§16.1](#161-control-planet)), which is an exclusive claim a colony makes by order; the two are different mechanisms
+that happen to share the English word "control" in the sources.
 
-How total available victory points are computed, whether victory is evaluated every turn, and how the game terminates
-are not specified (`GAP-27`).
+| Term                     | Definition                                                                                                          |
+|--------------------------|---------------------------------------------------------------------------------------------------------------------|
+| Colony held by a player  | The player owns the colony and it contains at least one `SOL` or `PRO` population unit                              |
+| Colony held by a race    | The race holds a **majority** of the colony's population, counting units of every type (`D-18`)                     |
+| Planet held by a player  | The player holds **every** colony on or orbiting the planet. At least one colony must exist there.                  |
+| Planet held by a race    | The race holds a **majority** of the colonies on or orbiting the planet. At least one colony must exist there.      |
+| Majority                 | `floor(N × 0.5) + 1` of whatever is being counted: colonies on a planet, or population units in a colony (`D-17`)   |
+
+A majority is unique, so **at most one race holds a colony**. A colony in which no race has a majority is held by no
+race; it still counts toward `N` when a planet's colonies are counted, but toward no race's total.
+
+The two colony tests are deliberately different. A player holds a colony by owning it and keeping soldiers or
+professionals in it; a race holds it by demographic weight alone, with no unit type privileged and regardless of who
+owns the colony.
+
+Whether population assigned to the `RBL` cadre counts toward either test is `GAP-56`.
+
+### 18.3 Solo victory
+
+Let `H` be the number of habitable planets in the cluster, that is, those with a Habitability Factor greater than 0. A
+single player wins when both hold:
+
+- It holds at least `floor(H × 0.5) + 1` habitable planets, **and**
+- No other single player holds more than `ceil(H × 0.1) + 1` habitable planets.
+
+### 18.4 Race victory
+
+On the same terms, applied to races. A race wins when both hold:
+
+- It holds at least `floor(H × 0.5) + 1` habitable planets, **and**
+- No other single race holds more than `ceil(H × 0.1) + 1` habitable planets.
+
+Because a race holds a colony through its resident soldiers and professionals rather than through ownership, captured
+population continues to count toward its own race ([§14.16](#1416-invasion-resolution)). Conquest can therefore advance
+the victory of the race conquered.
+
+`H` depends on cluster generation (`GAP-01`). Whether victory is evaluated every turn, how the game terminates, and what
+happens if two conditions are satisfied at once are not specified (`GAP-27`).
 
 ---
 
@@ -2020,7 +2073,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-08` | **Death rate.** The death rate formula; its relationship to life support capacity and habitability; the magnitude of the increase when over capacity or under-fuelled; the magnitude of the reduction when within capacity.                                                                                               |
 | `GAP-09` | **Discontent model.** Malcontent increase and decrease formulas; the malcontent threshold that creates rebels; rebel recruitment rate; rebel food and consumer goods theft quantities; police arrest and kill rates; police injury rate; special agent effectiveness; strike and riot selection, magnitude, and duration. |
 | `GAP-43` | **Back pay and composite pay.** Whether back pay decays or is ever cleared; whether constructor and special agent pay rates track changes to the rates they are composed of.                                                                                                                                              |
-| `GAP-49` | **Player elimination.** What happens when a player's population reaches zero, and what happens to that player's assets.                                                                                                                                                                                                   |
+| `GAP-49` | **Player elimination.** What happens when a player's population reaches zero. The intended route for that player's assets is a computer-controlled faction that keeps them in the victory pool rather than deleting them (`GAP-55`); the trigger, the timing, and the fate of any population still aboard remain open.     |
 
 ### 21.4 Entity model
 
@@ -2045,18 +2098,20 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                                                                                                                                                                                            |
 |----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-27` | **Victory evaluation.** How total available victory points are computed; whether victory is checked every turn; how the game ends; simultaneous victory.                                                                                                                                                                                                                                       |
+| `GAP-56` | **Rebels and holding.** Whether population assigned to the `RBL` cadre counts toward holding, for either victory condition ([§18.2](#182-holding)). Both tests currently admit rebels by default, and neither reading looks deliberate. A rebel keeps its Living type while assigned (`D-12`, `D-14`), so a colony whose only soldiers and professionals are rebels still satisfies the **player** test, and a colony in open revolt is still held by the player it is revolting against. Rebels are also population units of their race, so they count toward the **race** majority, and a race can hold a colony entirely through people working against its owner. Whether rebels are excluded from one test, both, or neither must be decided, along with what happens to a colony lost to rebellion: held by nobody, or passed to the computer-controlled faction that `GAP-55` uses for independent entities, which would keep it in the pool and deny it to everyone. Bears on `GAP-09`, which leaves rebel numbers unspecified, and on `D-16`, since captured population arrives with its malcontents. |
+| `GAP-27` | **Victory evaluation.** Whether victory is checked every turn; how the game ends; what happens when two conditions are satisfied on the same turn, which the handbook addresses only in passing, in the Diplomacy chapter, with "there can only be one Winner". `H`, the number of habitable planets in the cluster, follows from `GAP-01`, as does whether players are told what `H` is. |
 | `GAP-28` | **Markets.** The orders grammar contains `SELL` and `BUY`. No market, price, or trading mechanic exists in any source.                                                                                                                                                                                                                                                                         |
 | `GAP-29` | **Espionage.** `SPY` is adopted by `D-04` with no rules. The handbook describes a superspy concept explicitly as not implemented. An espionage mechanic must be designed: what a spy does, where it operates, how it is detected, and how it interacts with police, special agents, and rebels.                                                                                                |
 | `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. `D-08` places the `Beam` order in the Transfer stage, between `Transfer` and `Pick Up`, which suggests beaming conveys mass rather than damaging a target. What beaming does, what it targets, its range, and whether it draws on transport capacity must still be designed. |
 | `GAP-31` | **Prototype as a unit.** `PRTO` is adopted by `D-04`. Whether it is a distinct manufacturable unit, or a marker for any item held above the player's `TL` as in [§8.4](#84-prototypes), must be decided; the two models are not compatible as written.                                                                                                                                         |
 | `GAP-32` | **Cadre model, residual cases.** `D-12` settles the model itself ([§5.2](#52-living-types-and-cadre-assignments)). `D-13` settles how a cadre is released and `D-14` separates migration from assignment. Two cases remain. (a) `units.md` scopes `WRKR` to `FACT`, `FARM`, and `MINE`, while [§19.4](#194-operating-requirements) also gives laboratories a labor requirement; whether laboratory staff are `WRKR` is undecided. (b) `SPY` has no rules at all (`GAP-29`). |
-| `GAP-33` | **Races.** `Draft`, `Disband`, and `Pick Up` orders describe a mandatory `Race ID#`. Multiple races per player are never defined.                                                                                                                                                                                                                                                              |
+| `GAP-33` | **Race in order syntax.** `D-15` defines a race and `D-16` settles its statistics and how one is acquired. What remains is the order syntax, which the handbook states three incompatible ways: `Pick Up`'s format carries a `Race ID#` bound to the population unit; `Draft` and `Disband` say a `Race ID#` is mandatory while their formats have no field for it; `Pay` says race IDs are not used at all. Which orders take a race, and where in the syntax, must be settled with the order set (`GAP-51`). |
 | `GAP-34` | **Ship designs.** `Set Up` accepts a design ID in place of an item list, and supports a multiplier on a design. The design system is undefined.                                                                                                                                                                                                                                                |
 | `GAP-36` | **Glossary.** The handbook references a glossary of terms throughout and contains only the term list, not the definitions.                                                                                                                                                                                                                                                                     |
 | `GAP-38` | **`Accept` order.** Proposed but not on the roadmap for implementation (`D-09`). It has no rules and no place in the turn sequence. Recorded so the name is not reused for something else.                                                                                                                                                                                                     |
 | `GAP-39` | **`Supply` order.** No longer functional. Fuel resupply to forces in a multi-turn battle therefore has no mechanism.                                                                                                                                                                                                                                                                           |
-| `GAP-42` | **Master / Client diplomacy.** Described as under consideration: client perks equal to `Ally` minus pick up, and transfer of all the client's victory points to the master.                                                                                                                                                                                                                    |
+| `GAP-42` | **Master / Client diplomacy.** Described as under consideration: client perks equal to `Ally` minus pick up, and transfer of all the client's victory points to the master. Victory points no longer exist (`D-17`), so the transfer is expressed instead through the Faction layer: a client's factions are attributed to the master when holdings are counted, which is what carries the perk into the victory conditions. That makes this gap dependent on `GAP-55`. What remains is whether the status is adopted at all, and on what terms it is entered and left. |
+| `GAP-55` | **Faction layer.** An earlier version of the game interposed a Faction between player and entity (`Player → Faction → Entity`), and `§18`'s holding rules were written against it. `D-17` defers the layer and reads Faction as Player. It is not merely historical; it has two live uses. **One:** the Faction is the mechanism by which a Master / Client relationship feeds a client's holdings into the master's victory (`GAP-42`). **Two:** independent colonies and ships — abandoned by their owner, or left behind by an eliminated player — are assigned to a computer-controlled faction rather than removed. They go on holding what they hold, so an abandoned position still denies its planet to everyone else instead of becoming a free gain. Without the layer, abandoned positions either vanish from the pool or stay attributed to an absent player, and both make victory cheaper than intended. Deciding against the layer means finding another route to both. What makes an entity independent — abandonment, elimination, rebellion — is itself undefined; see `GAP-49` and `GAP-56`. Reintroducing the layer touches entity ownership, home port, diplomacy, and the actor of every order, and must be settled before the ownership model is built. |
 | `GAP-51` | **Order set.** The order set for this game is not decided. `docs/orders-grammar.txt` describes a different order vocabulary (`BOMBARD`, `RAID`, `SPY`, `SELL`, `BUY`, `COLONIZE`, `PERMIT`, `NEWS`, `MININGCHANGE`) than the handbook's. Until the order set is decided, the grammar file is unusable and [§22](#22-order-catalogue) is provisional.                                           |
 
 ---
@@ -2108,7 +2163,7 @@ Legend for **Actor**: `S/C` any entity, `Ship`, `Colony`, `Surface` surface colo
 | `Offensive Support`                 | S/C     | Combat / ground             | no       | defending entity, then a list of quantity + item-`TL`, terminated                              |
 | `Pay`                               | Colony  | Pay Change                  | **yes**  | amount + population type, or percentage + `ALL`                                                |
 | `Permission To Colonize`            | Colony  | Permission                  | no       | ship being granted permission                                                                  |
-| `Pick Up`                           | S/C     | Transfer                    | no       | quantity, item-`TL` or population type, source entity                                          |
+| `Pick Up`                           | S/C     | Transfer                    | no       | quantity, item-`TL` or population type + race ID (`GAP-33`), source entity                     |
 | `Pre-Maneuver Energy Weapon Fire`   | S/C     | Combat / pre-maneuver fire  | no       | target, percentage, target category, distance abort                                            |
 | `Pre-Maneuver Missile Fire`         | S/C     | Combat / pre-maneuver fire  | no       | target, percentage, target category, distance abort                                            |
 | `Probe` (orbit)                     | S/C     | Probe                       | no       | star letter or `ALL`, orbit number or `ALL`                                                    |
