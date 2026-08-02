@@ -52,6 +52,7 @@ list; entries are never rewritten.
 | `D-08` | `docs/turn-sequence.md` is **normative design input**. Where it and the handbook differ on the turn sequence, it governs. | Absorbed into [§3](#3-turn-processing-sequence). Adds `Beam` to the Transfer stage, narrowing `GAP-30`; splits the production-stage population changes so that graduations and retirements precede production and births and deaths follow rebel actions; and fixes life support fuel and power consumption at the population-change step, narrowing `GAP-15`. It leaves Produce Output and Send Output empty, confirming `GAP-05`. |
 | `D-09` | The `Accept` order is **not in the game**. | Overrides `D-08` on this one point: `turn-sequence.md` listed `Accept` in the Prefire segment and that line is removed. The order is proposed but is not on the roadmap for implementation. `GAP-38` is restated to say so, and the name is reserved rather than reused. |
 | `D-10` | A **ship's Structure Ratio is 8**, the same as an orbiting colony's. | Closes `GAP-10`, which is withdrawn from [§21](#21-gaps); its number is not reused. No source supplies a ship ratio, so this is a design decision rather than an extracted rule. Every entity type now has a ratio, which is what `D-05` requires before anything can be sized. A ship and an orbiting colony of the same structure `TL` enclose the same volume per structure unit. |
+| `D-11` | **Military supplies (`CSUP`) are retained.** The handbook's "to be deleted" annotation on the item chart is a note to re-examine the item's assembly and operational status, not to remove the item from the game. | `CONFLICT-10` rested on the opposite reading and is deleted from [§20](#20-source-conflicts); it was never a source conflict, and its number is not reused. The follow-through is recorded as `GAP-53`. Soldiers continue to consume 1 per combat round ([§14.11](#1411-ground-combat-units)). |
 
 ### 0.5 Notation and conventions
 
@@ -1467,7 +1468,7 @@ The per-category weights, the random distribution, and the pass logic are not sp
 | Assault craft speed                      | `5 × TL`                                                                                            |
 | Assault craft range                      | `TL` `TDU`                                                                                          |
 | Assault craft fuel                       | Consumed when sent into battle and each turn the battle continues                                   |
-| Soldier supply                           | 1 military supplies per soldier per combat round (`CONFLICT-10`)                                    |
+| Soldier supply                           | 1 combat supply per soldier per combat round (`GAP-53`)                                             |
 | Transport combat range                   | 1 `TDU`                                                                                             |
 | Transport combat capacity                | `3 × TL^2` `MU` per transport per turn                                                              |
 | Transport exposure                       | Transports are not fired upon; they drop troops at 1 `TDU` or less and return                       |
@@ -1844,7 +1845,6 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | `CONFLICT-07` | Hyper engine range               | `sqrt(TL) × 3` `LY`                                                                            | `sqrt(TL) + 4` `LY`                                                                                | Closed by `D-03`: reading A                                                                            |
 | `CONFLICT-08` | Orbit decay in empty orbits      | Empty orbits do not cause decay                                                                | Decay applies in any orbit                                                                         | **Open**                                                                                               |
 | `CONFLICT-09` | Target category effect           | +50% chance to hit items in the category                                                       | Total damage × 0.8, named category absorbs 4× proportionally                                       | **Open** (both readings are the handbook's)                                                            |
-| `CONFLICT-10` | Military supplies                | Soldiers consume 1 per combat round; the item chart marks it "to be deleted"                   | `units.md` keeps it as `CSUP` Combat Supplies                                                      | **Open**: is the item retained?                                                                        |
 | `CONFLICT-11` | Transport fuel                   | Chart text truncated: "`× TL^2` fuel"                                                          | `0.1 × TL^2` fuel                                                                                  | **Open**: the handbook figure is unrecoverable from the source                                         |
 | `CONFLICT-12` | Structure scale and naming       | `Structure` mass `0.1 × TL`; `Light Structure` mass `0.01 × TL`                                | `STRC` mass `1 × TL`; `STRL` mass `0.1 × TL`. `units.md` `STRL` equals the handbook's `Structure`. | Closed by `D-07`: there is no rename, so `D-03` applies and the handbook statistics stand. Both `units.md` rows are in error                            |
 | `CONFLICT-13` | Missile launcher build cost      | Assembly chart `15 × TL` metals; summary chart `15 + TL` metals                                | `15 × TL`                                                                                          | Closed by `D-03`: `15 × TL` (both sources' assembly chart)                                             |
@@ -1876,6 +1876,9 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | Robot Probe Vehicle         | Probe (`PROB`)                              |
 | Structure / Light Structure | `STRC` / `STRL` (codes only, no rename; `D-07`) |
 | Metals / Non-Metals         | Metallics (`METL`) / Non-Metallics (`NMTL`) |
+
+`Military Supplies` and `Combat Supplies` are one item, not two. The rename is deliberate: rebels are not military, and
+a future revision may let them draw on the same supplies. Use `CSUP` and "combat supplies" throughout.
 
 ### 20.3 Corrections to `units.md`
 
@@ -1952,6 +1955,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. |
 | `GAP-40` | **Unimplemented combat features.** Excluding friends and allies from close proximity targeting. Rebel activities described as intended rather than implemented.                                                                   |
 | `GAP-41` | **Orbit decay.** The docking-protection rule for ships without space drives is recorded as not implemented.                                                                                                                       |
+| `GAP-53` | **Military supplies status.** The handbook's item chart annotates `CSUP` "to be deleted", meaning its assembly and operational status should be re-examined, not that the item is removed (`D-11`). Whether `CSUP` should be an assembly item, what its operating requirements are, and whether rebels consume it as well as soldiers, is unreviewed. Not a blocker and not on the roadmap; the item stands as written until then. |
 
 ### 21.6 Systems named but not designed
 
