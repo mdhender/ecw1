@@ -1901,7 +1901,7 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | `CONFLICT-11` | Transport fuel                   | Chart text truncated: "`× TL^2` fuel"                                                          | `0.1 × TL^2` fuel                                                                                  | **Open**: the handbook figure is unrecoverable from the source                                         |
 | `CONFLICT-12` | Structure scale and naming       | `Structure` mass `0.1 × TL`; `Light Structure` mass `0.01 × TL`                                | `STRC` mass `1 × TL`; `STRL` mass `0.1 × TL`. `units.md` `STRL` equals the handbook's `Structure`. | Closed by `D-07`: there is no rename, so `D-03` applies and the handbook statistics stand. Both `units.md` rows are in error                            |
 | `CONFLICT-13` | Missile launcher build cost      | Assembly chart `15 × TL` metals; summary chart `15 + TL` metals                                | `15 × TL`                                                                                          | Closed by `D-03`: `15 × TL` (both sources' assembly chart)                                             |
-| `CONFLICT-14` | Non-assembly stowed volume       | No stowed volume; crating is a cargo hold rule only                                            | Every non-assembly item has a stowed volume, generally half                                        | **Deferred** pending research into the handbook's design history                                       |
+| `CONFLICT-14` | Non-assembly stowed volume       | No unassembled volume at all (`N/A` in the chart); crating is a cargo hold rule only            | Every non-assembly item has a stowed volume; half for `ACFT`, `AMSL`, `AWPN`, `MRBT`, equal to full volume for the other eleven | **Deferred** pending research into the handbook's design history                                       |
 | `CONFLICT-15` | Military robot volume            | `TL + 10`                                                                                      | `2 × (TL + 10)` assembled, `TL + 10` stowed, despite not being an assembly item                    | **Deferred**, follows `CONFLICT-14`                                                                    |
 | `CONFLICT-16` | Pre-maneuver missile fire timing | Order text says "after all ship maneuvers", contradicting its own name and the combat sequence | Combat sequence places it before maneuvers                                                         | **Open**, though the order text is plainly a copy error                                                |
 | `CONFLICT-17` | Game name                        | "Empyrean Cluster Wars"                                                                        | "Epimethean Challenge" / "Empyrean Challenge"                                                      | Closed by `D-01`: **Epimethean Challenge**                                                             |
@@ -1910,6 +1910,13 @@ Open conflicts must be resolved by decision, not by implementation choice.
 bookkeeping compromise whose purpose is to make the ships that haul goods between systems cheaper to build. The
 mechanism is acknowledged to be fragile, and the decision waits on research into how the handbook's design arrived at
 it. Nothing should be built on either reading until then.
+
+Two findings for that research. First, the handbook is not silent on non-assembly stowed volume: its Non-Assembly
+Items and Population Units charts both print `N/A` in the Volume Unassembled column for every row, so the single-volume
+reading is stated, not merely inferred from the absence of a figure. Second, `units.md`'s stowed volumes do not follow
+one rule. `ACFT`, `AMSL`, `AWPN`, and `MRBT` are half their full volume; the other eleven non-assembly items repeat the
+full volume. `AMSL` and `MSSL` are identical in every other statistic yet differ here, which suggests data entry rather
+than design.
 
 ### 20.1 Units adopted without rules
 
@@ -1945,6 +1952,15 @@ a future revision may let them draw on the same supplies. Use `CSUP` and "combat
 | Tech Level range             | Stated 0–10. `D-02` sets 1–200.                                                                                                                                                                                                    | Applied |
 | `STRC` and `STRL` Output     | Read "divided by structural requirement (based on Entity type)". The divisor is the **Structure Ratio**; the Structural Requirement is a different quantity ([§4.2](#42-volume-space-and-structure)). The `1 × TL^2` figure itself is adopted by `D-05`. | Applied |
 | `STRC` and `STRL` statistics | Every statistic on both rows was shifted one item: `STRL` carried `Structure`'s figures and `STRC` a tenfold rescale of them. Corrected values per `D-07` are in the table below.                                                   | Applied |
+| `HDRV` jump range            | Output read `sqrt(TL) + 4`. `CONFLICT-07`, closed by `D-03`, gives `sqrt(TL) × 3`.                                                                                                                                                  | Applied |
+| `FACT` output                | Output read `20 × TL` mass per turn. `CONFLICT-03`, closed by `D-03`, gives `5 × TL` per turn, which is `20 × TL` per **year**.                                                                                                     | Applied |
+| `CSUP` volume                | Volume read `0.04`, equal to its mass. The handbook's Non-Assembly chart gives volume `0.02`. Stowed volume was moved with it to keep the two equal, pending `CONFLICT-14`.                                                         | Applied |
+| `RBL` output                 | Read "Tally of population willing to rebel; does not allocate the underlying units", which contradicts `D-12`: rebels *are* assigned Living units.                                                                                  | Applied |
+| `BMR` statistics             | Mass `40 × (TL + 115)`, metals `10 × (TL + 210)`, non-metals `30 × TL + 2500`, fuel `20 × TL^2`, 1 professional per 25. **No source.** The Beamer appears nowhere in the handbook, in any chart or text. Provenance unknown (`GAP-30`). | **Open** |
+| `PRTO` statistics            | Mass `TL` but volume `3 × TL`, and build costs `TBD`. No source; the handbook has no Prototype item (`GAP-31`).                                                                                                                     | **Open** |
+| `TRNS` fuel                  | `0.1 × TL^2`. The handbook figure is truncated to "`× TL^2` fuel" and is unrecoverable (`CONFLICT-11`).                                                                                                                             | **Open** |
+| `MRBT` volume                | `2 × (TL + 10)`, twice the handbook's `TL + 10`, as though it were an assembly item (`CONFLICT-15`).                                                                                                                                | Deferred |
+| `Volume Stowed` column       | Present for every non-assembly item; the handbook gives those items no unassembled volume at all (`CONFLICT-14`).                                                                                                                   | Deferred |
 
 Structure statistics (`D-03`, `D-07`):
 
@@ -1958,6 +1974,16 @@ Structure statistics (`D-03`, `D-07`):
 
 `units.md` records the assembled volume of both items as negative and states the enclosure in its Output column, since
 the magnitude depends on the containing entity's Structure Ratio and so cannot be a per-item constant.
+
+**Verification status.** Every row of `units.md` has been compared field by field against the handbook's Assembly
+Items, Non-Assembly Items, and Population Units charts.
+
+- All 15 **assembly items** agree exactly on mass, assembled volume, stowed volume, and both build costs. `units.md`
+  states assembled volume where the handbook states unassembled, and the two are consistent under the doubling rule in
+  [§19.1](#191-assembly-and-volume-model).
+- All **population and cadre** rows agree: mass 1, volume 1, no build cost.
+- All **non-assembly items** agree on mass, volume, and both build costs except `CSUP` and `MRBT`, both listed above.
+- The remaining divergences are the `Volume Stowed` column and the unsourced `BMR` and `PRTO` rows.
 
 ---
 
