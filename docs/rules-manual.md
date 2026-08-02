@@ -51,6 +51,7 @@ list; entries are never rewritten.
 | `D-07` | `STRC` is the item code for **Structure** and `STRL` for **Light Structure**. `units.md` renames neither item. | Closes `CONFLICT-12`. The rename hypothesis is withdrawn, so `D-03` governs unimpeded and the handbook statistics stand for both items. `units.md` carries `Structure`'s statistics on its `STRL` row and a tenfold rescale of them on its `STRC` row; both rows are in error. See [§20.3](#203-corrections-to-unitsmd). |
 | `D-08` | `docs/turn-sequence.md` is **normative design input**. Where it and the handbook differ on the turn sequence, it governs. | Absorbed into [§3](#3-turn-processing-sequence). Adds `Beam` to the Transfer stage, narrowing `GAP-30`; splits the production-stage population changes so that graduations and retirements precede production and births and deaths follow rebel actions; and fixes life support fuel and power consumption at the population-change step, narrowing `GAP-15`. It leaves Produce Output and Send Output empty, confirming `GAP-05`. |
 | `D-09` | The `Accept` order is **not in the game**. | Overrides `D-08` on this one point: `turn-sequence.md` listed `Accept` in the Prefire segment and that line is removed. The order is proposed but is not on the roadmap for implementation. `GAP-38` is restated to say so, and the name is reserved rather than reused. |
+| `D-10` | A **ship's Structure Ratio is 8**, the same as an orbiting colony's. | Closes `GAP-10`, which is withdrawn from [§21](#21-gaps); its number is not reused. No source supplies a ship ratio, so this is a design decision rather than an extracted rule. Every entity type now has a ratio, which is what `D-05` requires before anything can be sized. A ship and an orbiting colony of the same structure `TL` enclose the same volume per structure unit. |
 
 ### 0.5 Notation and conventions
 
@@ -290,7 +291,9 @@ An **Entity** (`S/C`) is a ship or a colony. Both hold items, population, resour
 | `OPC`       | 1                        |
 | `ESC`       | 5                        |
 | `OBC`       | 8                        |
-| `Ship`      | Not specified (`GAP-10`) |
+| `Ship`      | 8                        |
+
+Ships take the orbiting colony ratio by decision (`D-10`); no source supplies one.
 
 **Enclosure.** One assembled `Structure` or `Light Structure` unit encloses `TL^2 / StructureRatio` volume units, where
 `TL` is the tech level of that structure unit and `StructureRatio` is that of the entity it is assembled in (`D-05`).
@@ -1936,7 +1939,6 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                      |
 |----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-10` | **Ship structure ratio.** Only `OPC`, `ESC`, and `OBC` ratios are given. `D-05` makes the ratio load-bearing for every entity type, so no ship can be sized until this is chosen.                        |
 | `GAP-12` | **Space accounting.** Whether stockpiles, cargo hold contents, and work in process count toward the volume that must be enclosed. The Space Available formula and the semantics of negative assembled volume are settled by `D-05` ([§4.2](#42-volume-space-and-structure)). |
 | `GAP-13` | **Mass accounting.** What is included in an entity's total mass for speed, lift, probe reporting, and control-planet ties: stockpiles, cargo hold contents, WIP, docked ships.                           |
 | `GAP-16` | **Solar power scope.** Whether solar power is available to surface colonies or ships in orbits 1–5, or only to orbiting colonies. Whether solar power is unlimited.                                      |
