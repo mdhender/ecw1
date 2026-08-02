@@ -53,6 +53,9 @@ list; entries are never rewritten.
 | `D-09` | The `Accept` order is **not in the game**. | Overrides `D-08` on this one point: `turn-sequence.md` listed `Accept` in the Prefire segment and that line is removed. The order is proposed but is not on the roadmap for implementation. `GAP-38` is restated to say so, and the name is reserved rather than reused. |
 | `D-10` | A **ship's Structure Ratio is 8**, the same as an orbiting colony's. | Closes `GAP-10`, which is withdrawn from [§21](#21-gaps); its number is not reused. No source supplies a ship ratio, so this is a design decision rather than an extracted rule. Every entity type now has a ratio, which is what `D-05` requires before anything can be sized. A ship and an orbiting colony of the same structure `TL` enclose the same volume per structure unit. |
 | `D-11` | **Military supplies (`CSUP`) are retained.** The handbook's "to be deleted" annotation on the item chart is a note to re-examine the item's assembly and operational status, not to remove the item from the game. | `CONFLICT-10` rested on the opposite reading and is deleted from [§20](#20-source-conflicts); it was never a source conflict, and its number is not reused. The follow-through is recorded as `GAP-53`. Soldiers continue to consume 1 per combat round ([§14.11](#1411-ground-combat-units)). |
+| `D-12` | **The Cadre model is adopted.** A cadre is an *assignment* of tangible population units, recorded so the engine can report where they are. It is not a kind of being. | Closes the main question of `GAP-32`, which is narrowed to the residual cases. Population units are the only tangible population and are counted once: mass, volume, food, and life support belong to the unit and never to the assignment. `TRNE`, `CNST`, `POL`, `SPAG`, `WRKR`, `RBL`, and `SPY` are cadre; `UEM`, `USK`, `PRO`, and `SOL` are Living types. Pay follows the assignment ([§6.2](#62-consumer-goods-and-pay)). `WRKR` records the direct labor requirements of [§19.4](#194-operating-requirements) being met, and is never an additional requirement. Supplies the rules `D-04` left open for `WRKR` and `RBL`. |
+| `D-13` | **Disbanding a cadre returns its population units to the Living type they were assigned from**, available for reassignment. | Closes residual case (b) of `GAP-32`. Reverses the handbook, which returns special agents to Unskilled although they are drafted from Professionals — a permanent downgrade that penalised the player for having used them. Under `D-12` a cadre is only an assignment, so releasing one cannot destroy skill. Special agents now return to Professionals ([§5.2](#52-living-types-and-cadre-assignments), [§17.2](#172-disband)). Arrest is unaffected: rebels arrested by police still become Unemployables. |
+| `D-14` | **Category migration and cadre assignment are separate mechanisms.** Migration moves a unit between Living types and changes the Living counts; assignment records what a unit is doing and changes no count. | Closes residual case (a) of `GAP-32`: soldiers are a Living type because drafting one *migrates* it out of Unskilled, while drafting police, constructors, or trainees only *assigns* an unskilled unit that is still counted as unskilled. Migration is automatic except for the draft and disband of soldiers. Restructures [§5.2](#52-living-types-and-cadre-assignments) into a Living table and a cadre table, and sharpens [§17.1](#171-draft) and [§17.2](#172-disband), which described both mechanisms as conversion. |
 
 ### 0.5 Notation and conventions
 
@@ -394,27 +397,55 @@ Every population unit, of every type:
 | Stowable                | No (except crated in a cargo hold, [§4.4](#44-cargo-holds))             |
 | Requires                | Food; consumer goods (except Unemployables); life support outside `OPC` |
 
-### 5.2 Population types
+### 5.2 Living types and cadre assignments
 
-| Type           | Recruited from                                                                                | Disbands to | Function                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------|-------------|------------------------------------------------------------------------------------------------|
-| Unemployables  | Births; combat wounded; surrendered soldiers; injured police; arrested rebels                 | —           | None. Cannot work.                                                                             |
-| Unskilled      | Unemployables (automatic); disbanded soldiers, police, constructors, special agents, trainees | —           | Labor in farms, mines, laboratories, factories                                                 |
-| Professionals  | Trainee graduation; soldier retirement                                                        | —           | Skilled labor; pilot transports; train trainees                                                |
-| Trainees       | Draft from Unskilled                                                                          | Unskilled   | Become professionals                                                                           |
-| Soldiers       | Draft from Unskilled                                                                          | Unskilled   | Combat; crew energy weapons, energy shields, missile launchers, assault craft, assault weapons |
-| Constructors   | Draft from Unskilled                                                                          | Unskilled   | Assemble, disassemble, scrap; assist add-on, set up, junk                                      |
-| Police         | Draft from Unskilled                                                                          | Unskilled   | Find and arrest rebels                                                                         |
-| Special Agents | Draft from **Professionals**                                                                  | Unskilled   | Reduce discontent; assist police against rebels                                                |
+Population is tracked by two independent mechanisms (`D-14`):
 
-Note the asymmetry: special agents are drafted from professionals but disband to unskilled.
+- **Category migration** moves a population unit from one Living type to another. The Living counts change. Migration
+  is automatic except for the draft and disband of soldiers.
+- **Cadre assignment** records what a population unit is doing. No Living count changes. What changes is how many units
+  of that type are available for other work.
+
+**Living types.** Every population unit is exactly one of these, always.
+
+| Type          | Migrates in from                                                              | Migrates out to                                                        | Function                                                                                       |
+|---------------|-------------------------------------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| Unemployables | Births; combat wounded; surrendered soldiers; injured police; arrested rebels | Unskilled, automatically (`GAP-07`)                                    | None. Cannot work.                                                                             |
+| Unskilled     | Unemployables; disbanded soldiers                                             | Soldiers, by `Draft`; Professionals, by trainee graduation             | Labor in farms, mines, laboratories, factories                                                 |
+| Professionals | Trainee graduation; soldier retirement                                        | —                                                                      | Skilled labor; pilot transports; train trainees                                                |
+| Soldiers      | Unskilled, by `Draft`                                                         | Unskilled, by `Disband`; Professionals, by retirement; Unemployables, by wounding or surrender | Combat; crew energy weapons, energy shields, missile launchers, assault craft, assault weapons |
+
+**Cadre.** An assignment of Living units to a role. Assigning and releasing never changes a Living count.
+
+| Cadre                 | Assigned from               | Assignment ends on                                              | Function                                                             |
+|-----------------------|-----------------------------|-----------------------------------------------------------------|----------------------------------------------------------------------|
+| Trainees `TRNE`       | Unskilled                   | `Disband`, or graduation, which migrates the unit to Professionals | Become professionals                                                |
+| Constructors `CNST`   | Unskilled                   | `Disband`                                                       | Assemble, disassemble, scrap; assist add-on, set up, junk            |
+| Police `POL`          | Unskilled                   | `Disband`, or injury, which migrates the unit to Unemployables  | Find and arrest rebels                                               |
+| Special Agents `SPAG` | Professionals               | `Disband`                                                       | Reduce discontent; assist police against rebels                      |
+| Workers `WRKR`        | Professionals and Unskilled | Reassignment                                                    | Staff a farm, mine, or factory ([§19.4](#194-operating-requirements)) |
+| Rebels `RBL`          | Any Living type             | Arrest, which migrates the unit to Unemployables; or death      | None. Never work. See [§5.7](#57-rebels).                            |
+| Spies `SPY`           | Not specified (`GAP-29`)    | Not specified                                                   | Not specified                                                        |
+
+How cadre are counted (`D-12`):
+
+- A population unit is counted **once**. Its 1 `MU`, 1 `VU`, food, and life support requirement belong to the unit, never
+  to the assignment. A cadre adds no mass, volume, food, or consumer goods of its own.
+- A unit keeps its Living type while assigned. Drafting 100 unskilled as police leaves the unskilled count unchanged and
+  reduces the unskilled available for assignment by 100.
+- Pay follows the **assignment**, at the rates in [§6.2](#62-consumer-goods-and-pay).
+- An assigned unit is unavailable for any other work.
+- `WRKR` records the population filling the direct labor requirements of [§19.4](#194-operating-requirements). It is a
+  record of those requirements being met, never an additional requirement on top of them.
+- Disbanding a cadre ends the assignment and frees the units for reassignment (`D-13`). No unit is lost or downgraded by
+  being assigned and released. Disbanding **soldiers** is not this: it is a migration back to Unskilled.
 
 ### 5.3 Derived and transient population states
 
 | State       | Nature                                                                                        |
 |-------------|-----------------------------------------------------------------------------------------------|
 | Malcontents | A tally, reported as a percentage of total population. Not an allocation of units.            |
-| Rebels      | Actual units drawn from the other types. Do not work.                                         |
+| Rebels      | Population units assigned to the `RBL` cadre, drawn from any type ([§5.2](#52-living-types-and-cadre-assignments)). Do not work. |
 | Militia     | Temporary. Drafted only during an invasion; returns to the source types when the battle ends. |
 
 ### 5.4 Population flow rules
@@ -430,6 +461,11 @@ Note the asymmetry: special agents are drafted from professionals but disband to
 | Training ratio           | 1 professional per 100 trainees                                                                              |
 | Soldier retirement       | 5% of soldiers per year (every 4 turns) become professionals                                                 |
 | Combat wounded           | Become Unemployables. The share of casualties that are wounded rather than dead is not specified (`GAP-22`). |
+| Police injury            | Police injured during encounters with rebels become Unemployables. The injury rate is not specified (`GAP-09`). |
+
+Injury is not a general mechanism. Only two paths produce it, and only soldiers and police are exposed to them:
+combat casualties ([§14.15](#1415-casualties)) and rebel encounters ([§5.7](#57-rebels)). Surrender and arrest also
+produce Unemployables, but neither is an injury.
 
 The exact birth rate function, the unemployable-to-unskilled draw rate, and the retirement scheduling within the
 four-turn year are gaps (`GAP-07`, `GAP-08`).
@@ -1522,6 +1558,11 @@ unitsLost = floor(lossRatio × unitCount)      per unit type
 
 Fractions are dropped.
 
+The handbook applies this to four unit types only: military robots, assault weapons, soldiers, and assault craft.
+**Militia are excluded**, although they contribute combat factors to the side's total. Read literally, militia raise a
+defender's combat factors and dilute its loss ratio without ever taking a casualty, and no population unit other than a
+soldier can be wounded in ground combat. Whether that is intended is `GAP-22`.
+
 ### 14.16 Invasion resolution
 
 | Condition                                                           | Result                                                                                                                                                                         |
@@ -1656,13 +1697,25 @@ permission.
 
 ### 17.1 Draft
 
-Converts unskilled population into soldiers, constructors, police, or trainees; converts professionals into special
-agents. Processed in the Draft Orders stage.
+Processed in the Draft Orders stage. The order does one of two different things (`D-14`):
+
+| Drafting into                            | Effect                                                                                              |
+|------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| Soldiers                                 | **Migration.** The unskilled count falls and the soldier count rises.                               |
+| Constructors, police, trainees           | **Assignment.** The unskilled count is unchanged; that many unskilled become unavailable for other work. |
+| Special agents                           | **Assignment.** The professional count is unchanged; that many professionals become unavailable.     |
 
 ### 17.2 Disband
 
-Converts soldiers, constructors, police, special agents, or trainees into unskilled population. Processed in the Draft
-Orders stage.
+The inverse of `Draft`, and likewise two different things (`D-14`). Processed in the Draft Orders stage.
+
+| Disbanding                                     | Effect                                                                                           |
+|------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Soldiers                                       | **Migration.** The soldier count falls and the unskilled count rises.                            |
+| Constructors, police, trainees, special agents | **Assignment ends.** No Living count changes; the units become available for reassignment (`D-13`). |
+
+Disbanding costs nothing and destroys nothing. A disbanded special agent is an available professional again, not a
+demoted one.
 
 Both orders reference a `Race ID#` that is described as mandatory. Multiple races per player are never defined
 (`GAP-33`).
@@ -1848,10 +1901,15 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | `CONFLICT-11` | Transport fuel                   | Chart text truncated: "`× TL^2` fuel"                                                          | `0.1 × TL^2` fuel                                                                                  | **Open**: the handbook figure is unrecoverable from the source                                         |
 | `CONFLICT-12` | Structure scale and naming       | `Structure` mass `0.1 × TL`; `Light Structure` mass `0.01 × TL`                                | `STRC` mass `1 × TL`; `STRL` mass `0.1 × TL`. `units.md` `STRL` equals the handbook's `Structure`. | Closed by `D-07`: there is no rename, so `D-03` applies and the handbook statistics stand. Both `units.md` rows are in error                            |
 | `CONFLICT-13` | Missile launcher build cost      | Assembly chart `15 × TL` metals; summary chart `15 + TL` metals                                | `15 × TL`                                                                                          | Closed by `D-03`: `15 × TL` (both sources' assembly chart)                                             |
-| `CONFLICT-14` | Non-assembly stowed volume       | No stowed volume; crating is a cargo hold rule only                                            | Every non-assembly item has a stowed volume, generally half                                        | **Open**                                                                                               |
-| `CONFLICT-15` | Military robot volume            | `TL + 10`                                                                                      | `2 × (TL + 10)` assembled, `TL + 10` stowed, despite not being an assembly item                    | **Open**, follows `CONFLICT-14`                                                                        |
+| `CONFLICT-14` | Non-assembly stowed volume       | No stowed volume; crating is a cargo hold rule only                                            | Every non-assembly item has a stowed volume, generally half                                        | **Deferred** pending research into the handbook's design history                                       |
+| `CONFLICT-15` | Military robot volume            | `TL + 10`                                                                                      | `2 × (TL + 10)` assembled, `TL + 10` stowed, despite not being an assembly item                    | **Deferred**, follows `CONFLICT-14`                                                                    |
 | `CONFLICT-16` | Pre-maneuver missile fire timing | Order text says "after all ship maneuvers", contradicting its own name and the combat sequence | Combat sequence places it before maneuvers                                                         | **Open**, though the order text is plainly a copy error                                                |
 | `CONFLICT-17` | Game name                        | "Empyrean Cluster Wars"                                                                        | "Epimethean Challenge" / "Empyrean Challenge"                                                      | Closed by `D-01`: **Epimethean Challenge**                                                             |
+
+`CONFLICT-14` and `CONFLICT-15` are deferred by the design owner, not merely unexamined. Known intent: cargo is a
+bookkeeping compromise whose purpose is to make the ships that haul goods between systems cheaper to build. The
+mechanism is acknowledged to be fragile, and the decision waits on research into how the handbook's design arrived at
+it. Nothing should be built on either reading until then.
 
 ### 20.1 Units adopted without rules
 
@@ -1861,11 +1919,11 @@ Open conflicts must be resolved by decision, not by implementation choice.
 |--------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `BMR`  | Beamer    | Stated to beam `5000 × TL^2` `MU`. `D-08` fixes when the `Beam` order resolves; what beaming does, what it targets, and its range remain undesigned. (`GAP-30`)                  |
 | `SPY`  | Spy       | The handbook describes a "superspy" concept explicitly as not implemented. No espionage mechanic exists. (`GAP-29`)                                                              |
-| `WRKR` | Worker    | A cadre representing professionals and unskilled allocated to a `FACT`, `FARM`, or `MINE`. Its relationship to the handbook's direct labor requirements is undefined. (`GAP-32`) |
-| `RBL`  | Rebel     | The handbook treats rebels as a tally drawn from other types, not an allocatable unit. (`GAP-32`)                                                                                |
 | `PRTO` | Prototype | The handbook treats prototypes as ordinary higher-`TL` items, not a distinct unit with its own mass and volume. Whether both models coexist is undecided. (`GAP-31`)             |
 
-`units.md` also reclassifies `POL`, `CNST`, `TRNE`, and `SPAG` from population types to `Cadre`. See `GAP-32`.
+`WRKR` and `RBL` were adopted by `D-04` without rules and are given them by `D-12`: both are cadre, that is,
+assignments of population units. `units.md`'s reclassification of `POL`, `CNST`, `TRNE`, and `SPAG` from population
+types to `Cadre` is adopted by the same decision. See [§5.2](#52-living-types-and-cadre-assignments).
 
 ### 20.2 Naming divergences
 
@@ -1952,7 +2010,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                               |
 |----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. |
+| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. Whether **militia** take casualties at all: they contribute combat factors but are absent from the loss-distribution rule ([§14.15](#1415-casualties)). If they do take casualties, which Living types and cadre are eligible for the militia draft, and how losses distribute across them, must also be settled. |
 | `GAP-40` | **Unimplemented combat features.** Excluding friends and allies from close proximity targeting. Rebel activities described as intended rather than implemented.                                                                   |
 | `GAP-41` | **Orbit decay.** The docking-protection rule for ships without space drives is recorded as not implemented.                                                                                                                       |
 | `GAP-53` | **Military supplies status.** The handbook's item chart annotates `CSUP` "to be deleted", meaning its assembly and operational status should be re-examined, not that the item is removed (`D-11`). Whether `CSUP` should be an assembly item, what its operating requirements are, and whether rebels consume it as well as soldiers, is unreviewed. Not a blocker and not on the roadmap; the item stands as written until then. |
@@ -1966,7 +2024,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-29` | **Espionage.** `SPY` is adopted by `D-04` with no rules. The handbook describes a superspy concept explicitly as not implemented. An espionage mechanic must be designed: what a spy does, where it operates, how it is detected, and how it interacts with police, special agents, and rebels.                                                                                                |
 | `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. `D-08` places the `Beam` order in the Transfer stage, between `Transfer` and `Pick Up`, which suggests beaming conveys mass rather than damaging a target. What beaming does, what it targets, its range, and whether it draws on transport capacity must still be designed. |
 | `GAP-31` | **Prototype as a unit.** `PRTO` is adopted by `D-04`. Whether it is a distinct manufacturable unit, or a marker for any item held above the player's `TL` as in [§8.4](#84-prototypes), must be decided; the two models are not compatible as written.                                                                                                                                         |
-| `GAP-32` | **Cadre model.** `WRKR` and `RBL` are adopted by `D-04`. Whether police, constructors, trainees, special agents, workers, spies, and rebels are population types or assignments of population units must be decided, along with how their food, consumer goods, mass, and volume are counted, and how `WRKR` relates to the direct labor requirements in [§19.4](#194-operating-requirements). |
+| `GAP-32` | **Cadre model, residual cases.** `D-12` settles the model itself ([§5.2](#52-living-types-and-cadre-assignments)). `D-13` settles how a cadre is released and `D-14` separates migration from assignment. Two cases remain. (a) `units.md` scopes `WRKR` to `FACT`, `FARM`, and `MINE`, while [§19.4](#194-operating-requirements) also gives laboratories a labor requirement; whether laboratory staff are `WRKR` is undecided. (b) `SPY` has no rules at all (`GAP-29`). |
 | `GAP-33` | **Races.** `Draft`, `Disband`, and `Pick Up` orders describe a mandatory `Race ID#`. Multiple races per player are never defined.                                                                                                                                                                                                                                                              |
 | `GAP-34` | **Ship designs.** `Set Up` accepts a design ID in place of an item list, and supports a multiplier on a design. The design system is undefined.                                                                                                                                                                                                                                                |
 | `GAP-36` | **Glossary.** The handbook references a glossary of terms throughout and contains only the term list, not the definitions.                                                                                                                                                                                                                                                                     |
