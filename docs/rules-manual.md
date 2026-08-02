@@ -21,6 +21,7 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 |----------------------------------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Player handbook (`docs/player-handbook.pdf`) | Informative                   | Third-party document. Not redistributable. Rules extracted here; the PDF is to be deleted once extraction is accepted.                                                                                 |
 | Unit table (`docs/units.md`)                 | Informative, work in progress | Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](#20-source-conflicts). |
+| Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
 | Orders grammar (`docs/orders-grammar.txt`)   | **Not a source**              | Incomplete and describes an order set that does not match the handbook. Excluded until the order set is decided. See [GAP-51](#21-gaps).                                                               |
 
 No text in this manual is copied from the handbook. All rules are restated.
@@ -48,6 +49,8 @@ list; entries are never rewritten.
 | `D-05` | One assembled structure unit **encloses** `TL^2 / StructureRatio` volume units, where `TL` is the structure unit's own and `StructureRatio` is the containing entity's. | Closes `CONFLICT-01` in favour of reading B. The handbook's Structure Ratio sentence states the relation backwards; its Structural Requirement paragraph is the same rule stated on the demand side. Settles the Space Available formula and the meaning of negative assembled volume, narrowing `GAP-12`. Enclosure does not depend on structure mass, so `CONFLICT-12` stays open without blocking the entity model. Raises `GAP-52`. |
 | `D-06` | **Both structure items are retained.** `STRC` exists because `STRL` may be manufactured only in an orbiting colony. | Closes the question raised as `GAP-52`, which is withdrawn; its number is not reused. The restriction on manufacturing `STRL` ([§7.4](#74-factories-and-manufacturing)) is a load-bearing invariant, not an incidental rule: a player expanding into a new system may found an open surface colony, and that colony can only become self-sufficient by manufacturing `STRC` locally. `STRL` being lighter and cheaper for the same enclosure is intended. |
 | `D-07` | `STRC` is the item code for **Structure** and `STRL` for **Light Structure**. `units.md` renames neither item. | Closes `CONFLICT-12`. The rename hypothesis is withdrawn, so `D-03` governs unimpeded and the handbook statistics stand for both items. `units.md` carries `Structure`'s statistics on its `STRL` row and a tenfold rescale of them on its `STRC` row; both rows are in error. See [§20.3](#203-corrections-to-unitsmd). |
+| `D-08` | `docs/turn-sequence.md` is **normative design input**. Where it and the handbook differ on the turn sequence, it governs. | Absorbed into [§3](#3-turn-processing-sequence). Adds `Beam` to the Transfer stage, narrowing `GAP-30`; splits the production-stage population changes so that graduations and retirements precede production and births and deaths follow rebel actions; and fixes life support fuel and power consumption at the population-change step, narrowing `GAP-15`. It leaves Produce Output and Send Output empty, confirming `GAP-05`. |
+| `D-09` | The `Accept` order is **not in the game**. | Overrides `D-08` on this one point: `turn-sequence.md` listed `Accept` in the Prefire segment and that line is removed. The order is proposed but is not on the roadmap for implementation. `GAP-38` is restated to say so, and the name is reserved rather than reused. |
 
 ### 0.5 Notation and conventions
 
@@ -173,7 +176,7 @@ Where a stage processes orders in player-written sequence, that is stated explic
 | 3  | Permission Orders  | Permission to Colonize; Home Port Change; Diplomacy                      |
 | 4  | Disassembly        | Disassemble; Scrap; Junk; Merge; Combine Factory Group                   |
 | 5  | Setup              | Define Cargo Hold; Set Up; Add On                                        |
-| 6  | Transfer           | Unload Cargo; Transfer; Pick Up; Load Cargo                              |
+| 6  | Transfer           | Unload Cargo; Transfer; Beam; Pick Up; Load Cargo                        |
 | 7  | Draft Orders       | Draft; Disband                                                           |
 | 8  | Assembly           | See [§3.2](#32-assembly-stage)                                           |
 | 9  | Surveys and Probes | S/C probes only; Survey; Launch Robot Probe                              |
@@ -225,22 +228,28 @@ Per colony, in order:
 1. Sum and report professionals used to pilot transports.
 2. Collect survey data.
 3. Total automation capacity and life support capacity.
-4. Production, in order: **Power → Mines → Farms → Laboratories → Factories**.
-5. Food consumption.
-6. Consumer goods consumption, including ships that use this colony as home port.
-7. Rebel actions.
-8. Population changes: births, deaths, graduations, retirements.
-9. Statistics update.
+4. Population changes: **graduations and retirements**.
+5. Production, in order: **Power → Mines → Farms → Laboratories → Factories**.
+6. Food consumption.
+7. Consumer goods consumption, including ships that use this colony as home port.
+8. Rebel actions.
+9. Population changes: **births and deaths**. Life supports consume their fuel or power at this step.
+10. Statistics update.
 
 Per ship, in order:
 
 1. Sum and report professionals used to pilot transports.
 2. Total automation capacity and life support capacity.
-3. Farm production.
-4. Food consumption.
-5. Rebel actions.
-6. Population changes: deaths, graduations, retirements. **Ships have no births.**
-7. Statistics update.
+3. Population changes: **graduations and retirements**.
+4. Farm production.
+5. Food consumption.
+6. Rebel actions.
+7. Population changes: **deaths**. Life supports consume their fuel or power at this step. **Ships have no births.**
+8. Statistics update.
+
+Population changes are split across two steps (`D-08`): graduations and retirements are applied before production, so
+the turn's new professionals are available to the turn's production, while births and deaths are applied after
+consumption and rebel actions.
 
 The order in which colonies (and ships) are selected within the stage is not specified (`GAP-06`).
 
@@ -1698,7 +1707,7 @@ characters including spaces.
 
 | Order    | Status                                                                                  |
 |----------|-----------------------------------------------------------------------------------------|
-| `Accept` | Not implemented. Its purpose is stated to be changing before implementation. (`GAP-38`) |
+| `Accept` | **Not in the game** (`D-09`). Proposed, but not on the roadmap for implementation. (`GAP-38`) |
 | `Supply` | No longer functional. It formerly sent fuel to forces engaged in a battle. (`GAP-39`)   |
 
 ---
@@ -1847,7 +1856,7 @@ Open conflicts must be resolved by decision, not by implementation choice.
 
 | Code   | Name      | What is missing                                                                                                                                                                  |
 |--------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `BMR`  | Beamer    | Stated to beam `5000 × TL^2` `MU`. Nothing says what beaming does, what it targets, its range, or when it resolves. (`GAP-30`)                                                   |
+| `BMR`  | Beamer    | Stated to beam `5000 × TL^2` `MU`. `D-08` fixes when the `Beam` order resolves; what beaming does, what it targets, and its range remain undesigned. (`GAP-30`)                  |
 | `SPY`  | Spy       | The handbook describes a "superspy" concept explicitly as not implemented. No espionage mechanic exists. (`GAP-29`)                                                              |
 | `WRKR` | Worker    | A cadre representing professionals and unskilled allocated to a `FACT`, `FARM`, or `MINE`. Its relationship to the handbook's direct labor requirements is undefined. (`GAP-32`) |
 | `RBL`  | Rebel     | The handbook treats rebels as a tally drawn from other types, not an allocatable unit. (`GAP-32`)                                                                                |
@@ -1905,10 +1914,10 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                     |
 |----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-05` | **Produce Output and Send Output stages.** Named in the turn sequence with no content.                                                                                                                                  |
+| `GAP-05` | **Produce Output and Send Output stages.** Named in the turn sequence with no content, by both the handbook and `docs/turn-sequence.md`.                                                                                |
 | `GAP-06` | **Entity iteration order.** The order in which colonies and ships are processed inside the Production stage, and inside every other stage that is not explicitly ordered.                                               |
 | `GAP-14` | **Labor allocation.** How scarce professionals, unskilled, and automation are distributed across farms, mines, laboratories, and factories; whether allocation is per-group or per-item; rounding of partial operation. |
-| `GAP-15` | **Fuel and power allocation.** Priority when fuel and power are insufficient for all assembled items, across production, life support, weapons, and propulsion. Whether power is consumed before fuel.                  |
+| `GAP-15` | **Fuel and power allocation.** Priority when fuel and power are insufficient for all assembled items, across production, life support, weapons, and propulsion. Whether power is consumed before fuel. `D-08` fixes only the timing of life support consumption, at the population-change step of the Production stage. |
 | `GAP-17` | **Rounding.** A general rounding rule. Only ship speed (floor) and defensive weapon counts (ceiling) are specified.                                                                                                     |
 | `GAP-18` | **Randomness.** Which events are random, their distributions, and seeding. The tactical distance metric. The distribution of arrival positions within a Close/Medium/Long band.                                         |
 | `GAP-19` | **Damage allocation algorithm.** Per-category weights, the random distribution, the four-pass logic, and how items within a category are selected for destruction.                                                      |
@@ -1949,13 +1958,13 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-27` | **Victory evaluation.** How total available victory points are computed; whether victory is checked every turn; how the game ends; simultaneous victory.                                                                                                                                                                                                                                       |
 | `GAP-28` | **Markets.** The orders grammar contains `SELL` and `BUY`. No market, price, or trading mechanic exists in any source.                                                                                                                                                                                                                                                                         |
 | `GAP-29` | **Espionage.** `SPY` is adopted by `D-04` with no rules. The handbook describes a superspy concept explicitly as not implemented. An espionage mechanic must be designed: what a spy does, where it operates, how it is detected, and how it interacts with police, special agents, and rebels.                                                                                                |
-| `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. What beaming does, what it targets, its range, and where it resolves in the turn sequence must be designed.                                                                                                                                                  |
+| `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. `D-08` places the `Beam` order in the Transfer stage, between `Transfer` and `Pick Up`, which suggests beaming conveys mass rather than damaging a target. What beaming does, what it targets, its range, and whether it draws on transport capacity must still be designed. |
 | `GAP-31` | **Prototype as a unit.** `PRTO` is adopted by `D-04`. Whether it is a distinct manufacturable unit, or a marker for any item held above the player's `TL` as in [§8.4](#84-prototypes), must be decided; the two models are not compatible as written.                                                                                                                                         |
 | `GAP-32` | **Cadre model.** `WRKR` and `RBL` are adopted by `D-04`. Whether police, constructors, trainees, special agents, workers, spies, and rebels are population types or assignments of population units must be decided, along with how their food, consumer goods, mass, and volume are counted, and how `WRKR` relates to the direct labor requirements in [§19.4](#194-operating-requirements). |
 | `GAP-33` | **Races.** `Draft`, `Disband`, and `Pick Up` orders describe a mandatory `Race ID#`. Multiple races per player are never defined.                                                                                                                                                                                                                                                              |
 | `GAP-34` | **Ship designs.** `Set Up` accepts a design ID in place of an item list, and supports a multiplier on a design. The design system is undefined.                                                                                                                                                                                                                                                |
 | `GAP-36` | **Glossary.** The handbook references a glossary of terms throughout and contains only the term list, not the definitions.                                                                                                                                                                                                                                                                     |
-| `GAP-38` | **`Accept` order.** Not implemented; its purpose is stated to be changing.                                                                                                                                                                                                                                                                                                                     |
+| `GAP-38` | **`Accept` order.** Proposed but not on the roadmap for implementation (`D-09`). It has no rules and no place in the turn sequence. Recorded so the name is not reused for something else.                                                                                                                                                                                                     |
 | `GAP-39` | **`Supply` order.** No longer functional. Fuel resupply to forces in a multi-turn battle therefore has no mechanism.                                                                                                                                                                                                                                                                           |
 | `GAP-42` | **Master / Client diplomacy.** Described as under consideration: client perks equal to `Ally` minus pick up, and transfer of all the client's victory points to the master.                                                                                                                                                                                                                    |
 | `GAP-51` | **Order set.** The order set for this game is not decided. `docs/orders-grammar.txt` describes a different order vocabulary (`BOMBARD`, `RAID`, `SPY`, `SELL`, `BUY`, `COLONIZE`, `PERMIT`, `NEWS`, `MININGCHANGE`) than the handbook's. Until the order set is decided, the grammar file is unusable and [§22](#22-order-catalogue) is provisional.                                           |
@@ -1964,14 +1973,15 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 ## 22. Order catalogue
 
-This catalogue records the handbook's order set. It is provisional; see
+This catalogue records the handbook's order set, plus orders added or removed by decision. It is provisional; see
 `GAP-51`.
 
 Legend for **Actor**: `S/C` any entity, `Ship`, `Colony`, `Surface` surface colony only.
 
 | Order                               | Actor   | Stage                       | Standing | Parameters                                                                                     |
 |-------------------------------------|---------|-----------------------------|----------|------------------------------------------------------------------------------------------------|
-| `Accept`                            | S/C     | —                           | no       | target entity. Not implemented (`GAP-38`)                                                      |
+| `Accept`                            | S/C     | —                           | no       | Not in the game (`D-09`)                                                                       |
+| `Beam`                              | S/C     | Transfer                    | no       | Undesigned (`GAP-30`). Resolves between `Transfer` and `Pick Up`                               |
 | `Add On`                            | S/C     | Setup                       | no       | quantity, item-`TL`, target entity, unassembled flag                                           |
 | `After-Maneuver Energy Weapon Fire` | S/C     | Combat / post-maneuver fire | no       | target, percentage, target category, distance abort                                            |
 | `After-Maneuver Missile Fire`       | S/C     | Combat / post-maneuver fire | no       | target, percentage, target category, distance abort                                            |
