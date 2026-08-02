@@ -45,6 +45,9 @@ list; entries are never rewritten.
 | `D-02` | Tech Levels run **1 through 200**, as in the handbook.                                             | Closes `CONFLICT-04`. `docs/units.md` states 0–10 and is in error; it must be corrected.                                                                                                                                              |
 | `D-03` | **Item codes** come from `docs/units.md`; **mechanics and statistics** come from the handbook.     | Closes `CONFLICT-03`, `CONFLICT-07`, and `CONFLICT-13`, all of which are `units.md` statistics that contradict handbook mechanics. Where `units.md` and the handbook agree on a mechanic, the item code is still the `units.md` code. |
 | `D-04` | The units `BMR`, `SPY`, `WRKR`, `RBL`, and `PRTO` are **adopted into the game** but have no rules. | They remain in the unit vocabulary. Rules for each must be designed before an engine can implement them. See `GAP-29` through `GAP-32`.                                                                                               |
+| `D-05` | One assembled structure unit **encloses** `TL^2 / StructureRatio` volume units, where `TL` is the structure unit's own and `StructureRatio` is the containing entity's. | Closes `CONFLICT-01` in favour of reading B. The handbook's Structure Ratio sentence states the relation backwards; its Structural Requirement paragraph is the same rule stated on the demand side. Settles the Space Available formula and the meaning of negative assembled volume, narrowing `GAP-12`. Enclosure does not depend on structure mass, so `CONFLICT-12` stays open without blocking the entity model. Raises `GAP-52`. |
+| `D-06` | **Both structure items are retained.** `STRC` exists because `STRL` may be manufactured only in an orbiting colony. | Closes the question raised as `GAP-52`, which is withdrawn; its number is not reused. The restriction on manufacturing `STRL` ([§7.4](#74-factories-and-manufacturing)) is a load-bearing invariant, not an incidental rule: a player expanding into a new system may found an open surface colony, and that colony can only become self-sufficient by manufacturing `STRC` locally. `STRL` being lighter and cheaper for the same enclosure is intended. |
+| `D-07` | `STRC` is the item code for **Structure** and `STRL` for **Light Structure**. `units.md` renames neither item. | Closes `CONFLICT-12`. The rename hypothesis is withdrawn, so `D-03` governs unimpeded and the handbook statistics stand for both items. `units.md` carries `Structure`'s statistics on its `STRL` row and a tenfold rescale of them on its `STRC` row; both rows are in error. See [§20.3](#203-corrections-to-unitsmd). |
 
 ### 0.5 Notation and conventions
 
@@ -280,14 +283,32 @@ An **Entity** (`S/C`) is a ship or a colony. Both hold items, population, resour
 | `OBC`       | 8                        |
 | `Ship`      | Not specified (`GAP-10`) |
 
-The relationship between Structure Ratio, structure `TL`, and enclosed volume is stated inconsistently by the sources
-(`CONFLICT-01`). The two candidate readings are:
+**Enclosure.** One assembled `Structure` or `Light Structure` unit encloses `TL^2 / StructureRatio` volume units, where
+`TL` is the tech level of that structure unit and `StructureRatio` is that of the entity it is assembled in (`D-05`).
 
-- **(a)** One assembled structure unit encloses `TL^2 / StructureRatio` volume.
-- **(b)** Enclosing one volume unit requires `TL^2 / StructureRatio` assembled structure units.
+- **Enclosure capacity** of an entity is the sum of `TL^2 / StructureRatio` over its assembled structure units.
+- **Space Available** = enclosure capacity − the volume of the contents that must be enclosed.
+- Structure Ratio is a property of the **entity**, not of the structure unit. The same structure unit encloses eight
+  times less in an `OBC` than in an `OPC`. Structure moved between entities of different type changes the volume it
+  encloses.
+- `Structure` and `Light Structure` of the same `TL` enclose the same volume. They differ in mass, build cost, stowed
+  volume, and where they may be manufactured (`D-06`, [§7.4](#74-factories-and-manufacturing)).
+- The negative assembled volume of structure ([§19.1](#191-assembly-and-volume-model)) has magnitude
+  `TL^2 / StructureRatio`. An assembled structure unit is never itself counted among the contents to be enclosed.
+- Unassembled structure in Storage Inventory occupies its unassembled volume like any other item and is enclosed like
+  any other item.
+- Per-unit enclosure may be fractional. Rounding of the summed capacity is `GAP-17`.
 
-Reading (a) makes higher `TL` structure more efficient and higher-ratio entity types less efficient; reading (b) inverts
-both.
+Equivalent demand-side statement: an entity's **Structural Requirement** is the total volume of its enclosed contents
+times its Structure Ratio, and each assembled structure unit supplies `TL^2` toward that requirement.
+
+Volume enclosed by one assembled structure unit:
+
+| Structure `TL` | `OPC` (ratio 1) | `ESC` (ratio 5) | `OBC` (ratio 8) |
+|----------------|-----------------|-----------------|-----------------|
+| 1              | 1               | 0.2             | 0.125           |
+| 10             | 100             | 20              | 12.5            |
+| 200            | 40,000          | 8,000           | 5,000           |
 
 ### 4.3 Mass
 
@@ -607,7 +628,7 @@ Space effects:
 | Grouping           | Factories are assembled into **Factory Groups**; all factories in a group share one `TL`                    |
 | Product            | One item-`TL` at a time per group                                                                           |
 | Not manufacturable | Food, resources, population                                                                                 |
-| Restricted product | `Light Structure` may only be manufactured in an orbiting colony                                            |
+| Restricted product | `Light Structure` may only be manufactured in an orbiting colony (`D-06`)                                   |
 | Location           | Colonies only. Factory groups cannot be assembled in ships; unassembled factories may be carried in a ship. |
 | Labor              | 1 professional + 3 unskilled per factory                                                                    |
 | Fuel               | `0.5 × TL` per factory per turn                                                                             |
@@ -975,7 +996,7 @@ and inventory.
 | Cross-player       | Requires the target's owner to be set to `Ally` by the acting player                                                           |
 | Quantity limit     | None, beyond transport capacity, constructors, and Space Available                                                             |
 | Failure causes     | Shortage of constructors, transport fuel, transport pilots, transport capacity, or Space Available                             |
-| Structural effect  | Adding assembled structure increases the target's Space Available                                                              |
+| Structural effect  | Adding assembled structure increases the target's Space Available by `TL^2 / StructureRatio` per unit, using the target's Structure Ratio ([§4.2](#42-volume-space-and-structure)) |
 | Unassembled option | Assembly-type items may be left unassembled in the target's Storage Inventory                                                  |
 | Actor              | Need not be the entity that originally set the target up                                                                       |
 | Group targeting    | Factories, mines, and farms may be added to an existing factory group, mine group, or farm group instead of creating a new one |
@@ -1716,7 +1737,7 @@ this manual; see
 |-------------------------------|--------------------------------------------------------------------------------------|
 | Assembly-type items           | Have both an unassembled and an assembled volume. Must be assembled to operate.      |
 | Assembled volume              | Twice the unassembled volume, for every assembly-type item except structure          |
-| Structure and light structure | Have negative assembled volume: they create enclosed volume rather than consuming it |
+| Structure and light structure | Have negative assembled volume of magnitude `TL^2 / StructureRatio` ([§4.2](#42-volume-space-and-structure)): they create enclosed volume rather than consuming it |
 | Non-assembly items            | Operate directly from Storage Inventory; have a single volume                        |
 | Crated volume                 | 50% of normal, in a cargo hold only                                                  |
 | Population and cadre          | 1 `MU` and 1 `VU`, never stowable                                                    |
@@ -1728,7 +1749,7 @@ Item codes are those of `docs/units.md` (`D-03`). Names in parentheses are the h
 
 | Class          | Members                                                                                                                                                                                        |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Structural     | `STRC` Structure, `STRL` Light Structure (see `CONFLICT-12`)                                                                                                                                   |
+| Structural     | `STRC` Structure, `STRL` Light Structure                                                                                                                                                       |
 | Propulsion     | `HDRV` Hyper Drive (Hyper Engines), `SDRV` Space Drive                                                                                                                                         |
 | Static         | `LSU` Life Support                                                                                                                                                                             |
 | Weaponry       | `ESHD` Energy Shield, `EWPN` Energy Weapon, `MLNC` Missile Launcher, `ACFT` Assault Craft, `AWPN` Assault Weapons, `MRBT` Military Robot                                                       |
@@ -1749,6 +1770,7 @@ model governs food, consumer goods, mass, and volume accounting is `GAP-32`.
 
 | Item                 | Value                 | Formula                |
 |----------------------|-----------------------|------------------------|
+| Structure, Light Structure | Volume enclosed | `TL^2 / StructureRatio` |
 | Hyper Engines        | Lift                  | `1045 × TL` `MU`       |
 | Hyper Engines        | Jump range            | `sqrt(TL) × 3` `LY`    |
 | Space Drives         | Thrust                | `3000 × TL^2`          |
@@ -1801,7 +1823,7 @@ Open conflicts must be resolved by decision, not by implementation choice.
 
 | ID            | Subject                          | Reading A (handbook)                                                                           | Reading B (`units.md` or elsewhere)                                                                | Resolution                                                                                             |
 |---------------|----------------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `CONFLICT-01` | Structure capacity               | "Structure required to enclose one volume unit = `TL^2 / ratio`"                               | "One structure unit encloses `TL^2 / ratio` volume"                                                | **Open**                                                                                               |
+| `CONFLICT-01` | Structure capacity               | "Structure required to enclose one volume unit = `TL^2 / ratio`"                               | "One structure unit encloses `TL^2 / ratio` volume"                                                | Closed by `D-05`: reading B. Reading A is the same quotient stated backwards.                          |
 | `CONFLICT-02` | Ration bounds                    | Minimum 25%, maximum 100%                                                                      | May exceed 100%; capped by a 5-turn stockpile and 0.25 food per unit per turn                      | **Open**                                                                                               |
 | `CONFLICT-03` | Factory output                   | `5 × TL` `MU` per turn (`20 × TL` per year)                                                    | `20 × TL` `MU` per turn                                                                            | Closed by `D-03`: reading A                                                                            |
 | `CONFLICT-04` | Tech level range                 | 1 to 200                                                                                       | 0 to 10                                                                                            | Closed by `D-02`: reading A                                                                            |
@@ -1812,7 +1834,7 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | `CONFLICT-09` | Target category effect           | +50% chance to hit items in the category                                                       | Total damage × 0.8, named category absorbs 4× proportionally                                       | **Open** (both readings are the handbook's)                                                            |
 | `CONFLICT-10` | Military supplies                | Soldiers consume 1 per combat round; the item chart marks it "to be deleted"                   | `units.md` keeps it as `CSUP` Combat Supplies                                                      | **Open**: is the item retained?                                                                        |
 | `CONFLICT-11` | Transport fuel                   | Chart text truncated: "`× TL^2` fuel"                                                          | `0.1 × TL^2` fuel                                                                                  | **Open**: the handbook figure is unrecoverable from the source                                         |
-| `CONFLICT-12` | Structure scale and naming       | `Structure` mass `0.1 × TL`; `Light Structure` mass `0.01 × TL`                                | `STRC` mass `1 × TL`; `STRL` mass `0.1 × TL`. `units.md` `STRL` equals the handbook's `Structure`. | **Open**: `D-03` gives handbook statistics, but the apparent rename is deliberate and needs confirming |
+| `CONFLICT-12` | Structure scale and naming       | `Structure` mass `0.1 × TL`; `Light Structure` mass `0.01 × TL`                                | `STRC` mass `1 × TL`; `STRL` mass `0.1 × TL`. `units.md` `STRL` equals the handbook's `Structure`. | Closed by `D-07`: there is no rename, so `D-03` applies and the handbook statistics stand. Both `units.md` rows are in error                            |
 | `CONFLICT-13` | Missile launcher build cost      | Assembly chart `15 × TL` metals; summary chart `15 + TL` metals                                | `15 × TL`                                                                                          | Closed by `D-03`: `15 × TL` (both sources' assembly chart)                                             |
 | `CONFLICT-14` | Non-assembly stowed volume       | No stowed volume; crating is a cargo hold rule only                                            | Every non-assembly item has a stowed volume, generally half                                        | **Open**                                                                                               |
 | `CONFLICT-15` | Military robot volume            | `TL + 10`                                                                                      | `2 × (TL + 10)` assembled, `TL + 10` stowed, despite not being an assembly item                    | **Open**, follows `CONFLICT-14`                                                                        |
@@ -1840,8 +1862,29 @@ Open conflicts must be resolved by decision, not by implementation choice.
 | Hyper Engines               | Hyper Drive (`HDRV`)                        |
 | Military Supplies           | Combat Supplies (`CSUP`)                    |
 | Robot Probe Vehicle         | Probe (`PROB`)                              |
-| Structure / Light Structure | `STRC` / `STRL`, rescaled                   |
+| Structure / Light Structure | `STRC` / `STRL` (codes only, no rename; `D-07`) |
 | Metals / Non-Metals         | Metallics (`METL`) / Non-Metallics (`NMTL`) |
+
+### 20.3 Corrections to `units.md`
+
+| Item                         | Correction                                                                                                                                                                                                                          | Status  |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| Tech Level range             | Stated 0–10. `D-02` sets 1–200.                                                                                                                                                                                                    | Applied |
+| `STRC` and `STRL` Output     | Read "divided by structural requirement (based on Entity type)". The divisor is the **Structure Ratio**; the Structural Requirement is a different quantity ([§4.2](#42-volume-space-and-structure)). The `1 × TL^2` figure itself is adopted by `D-05`. | Applied |
+| `STRC` and `STRL` statistics | Every statistic on both rows was shifted one item: `STRL` carried `Structure`'s figures and `STRC` a tenfold rescale of them. Corrected values per `D-07` are in the table below.                                                   | Applied |
+
+Structure statistics (`D-03`, `D-07`):
+
+| Column             | `STRC` (Structure)                 | `STRL` (Light Structure)           |
+|--------------------|------------------------------------|------------------------------------|
+| Mass               | `0.1 × TL`                         | `0.01 × TL`                        |
+| Volume, assembled  | Negative, magnitude `TL^2 / StructureRatio` ([§4.2](#42-volume-space-and-structure)) | Negative, magnitude `TL^2 / StructureRatio` |
+| Volume, stowed     | `0.05 × TL`                        | `0.005 × TL`                       |
+| Metals to build    | `0.07 × TL`                        | `0.005 × TL`                       |
+| Non-metals to build | `0.03 × TL`                       | `0.005 × TL`                       |
+
+`units.md` records the assembled volume of both items as negative and states the enclosure in its Output column, since
+the magnitude depends on the containing entity's Structure Ratio and so cannot be a per-item constant.
 
 ---
 
@@ -1884,8 +1927,8 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                      |
 |----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-10` | **Ship structure ratio.** Only `OPC`, `ESC`, and `OBC` ratios are given.                                                                                                                                 |
-| `GAP-12` | **Space accounting.** The exact Space Available formula; the semantics of negative assembled volume; whether stockpiles, cargo hold contents, and work in process consume space.                         |
+| `GAP-10` | **Ship structure ratio.** Only `OPC`, `ESC`, and `OBC` ratios are given. `D-05` makes the ratio load-bearing for every entity type, so no ship can be sized until this is chosen.                        |
+| `GAP-12` | **Space accounting.** Whether stockpiles, cargo hold contents, and work in process count toward the volume that must be enclosed. The Space Available formula and the semantics of negative assembled volume are settled by `D-05` ([§4.2](#42-volume-space-and-structure)). |
 | `GAP-13` | **Mass accounting.** What is included in an entity's total mass for speed, lift, probe reporting, and control-planet ties: stockpiles, cargo hold contents, WIP, docked ships.                           |
 | `GAP-16` | **Solar power scope.** Whether solar power is available to surface colonies or ships in orbits 1–5, or only to orbiting colonies. Whether solar power is unlimited.                                      |
 | `GAP-23` | **Transport capacity pool.** Whether transfer capacity is one per-turn pool shared by transfers, pick ups, loads, unloads, surveys, set ups, add-ons, junking, and combat conveyance, or separate pools. |
