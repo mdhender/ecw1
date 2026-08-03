@@ -2,11 +2,12 @@
 
 The starting assets of a new player, in seed form, and the arithmetic that closes them.
 
-> **Normative for the contents of the two starting colonies**, which `D-21` fixes and which are stated here rather than
-> in the manual. [§1.7](./rules-manual.md#17-starting-position) fixes the *shape* of the starting position — the home
-> system, the two colonies, and the facts about them that other rules turn on — and governs wherever it and this
-> document overlap. Everything else in [`rules-manual.md`](./rules-manual.md) governs unconditionally: this document
-> states a starting state, never a rule. Section references below are to the manual.
+> **Normative for the official setup.** `D-21` fixes what the two starting colonies contain and it is stated here rather
+> than in the manual. [§1.7](./rules-manual.md#17-starting-position) fixes the *shape* of that setup — the home system,
+> the two colonies, and the facts about them that other rules turn on — and governs wherever it and this document
+> overlap. A gamemaster may run a variant instead (`D-26`); this document does not describe one, and a variant's numbers
+> must be re-derived rather than scaled. Everything else in [`rules-manual.md`](./rules-manual.md) governs
+> unconditionally: this document states a starting state, never a rule. Section references below are to the manual.
 
 Every figure here is at Tech Level 1, the level a game starts at unless a gamemaster sets another (`D-25`, §8.1). One
 population unit is 100 individuals. Volumes are `VU`, masses `MU`.

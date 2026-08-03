@@ -22,7 +22,6 @@ The manual's own §0.2 is the authority; the ranking is:
 | `docs/rules-manual.md` | **Normative.** Our own work, licensed to distribute. If it disagrees with an implementation, amend the manual first. |
 | `docs/player-handbook.pdf` | **Removed.** Third-party, not redistributable, never committed. Extraction is complete and accepted, and the file is gone; the source URL is recorded in `docs/README.md`. Anything it alone could answer — `CONFLICT-14`, `CONFLICT-15` — now needs a fresh copy. |
 | `docs/units.md` | Informative, work in progress. Source of canonical item codes only (`D-03`); several statistics are known errors. |
-| `docs/orders-grammar.txt` | **Not a source.** Describes an order vocabulary that does not match the handbook; excluded until the order set is decided (`GAP-51`). |
 
 ## Working on the rules manual
 

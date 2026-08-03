@@ -22,10 +22,9 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 | Player handbook (*Empyrean Cluster Wars Manual*) | Informative, **removed** | Third-party document, never ours to distribute. Extraction is complete and accepted, and the file has been removed from the repository; it was never committed. Cited throughout as "the handbook". Source recorded for provenance in [`docs/README.md`](./README.md). |
 | Unit table (`docs/units.md`)                 | Informative, work in progress | Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](./conflicts-and-gaps.md#20-source-conflicts). |
 | Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
-| Orders grammar (`docs/orders-grammar.txt`)   | **Not a source**              | Incomplete and describes an order set that does not match the handbook. Excluded until the order set is decided. See [GAP-51](./conflicts-and-gaps.md#21-gaps).                                                               |
 | Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
 | Conflicts and gaps (`docs/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](./conflicts-and-gaps.md#04-decisions-on-record), [§20](./conflicts-and-gaps.md#20-source-conflicts), and [§21](./conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `CONFLICT-nn` and `GAP-nn` tag in the rules text resolves there, as does every `D-nn` cited in this table. The rules text itself cites no decisions. It records how the rules got here; this manual states where they got to. |
-| Home world setup (`docs/home-world-setup.md`) | **Normative**, for the starting state only | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). [§1.7](#17-starting-position) fixes the shape of the starting position and governs where the two overlap; the rest of this manual governs unconditionally. That document states a starting state, never a rule. |
+| Home world setup (`docs/home-world-setup.md`) | **Normative**, for the official setup | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). It is the authority on what the official setup contains; [§1.7](#17-starting-position) fixes the shape of that setup and governs where the two overlap. A gamemaster may run a variant instead (`D-26`), which neither document describes. The rest of this manual governs unconditionally. |
 
 No text in this manual is copied from the handbook. All rules are restated.
 
@@ -160,7 +159,7 @@ derived.
 
 This section fixes the shape of the starting position. What the two colonies contain — population by Living type and
 cadre, assembled items, Storage Inventory, stockpiles, and structure — is tabulated in
-[`home-world-setup.md`](./home-world-setup.md), which is normative for it.
+[`home-world-setup.md`](./home-world-setup.md), which is normative for the official setup.
 
 At game start each player has:
 
