@@ -39,10 +39,13 @@ Three tracking vocabularies run through the document and must be kept consistent
 - `D-nn` (§0.4) — a design-owner decision. **Entries are never rewritten**, only appended. A
   decision names the conflict or question it closes and its consequences.
 
-When a decision lands, the follow-through is: append `D-nn` in §0.4 → rewrite the affected body
-section to state the rule as fact with no hedging (remove the candidate-readings passage) → update
-the Resolution column in §20 → update §21 for gaps closed or newly exposed → note any correction
-`docs/units.md` now needs.
+All three now live in `docs/conflicts-and-gaps.md`, not in the manual. The manual keeps §0.4, §20,
+and §21 as headings that point there, and that document keeps the manual's numbering.
+
+When a decision lands, the follow-through is: append `D-nn` in §0.4 of
+`docs/conflicts-and-gaps.md` → rewrite the affected body section of the manual to state the rule as
+fact with no hedging (remove the candidate-readings passage) → update the Resolution column in §20
+→ update §21 for gaps closed or newly exposed → note any correction `docs/units.md` now needs.
 
 Ask the design owner (the repo owner) rather than guessing when evidence is genuinely ambiguous —
 wrong foundational formulas are expensive to unwind once a data model depends on them.
