@@ -8,7 +8,7 @@ The starting assets of a new player, in seed form, and the arithmetic that close
 > document overlap. Everything else in [`rules-manual.md`](./rules-manual.md) governs unconditionally: this document
 > states a starting state, never a rule. Section references below are to the manual.
 
-Every figure here is at Tech Level 1, because a player starts at `TL-1` in every item type (§8.1). One population unit
+Every figure here is at Tech Level 1, because every game starts at `TL-1` in every item type (`D-24`, §8.1). One population unit
 is 100 individuals. Volumes are `VU`, masses `MU`.
 
 ---
@@ -24,7 +24,7 @@ is 100 individuals. Volumes are `VU`, masses `MU`.
 | Colonies                | One `OPC` at `0/0/0`; one `OBC` at tactical distance 1 from it    |
 | Ships                   | None                                                              |
 | Population              | 51,000 units (5,100,000 individuals), all of one race             |
-| Tech Level              | 1 in every item type                                              |
+| Tech Level              | 1 in every item type, in every game (`D-24`)                      |
 | Discovered systems      | The home system only                                              |
 
 Both colonies are **home colonies** and may never be given away (§15.3). The `OPC` controls the home planet and its
@@ -212,7 +212,7 @@ No work in process.
 
 | Property                      | Value                                                            |
 |-------------------------------|------------------------------------------------------------------|
-| Tech Level                    | 1 in every item type, unless the game is configured otherwise (`GAP-03`) |
+| Tech Level                    | 1 in every item type, in every game (`D-24`)                     |
 | Races held                    | One, `Race ID#` assigned sequentially by the engine (`D-15`)     |
 | Ships                         | None                                                             |
 | Discovered systems            | The home system only                                             |
@@ -313,6 +313,11 @@ Standard of Living is pay × 4 (§6.5), computed over the whole population inclu
 Both are below 1.0, which §5.6 makes a malcontent driver of unspecified magnitude (`GAP-09`). The default rates cannot
 reach 1.0 for any population that is mostly unskilled: 1.0 requires an average of 0.25 consumer goods per population
 unit per turn and the unskilled rate is 0.125. Raising pay is a `Pay` order (§17.3).
+
+The low opening Standard of Living is intended rather than incidental. It is the pressure toward rapid development: the
+colony is solvent but not comfortable, and the discontent it accrues is what a player spends the opening turns
+outrunning. Nothing in the rules says this — it is design intent recorded here, and an engine reads only the seeded
+`Pay` rates and the §5.6 response to them.
 
 ### 6.3 Labor
 
@@ -559,7 +564,8 @@ Rules the numbers depend on, and open questions they avoid.
 | `CONFLICT-02` | Ration bounds. The seeded 100% is in bounds under both readings, so the conflict is untouched.                            |
 | `CONFLICT-11` | Transport fuel. Unrecoverable; the seeded 10,000 `FUEL` and 3,000 per turn cover it under any reading of a `TL` 1 rate.   |
 | `GAP-01`      | The rest of the home system, and the yields of deposits other than the three named.                                       |
-| `GAP-03`      | Whether a game may start above `TL` 1, which would change every figure here.                                              |
+| `D-24`        | Every game starts at `TL` 1, so this is the seed rather than one of a family of them.                                     |
+| `GAP-03`      | Player count and home system separation. Neither bears on the contents of the two colonies.                              |
 | `GAP-07`, `GAP-08` | Birth and death rates. The seed sets initial populations, not the rates that move them.                             |
 | `GAP-09`      | Discontent. Both colonies begin below Standard of Living 1.0; the malcontent response is unspecified.                     |
 | `GAP-12`      | Work in process. Avoided: no factory group is seeded with any.                                                            |
