@@ -154,6 +154,10 @@ Some home-planet deposits are unlimited in size. Which ones, and how many deposi
 
 ### 1.7 Starting position
 
+This section is the **official setup**. Any other starting position is a variant, which a gamemaster may run and which
+the rules permit, provided it is symmetric across the players of a game. Every value below is chosen rather than
+derived.
+
 This section fixes the shape of the starting position. What the two colonies contain — population by Living type and
 cadre, assembled items, Storage Inventory, stockpiles, and structure — is tabulated in
 [`home-world-setup.md`](./home-world-setup.md), which is normative for it.
