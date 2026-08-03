@@ -74,8 +74,8 @@ done.
 Epimethean Challenge is inspired by Vern Holford's **Empyrean Challenge**, a play-by-mail game. Three
 documents were the evidence these rules were extracted from, and they do not all stand alike.
 
-Empyrean Challenge is owned by **James Colombo**, who gave permission in February 2023 to use the
-manual and create this game engine. The [project README](../README.md) carries the notice.
+Empyrean Challenge is owned by **James Colombo**, who gave permission to use the manual and create
+this game engine. The [project README](../README.md) carries the notice.
 
 **The player handbook**, circulated as the *Empyrean Cluster Wars Manual*, is an extract of the
 original Empyrean Challenge website, which was the game's source of truth. It is not redistributed

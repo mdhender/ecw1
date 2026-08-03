@@ -5,8 +5,8 @@ by **Empyrean Challenge**.
 
 ## Rights and permission
 
-**Empyrean Challenge is owned by James Colombo.** In **February 2023** he gave permission to use the
-manual and to create this game engine. Epimethean Challenge exists under that permission.
+**Empyrean Challenge is owned by James Colombo**, who gave permission to use the manual and to
+create this game engine. Epimethean Challenge exists under that permission.
 
 That permission is not a transfer of ownership. Mr Colombo retains the rights to Empyrean Challenge.
 

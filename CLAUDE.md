@@ -66,7 +66,7 @@ wrong foundational formulas are expensive to unwind once a data model depends on
   gitignored and are task input, not project documentation.
 - `*.pdf` is gitignored, which is what kept the unlicensed handbook out of the repository. It has
   since been removed altogether. Do not commit a copy or quote it verbatim.
-- **Empyrean Challenge is owned by James Colombo**, who gave permission in February 2023 to use the
-  manual and create this engine. The root `README.md` carries the notice; keep it there. The
+- **Empyrean Challenge is owned by James Colombo**, who gave permission to use the manual and create
+  this engine. The root `README.md` carries the notice; keep it there. The
   permission covers use, not redistribution: restate, never quote, and never commit the handbook.
 - The project is MIT licensed, which covers **our own work** only — not Empyrean Challenge itself.
