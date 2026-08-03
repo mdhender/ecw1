@@ -23,6 +23,7 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 | Unit table (`docs/units.md`)                 | Informative, work in progress | Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](#20-source-conflicts). |
 | Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
 | Orders grammar (`docs/orders-grammar.txt`)   | **Not a source**              | Incomplete and describes an order set that does not match the handbook. Excluded until the order set is decided. See [GAP-51](#21-gaps).                                                               |
+| Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
 
 No text in this manual is copied from the handbook. All rules are restated.
 
@@ -60,6 +61,7 @@ list; entries are never rewritten.
 | `D-16` | **Races are identical in every statistic**; they differ only in identity. A player comes to hold population of another race **only by capturing another player's ship or colony**. | Closes `GAP-33` except for the order syntax. Capture is the sole route, so a player's holdings are single-race until it first takes an enemy entity, and the race discriminator does no work before then. Captured population transfers with the entity and keeps its race ([§14.16](#1416-invasion-resolution)); race is fixed for the life of the unit and survives any change of owner. A race-based victory condition is planned (`GAP-54`), which is what makes that permanent provenance load-bearing rather than cosmetic. |
 | `D-17` | **Victory is decided by holding habitable planets.** A race holds a colony through its resident `SOL` or `PRO` units and a planet through a majority of its colonies; a player holds a planet by holding every colony on it. Solo and Race victory each require holding `floor(H × 0.5) + 1` habitable planets while no rival holds more than `ceil(H × 0.1) + 1`. | Replaces the handbook's Domination victory. **Victory points no longer exist**: the per-100,000 rate, the Habitability Factor cap, and the oldest-colony contention rule are all dropped, and `GAP-27` and `GAP-42` are restated without them. Adapted from an earlier version of the game that used "species" for race and interposed a Faction layer between player and entity; Faction is deferred and reads as Player throughout ([§18.2](#182-holding)). Closes `GAP-54`, which is withdrawn. **Correction on record:** the source wrote both thresholds with `ceil`, which is not a majority — `ceil(C × 0.5) + 1` demands 2 colonies on a 1-colony planet, making single-colony planets unholdable and contradicting the every-colony rule for players, and `ceil(H × 0.5) + 1` makes a one-planet cluster unwinnable. `floor` is used instead and yields a true majority at every size. |
 | `D-18` | **A race holds a colony by holding a majority of its population**, `floor(P × 0.5) + 1` of the colony's `P` population units, counting every type. | Replaces the "at least one `SOL` or `PRO` of that race" test taken from the earlier version. A majority is unique, so at most one race holds a colony and no colony is counted toward two races at once ([§18.2](#182-holding)). A colony where no race reaches a majority is held by no race. Race holding is now demographic and type-blind, while player holding still turns on ownership plus a soldier or professional; the asymmetry is intended. |
+| `D-19` | **The Faction layer is not adopted into the rules.** A player owns entities directly. Every entity is owned by exactly one player or is **independent**, owned by none. An entity holding no Soldier and no Professional outside the `RBL` cadre is independent: it accepts no orders, keeps everything it holds, and returns to play only when a player places a soldier or professional in it. Victory is counted by **position** — a player's seat in the game, whether or not an account still plays it. `Master / Client` is not in the game. | Closes `GAP-55`, `GAP-49`, and `GAP-42`; all three are withdrawn and their numbers are not reused. Supersedes `D-17`'s reading of Faction as Player by removing the term: the indirection an implementation may want between the agency directing orders and the entity receiving them is an implementation concern, recorded in `docs/entity-model.md`, which is not normative. [§18.2](#182-holding) needs no third holding subject — an independent entity has no owner, so no player holds it, and the planet test already requires **every** colony on the planet, so one independent colony there denies the planet to every player while its population goes on holding for its race under `D-18`. Elimination stops being a trigger needing its own definition and becomes a readable state: a player owning no entity is eliminated, which covers zero population and also a player left holding only unemployables and unskilled. Narrows `GAP-56` to the race test alone. Raises `GAP-57`, the upkeep of independent entities, and extends `GAP-22` with whether an independent entity drafts militia. `Master / Client` follows `D-09`'s pattern: the name is reserved and its gap withdrawn rather than left open, its ground covered by the `Give` order and by out-of-game delegation, which confers no ownership, no diplomatic status, and no holding. |
 
 ### 0.5 Notation and conventions
 
@@ -73,6 +75,19 @@ list; entries are never rewritten.
 | `RP`   | Research Point                                           |
 | `S/C`  | Ship or Colony; the generic term is **Entity**           |
 | `x^2`  | x squared                                                |
+
+**Own, hold, control.** Three distinct relations that the sources all render with the English word "control". They are
+never interchangeable in this manual:
+
+| Term        | Relation                                                                | Defined in                            |
+|-------------|-------------------------------------------------------------------------|---------------------------------------|
+| **Owns**    | A player to an entity. An entity has one owner or none (`D-19`).        | [§4.8](#48-ownership-and-independence) |
+| **Holds**   | A player or a race to a colony or a planet. Computed, never ordered.    | [§18.2](#182-holding)                  |
+| **Controls** | A surface colony to a planet and its orbit. An exclusive claim, ordered. | [§16.1](#161-control-planet)           |
+
+**Position.** A player's seat in the game. A position is **active** while an account plays it and inactive once that
+account leaves; its entities and their ownership are unaffected either way. Positions, not accounts, are counted by the
+victory conditions ([§18](#18-victory)).
 
 - Quantities of population are in **population units**; one population unit represents 100 individuals.
 - Every unit's statistics are a function of its own `TL`. A `Mines-3` and a
@@ -377,14 +392,48 @@ A colony created this turn cannot unload a ship, because no ship can be docked t
 - The home port pays the ship's crew from its consumer goods.
 - A ship's initial home port is the colony that set it up; if a ship set it up, the mother ship's home port.
 - Changed with `Home Port Change`; both entities must belong to the same player.
-- If the home port is destroyed or captured, the home port becomes the owning player's lowest-numbered colony on the
-  following turn.
+- If the home port is destroyed, captured, or becomes independent, the home port becomes the owning player's
+  lowest-numbered colony on the following turn.
+- An independent ship has no owning player and so has no home port. Its crew goes unpaid (`GAP-57`).
 
 ### 4.7 Entity identity
 
 - Each entity has an `S/C ID#`, allocated at set up but not visible to the player until the following turn's report.
 - Lower `S/C ID#` means older.
 - Entity names are visible to all players. See [§17.7](#177-name).
+
+### 4.8 Ownership and independence
+
+Entities are the only objects that receive orders. An entity is owned by exactly one player, or by none, in which case
+it is **independent** (`D-19`). An entity executes orders from its owner and from no one else; an independent entity
+executes no orders at all.
+
+**Independence test.** An owned entity becomes independent when it holds no Soldier and no Professional. Population
+assigned to the `RBL` cadre is excluded from the test, so an entity whose only soldiers and professionals are rebels
+becomes independent ([§5.7](#57-rebels)). The test is on population type alone, not on quantity: a colony of a million
+Unskilled with no professional is independent, and one professional is enough to keep a colony out of independence
+however large it is.
+
+**Entering independence.** An entity that fails the test becomes independent immediately, in the stage in which it
+fails. Nothing is destroyed or removed. It keeps its items, resources, stockpiles, cargo, population, planetary
+control, and `S/C ID#`, and its population keeps its race (`D-16`).
+
+**Leaving independence.** An independent entity becomes the property of the first player to place a Soldier or
+Professional in it. Population already inside it cannot do this: a professional that an independent entity produces for
+itself, by trainee graduation or soldier retirement, leaves it independent, because no player placed the unit.
+
+Independent entities are not valid targets for `Transfer`, `Pick Up`, `Give`, `Load Cargo`, or `Unload`, so goods and
+population cannot be moved into or out of one. Any order requiring a diplomatic status of the target's owner fails
+against an independent entity, which has no owner to hold a status. Invasion is therefore the only route by which a
+player places population in one ([§14.16](#1416-invasion-resolution)).
+
+**Consequences for holding.** An independent entity has no owner, so no player holds it ([§18.2](#182-holding)). A
+planet is held by a player only when that player holds every colony on or orbiting it, so a single independent colony
+denies the planet to every player. The independent entity's population continues to count toward its race, which may
+still hold the colony and the planet.
+
+An independent entity receives nothing from outside and issues no orders, so its food, pay, life support, and
+production have no stated source (`GAP-57`).
 
 ---
 
@@ -532,6 +581,10 @@ Rebel activity escalates with rebel numbers and malcontent percentage:
 | Demonstrations | None mechanically; a warning signal only                                 |
 | Strikes        | Partial or complete work stoppage in randomly selected production groups |
 | Riots          | Destruction of randomly selected units, plus deaths                      |
+
+Rebels are excluded from the independence test, so an entity whose every soldier and professional is assigned to `RBL`
+becomes independent and passes out of its owner's hands ([§4.8](#48-ownership-and-independence), `D-19`). Whether
+rebels count toward the **race** holding test is still open (`GAP-56`).
 
 Thresholds, rates, magnitudes, durations, theft quantities, police effectiveness, and special agent effectiveness are
 all unspecified (`GAP-09`). The handbook describes rebel activities as intended rather than implemented (`GAP-40`).
@@ -908,6 +961,7 @@ junking, and combat conveyance is not specified (`GAP-23`). Invade orders explic
 | Transports used    | The sending entity's                                                                                  |
 | Permitted contents | Population units, unassembled assembly items, non-assembly items                                      |
 | Cross-player       | Fails unless the receiving player is designated `Friend` or `Ally` and has reciprocated appropriately |
+| Independent entity | Never a valid sender or receiver ([§4.8](#48-ownership-and-independence))                             |
 | Failure causes     | Insufficient transport capacity, fuel, or professionals; insufficient Space Available at the receiver |
 | Processing         | In player-written sequence, one by one, halting at a shortage                                         |
 
@@ -933,6 +987,7 @@ chapter states that mutual `Ally` status enables pick ups.
 | Ship state         | Docked to that colony                                                             |
 | Capacity cost      | One fifth (0.2×) of the capacity an equivalent `Transfer` or `Pick Up` would cost |
 | Cross-player       | Always fails, regardless of diplomatic status                                     |
+| Independent entity | Never a valid actor or target ([§4.8](#48-ownership-and-independence))            |
 | Permitted contents | Population units, unassembled assembly items, non-assembly items                  |
 
 See [§4.4](#44-cargo-holds) for cargo hold semantics and revival losses.
@@ -1595,6 +1650,12 @@ soldier can be wounded in ground combat. Whether that is intended is `GAP-22`.
 A captured entity's population transfers with it and keeps its race (`D-16`, [§5.1](#51-common-properties)). Capture is
 the only way a player comes to hold population of a race other than its own.
 
+**Independent entities.** An independent entity holds no soldiers by definition
+([§4.8](#48-ownership-and-independence)), so it has no standing defending troops and the first row applies to it on the
+turn it is invaded. It becomes the property of the owner of the largest invading force, which is how a player places
+population in one. Whether it drafts militia in its own defence, having no owner to raise them, is not specified
+(`GAP-22`).
+
 How "largest invading force" is measured is not specified (`GAP-22`).
 
 ### 14.17 Support and withdrawal
@@ -1660,7 +1721,11 @@ There is no limit on the number of friends or allies.
 
 Diplomacy orders take effect in the Permission Orders stage and are in force for every later stage of the same turn.
 
-A `Master / Client` status is described as under consideration and is not implemented (`GAP-42`).
+A `Master / Client` status is **not in the game** (`D-19`). The handbook described it as under consideration; it is not
+on the roadmap, and the name is reserved rather than reused.
+
+An independent entity has no owner and therefore holds no diplomatic status in either direction. Every right in the
+table above fails against one ([§4.8](#48-ownership-and-independence)).
 
 ### 15.3 Give
 
@@ -1669,7 +1734,8 @@ A `Master / Client` status is described as under consideration and is not implem
 | Effect               | Transfers ownership of an entity to another player                                      |
 | Requirement          | Mutual `Friend` or `Ally` status on the same turn                                       |
 | Location requirement | The receiving player must have an entity in the same star system                        |
-| Prohibited           | A home colony may never be given away, even if its original owner no longer controls it |
+| Prohibited           | A home colony may never be given away, even if its original owner no longer owns it     |
+| Independent entity   | Can neither be given nor receive ([§4.8](#48-ownership-and-independence))               |
 | Stage                | Give stage, after ship travel                                                           |
 
 What accompanies a given entity — its population, cargo, docked ships, home port assignments — is not specified
@@ -1699,6 +1765,10 @@ travel. Sending or receiving a message establishes `Acquaintance` status in both
 
 Effect: other players cannot establish surface colonies on the planet, or orbiting colonies in that orbit, without
 permission.
+
+A colony that becomes independent keeps the planetary control it held ([§4.8](#48-ownership-and-independence)).
+`Un-Control Planet` is an order, and an independent colony issues none, so that control persists until the colony is
+captured or destroyed and the planet stays closed to colonisation meanwhile.
 
 ### 16.2 Permission To Colonize
 
@@ -1795,17 +1865,22 @@ characters including spaces.
 
 ### 18.1 Total victory
 
-Eliminate every other player.
+A player wins total victory when no other **active** position owns any entity ([§0.5](#05-notation-and-conventions)).
+
+A player is **eliminated** when it owns no entity (`D-19`). Elimination needs no separate trigger: a player whose
+entities all fall independent — through losing their last soldiers and professionals, through rebellion, or through
+capture — owns nothing and is eliminated by that fact. Entities that have gone independent are owned by no position and
+so obstruct no one's total victory, though they go on denying planets under [§18.2](#182-holding).
 
 ### 18.2 Holding
 
-**Holding** is computed from occupation every turn. It is unrelated to the `Control Planet` order
-([§16.1](#161-control-planet)), which is an exclusive claim a colony makes by order; the two are different mechanisms
-that happen to share the English word "control" in the sources.
+**Holding** is computed from occupation every turn. It is one of the three relations distinguished in
+[§0.5](#05-notation-and-conventions): it is not ownership, and it is not the exclusive claim made by the `Control
+Planet` order ([§16.1](#161-control-planet)). The sources render all three with the English word "control".
 
 | Term                     | Definition                                                                                                          |
 |--------------------------|---------------------------------------------------------------------------------------------------------------------|
-| Colony held by a player  | The player owns the colony and it contains at least one `SOL` or `PRO` population unit                              |
+| Colony held by a player  | The player owns the colony and it contains at least one `SOL` or `PRO` population unit outside the `RBL` cadre      |
 | Colony held by a race    | The race holds a **majority** of the colony's population, counting units of every type (`D-18`)                     |
 | Planet held by a player  | The player holds **every** colony on or orbiting the planet. At least one colony must exist there.                  |
 | Planet held by a race    | The race holds a **majority** of the colonies on or orbiting the planet. At least one colony must exist there.      |
@@ -1818,7 +1893,19 @@ The two colony tests are deliberately different. A player holds a colony by owni
 professionals in it; a race holds it by demographic weight alone, with no unit type privileged and regardless of who
 owns the colony.
 
-Whether population assigned to the `RBL` cadre counts toward either test is `GAP-56`.
+**Independent entities.** An independent colony has no owner, so it is held by no player, and no player can hold a
+planet carrying one, since the planet test requires every colony on it
+([§4.8](#48-ownership-and-independence), `D-19`). Its population is unaffected and continues to count toward its race,
+which may hold the colony and the planet outright. An abandoned colony therefore denies its planet to every player
+rather than becoming a free gain for whoever arrives first. A position whose account has left the game is a separate
+case: its entities keep their soldiers and professionals and are not independent, so it goes on holding through them.
+
+Holding is counted by **position**, not by account ([§0.5](#05-notation-and-conventions)). A position whose account has
+left the game keeps its entities and goes on holding through them.
+
+Population assigned to the `RBL` cadre is excluded from the **player** test: a colony whose only soldiers and
+professionals are rebels is independent, so its owner no longer holds it and neither does anyone else (`D-19`). Whether
+rebels count toward the **race** test is still open (`GAP-56`).
 
 ### 18.3 Solo victory
 
@@ -1826,7 +1913,10 @@ Let `H` be the number of habitable planets in the cluster, that is, those with a
 single player wins when both hold:
 
 - It holds at least `floor(H × 0.5) + 1` habitable planets, **and**
-- No other single player holds more than `ceil(H × 0.1) + 1` habitable planets.
+- No other single **position** holds more than `ceil(H × 0.1) + 1` habitable planets.
+
+The rival test counts positions, not active accounts (`D-19`). A position whose account has left the game is still a
+rival, and blocks a solo victory on exactly the terms it did while it was played.
 
 ### 18.4 Race victory
 
@@ -1835,9 +1925,19 @@ On the same terms, applied to races. A race wins when both hold:
 - It holds at least `floor(H × 0.5) + 1` habitable planets, **and**
 - No other single race holds more than `ceil(H × 0.1) + 1` habitable planets.
 
-Because a race holds a colony through its resident soldiers and professionals rather than through ownership, captured
-population continues to count toward its own race ([§14.16](#1416-invasion-resolution)). Conquest can therefore advance
-the victory of the race conquered.
+Race holding is computed from population and not from ownership, in three steps: a race holds an entity by holding a
+majority of the population in it (`D-18`); the entities it holds decide which race holds each planet; and the habitable
+planets it holds are what the two conditions above count. Every step is blind to who owns the entities, so independent
+entities count for their race exactly as owned ones do.
+
+A race victory is credited to every **active** player of that race — the race each player began with (`D-15`), fixed
+for the game and unchanged by capturing population of any other. Players of that race whose accounts have left the game
+are credited nothing. Because the conditions are evaluated on population rather than on players, a race with no active
+players at all can satisfy them, in which case the victory is credited to no one.
+
+Because a race holds a colony by demographic weight rather than through ownership, captured population continues to
+count toward its own race ([§14.16](#1416-invasion-resolution)). Conquest can therefore advance the victory of the race
+conquered.
 
 `H` depends on cluster generation (`GAP-01`). Whether victory is evaluated every turn, how the game terminates, and what
 happens if two conditions are satisfied at once are not specified (`GAP-27`).
@@ -2073,7 +2173,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-08` | **Death rate.** The death rate formula; its relationship to life support capacity and habitability; the magnitude of the increase when over capacity or under-fuelled; the magnitude of the reduction when within capacity.                                                                                               |
 | `GAP-09` | **Discontent model.** Malcontent increase and decrease formulas; the malcontent threshold that creates rebels; rebel recruitment rate; rebel food and consumer goods theft quantities; police arrest and kill rates; police injury rate; special agent effectiveness; strike and riot selection, magnitude, and duration. |
 | `GAP-43` | **Back pay and composite pay.** Whether back pay decays or is ever cleared; whether constructor and special agent pay rates track changes to the rates they are composed of.                                                                                                                                              |
-| `GAP-49` | **Player elimination.** What happens when a player's population reaches zero. The intended route for that player's assets is a computer-controlled faction that keeps them in the victory pool rather than deleting them (`GAP-55`); the trigger, the timing, and the fate of any population still aboard remain open.     |
+| `GAP-57` | **Upkeep of independent entities.** An independent entity issues no orders and can neither send nor receive goods ([§4.8](#48-ownership-and-independence)), so nothing in the manual supplies its food, consumer goods, pay, or life support fuel, and no player can supply them from outside. Whether it continues to farm, mine, and manufacture on its existing assignments, whether its population starves and dies on the ordinary rates ([§5.5](#55-death-rate), [§6.1](#61-food)), and whether an independent ship's unpaid crew accrues back pay ([§6.3](#63-back-pay)) are all unstated. The blockade on `Transfer` and `Give` is deliberate — it is what stops an independent colony from being resupplied into someone's hands — but it also denies a player any way to feed one it intends to capture. |
 
 ### 21.4 Entity model
 
@@ -2089,7 +2189,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                               |
 |----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. Whether **militia** take casualties at all: they contribute combat factors but are absent from the loss-distribution rule ([§14.15](#1415-casualties)). If they do take casualties, which Living types and cadre are eligible for the militia draft, and how losses distribute across them, must also be settled. |
+| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. Whether **militia** take casualties at all: they contribute combat factors but are absent from the loss-distribution rule ([§14.15](#1415-casualties)). If they do take casualties, which Living types and cadre are eligible for the militia draft, and how losses distribute across them, must also be settled. Whether an **independent** entity drafts militia in its own defence, having no owner to raise them, is undecided (`D-19`): if it does, a large independent colony resists invasion in proportion to its population; if it does not, any invading force takes it uncontested. |
 | `GAP-40` | **Unimplemented combat features.** Excluding friends and allies from close proximity targeting. Rebel activities described as intended rather than implemented.                                                                   |
 | `GAP-41` | **Orbit decay.** The docking-protection rule for ships without space drives is recorded as not implemented.                                                                                                                       |
 | `GAP-53` | **Military supplies status.** The handbook's item chart annotates `CSUP` "to be deleted", meaning its assembly and operational status should be re-examined, not that the item is removed (`D-11`). Whether `CSUP` should be an assembly item, what its operating requirements are, and whether rebels consume it as well as soldiers, is unreviewed. Not a blocker and not on the roadmap; the item stands as written until then. |
@@ -2098,7 +2198,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                                                                                                                                                                                            |
 |----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-56` | **Rebels and holding.** Whether population assigned to the `RBL` cadre counts toward holding, for either victory condition ([§18.2](#182-holding)). Both tests currently admit rebels by default, and neither reading looks deliberate. A rebel keeps its Living type while assigned (`D-12`, `D-14`), so a colony whose only soldiers and professionals are rebels still satisfies the **player** test, and a colony in open revolt is still held by the player it is revolting against. Rebels are also population units of their race, so they count toward the **race** majority, and a race can hold a colony entirely through people working against its owner. Whether rebels are excluded from one test, both, or neither must be decided, along with what happens to a colony lost to rebellion: held by nobody, or passed to the computer-controlled faction that `GAP-55` uses for independent entities, which would keep it in the pool and deny it to everyone. Bears on `GAP-09`, which leaves rebel numbers unspecified, and on `D-16`, since captured population arrives with its malcontents. |
+| `GAP-56` | **Rebels and the race holding test.** `D-19` settles the player side: rebels are excluded from it, so a colony whose only soldiers and professionals are rebels goes independent and is held by no player ([§18.2](#182-holding)). The race side is untouched. Rebels are population units of their race, and `D-18` counts every type, so as written a race holds a colony through people who have stopped working and are stealing its food — and an independent colony can be held outright by the race whose rebels emptied it. Whether `D-18`'s "counting every type" is deliberate here or merely unexamined must be decided; the type-blindness of the race test is on record as intended, which argues for admitting rebels, while nothing on record shows the rebel case was in view when it was written. Bears on `GAP-09`, which leaves rebel numbers unspecified, and on `D-16`, since captured population arrives with its malcontents. |
 | `GAP-27` | **Victory evaluation.** Whether victory is checked every turn; how the game ends; what happens when two conditions are satisfied on the same turn, which the handbook addresses only in passing, in the Diplomacy chapter, with "there can only be one Winner". `H`, the number of habitable planets in the cluster, follows from `GAP-01`, as does whether players are told what `H` is. |
 | `GAP-28` | **Markets.** The orders grammar contains `SELL` and `BUY`. No market, price, or trading mechanic exists in any source.                                                                                                                                                                                                                                                                         |
 | `GAP-29` | **Espionage.** `SPY` is adopted by `D-04` with no rules. The handbook describes a superspy concept explicitly as not implemented. An espionage mechanic must be designed: what a spy does, where it operates, how it is detected, and how it interacts with police, special agents, and rebels.                                                                                                |
@@ -2110,8 +2210,6 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-36` | **Glossary.** The handbook references a glossary of terms throughout and contains only the term list, not the definitions.                                                                                                                                                                                                                                                                     |
 | `GAP-38` | **`Accept` order.** Proposed but not on the roadmap for implementation (`D-09`). It has no rules and no place in the turn sequence. Recorded so the name is not reused for something else.                                                                                                                                                                                                     |
 | `GAP-39` | **`Supply` order.** No longer functional. Fuel resupply to forces in a multi-turn battle therefore has no mechanism.                                                                                                                                                                                                                                                                           |
-| `GAP-42` | **Master / Client diplomacy.** Described as under consideration: client perks equal to `Ally` minus pick up, and transfer of all the client's victory points to the master. Victory points no longer exist (`D-17`), so the transfer is expressed instead through the Faction layer: a client's factions are attributed to the master when holdings are counted, which is what carries the perk into the victory conditions. That makes this gap dependent on `GAP-55`. What remains is whether the status is adopted at all, and on what terms it is entered and left. |
-| `GAP-55` | **Faction layer.** An earlier version of the game interposed a Faction between player and entity (`Player → Faction → Entity`), and `§18`'s holding rules were written against it. `D-17` defers the layer and reads Faction as Player. It is not merely historical; it has two live uses. **One:** the Faction is the mechanism by which a Master / Client relationship feeds a client's holdings into the master's victory (`GAP-42`). **Two:** independent colonies and ships — abandoned by their owner, or left behind by an eliminated player — are assigned to a computer-controlled faction rather than removed. They go on holding what they hold, so an abandoned position still denies its planet to everyone else instead of becoming a free gain. Without the layer, abandoned positions either vanish from the pool or stay attributed to an absent player, and both make victory cheaper than intended. Deciding against the layer means finding another route to both. What makes an entity independent — abandonment, elimination, rebellion — is itself undefined; see `GAP-49` and `GAP-56`. Reintroducing the layer touches entity ownership, home port, diplomacy, and the actor of every order, and must be settled before the ownership model is built. |
 | `GAP-51` | **Order set.** The order set for this game is not decided. `docs/orders-grammar.txt` describes a different order vocabulary (`BOMBARD`, `RAID`, `SPY`, `SELL`, `BUY`, `COLONIZE`, `PERMIT`, `NEWS`, `MININGCHANGE`) than the handbook's. Until the order set is decided, the grammar file is unusable and [§22](#22-order-catalogue) is provisional.                                           |
 
 ---
@@ -2122,6 +2220,9 @@ This catalogue records the handbook's order set, plus orders added or removed by
 `GAP-51`.
 
 Legend for **Actor**: `S/C` any entity, `Ship`, `Colony`, `Surface` surface colony only.
+
+Every actor below is an entity acting for its owner, except `Diplomacy`, which a player issues directly. An independent
+entity has no owner and is the actor of no order ([§4.8](#48-ownership-and-independence)).
 
 | Order                               | Actor   | Stage                       | Standing | Parameters                                                                                     |
 |-------------------------------------|---------|-----------------------------|----------|------------------------------------------------------------------------------------------------|
