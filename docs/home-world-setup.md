@@ -20,7 +20,7 @@ is 100 individuals. Volumes are `VU`, masses `MU`.
 | Star systems            | One, the home system, at `0,0,0` in the player's own frame        |
 | Stars                   | One                                                               |
 | Home planet             | Terrestrial, Habitability Factor 25, orbit 3                      |
-| Unlimited deposits      | Three on the home planet: one `Fuel`, one `Metals`, one `Non-Metals`, each at 80% yield |
+| Unlimited deposits      | Three on the home planet: `Fuel` at 80% yield, `Metals` at 40%, `Non-Metals` at 40%  |
 | Colonies                | One `OPC` at `0/0/0`; one `OBC` at tactical distance 1 from it    |
 | Ships                   | None                                                              |
 | Population              | 51,000 units (5,100,000 individuals), all of one race             |
@@ -66,8 +66,8 @@ Structure Ratio 1, so one assembled `STRC-1` encloses 1 `VU` (§4.2).
 | Living type | Units      |
 |-------------|------------|
 | `UEM`       | 2,500      |
-| `USK`       | 43,000     |
-| `PRO`       | 3,500      |
+| `USK`       | 42,500     |
+| `PRO`       | 4,000      |
 | `SOL`       | 1,000      |
 | **Total**   | **50,000** |
 
@@ -77,7 +77,7 @@ An assignment changes no Living count (`D-12`, `D-14`).
 
 | Cadre  | Assigned                  | Drawn from        |
 |--------|---------------------------|-------------------|
-| `WRKR` | 2,700 `PRO` + 8,100 `USK` | Farms, mines, factories |
+| `WRKR` | 3,260 `PRO` + 9,780 `USK` | Farms, mines, factories |
 | `CNST` | 500 `USK`                 | Unskilled         |
 | `TRNE` | 1,000 `USK`               | Unskilled         |
 | `POL`  | 0                         | —                 |
@@ -88,7 +88,7 @@ An assignment changes no Living count (`D-12`, `D-14`).
 Not recorded as cadre: 300 `PRO` + 100 `USK` staffing the laboratories (`GAP-32` leaves the record open and no count
 turns on it), 20 `PRO` piloting transports, 10 `PRO` training the trainees.
 
-Unassigned and available: 470 `PRO`, 33,300 `USK`.
+Unassigned and available: 410 `PRO`, 31,120 `USK`.
 
 ### 3.3 Assembled items
 
@@ -97,12 +97,12 @@ Unassigned and available: 470 `PRO`, 33,300 `USK`.
 | `STRC-1` | 350,000  | —                                         | encloses 350,000 |
 | `FARM-1` | 600      | Farm group, `TL` 1                        | 4,800   |
 | `MINE-1` | 150      | Mine Group 1, unlimited `Fuel` deposit    | 1,800   |
-| `MINE-1` | 200      | Mine Group 2, unlimited `Metals` deposit  | 2,400   |
-| `MINE-1` | 250      | Mine Group 3, unlimited `Non-Metals` deposit | 3,000 |
-| `FACT-1` | 900      | Factory Group 1, product `CSGD`           | 12,600  |
+| `MINE-1` | 450      | Mine Group 2, unlimited `Metals` deposit  | 5,400   |
+| `MINE-1` | 500      | Mine Group 3, unlimited `Non-Metals` deposit | 6,000 |
+| `FACT-1` | 960      | Factory Group 1, product `CSGD`           | 13,440  |
 | `FACT-1` | 600      | Factory Group 2, product `STRC-1`         | 8,400   |
 | `LAB-1`  | 100      | —                                         | 1,000   |
-| `POWR-1` | 1,500    | —                                         | 18,000  |
+| `POWR-1` | 1,750    | —                                         | 21,000  |
 | `SENS-1` | 10       | —                                         | 30,000  |
 
 Neither factory group holds work in process. Each starts its first batch on turn 1 and finishes it on turn 5 (§7.4).
@@ -125,16 +125,16 @@ At the four-turn target (§6.4).
 | Commodity | Quantity | Volume  |
 |-----------|----------|---------|
 | `FOOD`    | 50,000   | 150,000 |
-| `CSGD`    | 28,500   | 8,550   |
+| `CSGD`    | 29,000   | 8,700   |
 
 ### 3.6 Totals
 
 | Quantity            | Value       |
 |---------------------|-------------|
 | Enclosure capacity  | 350,000 `VU` |
-| Enclosed contents   | 305,350 `VU` |
-| Space Available     | 44,650 `VU`  |
-| Total mass          | 552,900 `MU` |
+| Enclosed contents   | 315,340 `VU` |
+| Space Available     | 34,660 `VU`  |
+| Total mass          | 563,040 `MU` |
 
 ---
 
@@ -237,13 +237,13 @@ Every balance closes with a margin. The sections that follow derive each line.
 | Balance             | Supply                        | Demand                                                  | Margin      |
 |---------------------|-------------------------------|---------------------------------------------------------|-------------|
 | Food                | 15,000 (`OPC` farms)          | 12,750 (both colonies)                                  | +2,250      |
-| Consumer goods      | 7,500 (`OPC` factory group 1) | 7,318.75 (both colonies)                                | +181.25     |
-| `METL`              | 4,000 (`OPC` mine group 2)    | 3,975                                                   | +25         |
-| `NMTL`              | 5,000 (`OPC` mine group 3)    | 4,275                                                   | +725        |
+| Consumer goods      | 8,000 (`OPC` factory group 1) | 7,443.75 (both colonies)                                | +556.25     |
+| `METL`              | 4,500 (`OPC` mine group 2)    | 4,075                                                   | +425        |
+| `NMTL`              | 5,000 (`OPC` mine group 3)    | 4,475                                                   | +525        |
 | `FUEL`              | 3,000 (`OPC` mine group 1)    | Transports only (`CONFLICT-11`)                         | accumulates |
-| Power               | 1,500 (`OPC` power plants)    | 1,400.5                                                 | +99.5       |
-| `OPC` `PRO`         | 3,500                         | 3,030                                                   | +470        |
-| `OPC` `USK`         | 43,000                        | 9,700                                                   | +33,300     |
+| Power               | 1,750 (`OPC` power plants)    | 1,680.5                                                 | +69.5       |
+| `OPC` `PRO`         | 4,000                         | 3,590                                                   | +410        |
+| `OPC` `USK`         | 42,500                        | 11,380                                                  | +31,120     |
 | `OBC` `PRO`         | 200                           | 155                                                     | +45         |
 | `OBC` `USK`         | 700                           | 500                                                     | +200        |
 | Life support, `OBC` | 1,200 population units        | 1,000                                                   | +200        |
@@ -278,10 +278,10 @@ population may draw from a stockpile (§6.4). Five turns, the cap on what the po
 |---------------------------------------------|--------|-------|----------|
 | `UEM`                                       | 2,500  | 0     | 0        |
 | `SOL`                                       | 1,000  | 0.250 | 250      |
-| `PRO`                                       | 3,500  | 0.375 | 1,312.5  |
-| `USK`, including `TRNE` at the unskilled rate | 42,500 | 0.125 | 5,312.5  |
+| `PRO`                                       | 4,000  | 0.375 | 1,500    |
+| `USK`, including `TRNE` at the unskilled rate | 42,000 | 0.125 | 5,250    |
 | `CNST`                                      | 500    | 0.500 | 250      |
-| **Total**                                   |        |       | **7,125** |
+| **Total**                                   |        |       | **7,250** |
 
 `OBC`:
 
@@ -294,20 +294,20 @@ population may draw from a stockpile (§6.4). Five turns, the cap on what the po
 | `CNST`     | 50    | 0.500 | 25       |
 | **Total**  |       |       | **193.75** |
 
-Combined demand 7,318.75 per turn. Factory Group 1 supplies `900 × 20 / 0.6 = 30,000` `CSGD` per year, 7,500 per turn,
-a surplus of 181.25.
+Combined demand 7,443.75 per turn. Factory Group 1 supplies `960 × 20 / 0.6 = 32,000` `CSGD` per year, 8,000 per turn,
+a surplus of 556.25.
 
 That output first reaches Storage Inventory on turn 5, because a batch takes four turns (§7.4). The 30,000 `CSGD` in
-the `OPC`'s Storage Inventory covers `4 × 7,318.75 = 29,275`, four turns of both colonies' pay, with 725 spare.
+the `OPC`'s Storage Inventory covers `4 × 7,443.75 = 29,775`, four turns of both colonies' pay, with 225 spare.
 
-Stockpiles are at the four-turn target: 28,500 in the `OPC`, 775 in the `OBC`. The 25% per turn the population may draw
+Stockpiles are at the four-turn target: 29,000 in the `OPC`, 775 in the `OBC`. The 25% per turn the population may draw
 from a stockpile at target is exactly one turn's pay in each case.
 
 Standard of Living is pay × 4 (§6.5), computed over the whole population including unemployables:
 
 | Colony | Consumed per turn | Population | Standard of Living |
 |--------|-------------------|------------|--------------------|
-| `OPC`  | 7,125             | 50,000     | 0.570              |
+| `OPC`  | 7,250             | 50,000     | 0.580              |
 | `OBC`  | 193.75            | 1,000      | 0.775              |
 
 Both are below 1.0, which §5.6 makes a malcontent driver of unspecified magnitude (`GAP-09`). The default rates cannot
@@ -324,28 +324,28 @@ laboratory (§19.4); 1 professional per 10 transports (§9.1); 1 professional pe
 | Use                        | `PRO`     |
 |----------------------------|-----------|
 | 600 farms                  | 600       |
-| 600 mines                  | 600       |
-| 1,500 factories            | 1,500     |
+| 1,100 mines                | 1,100     |
+| 1,560 factories            | 1,560     |
 | 100 laboratories           | 300       |
 | 200 transports             | 20        |
 | 1,000 trainees             | 10        |
-| **Committed**              | **3,030** |
-| Held                       | 3,500     |
-| Spare                      | 470       |
+| **Committed**              | **3,590** |
+| Held                       | 4,000     |
+| Spare                      | 410       |
 
 `OPC` unskilled:
 
 | Use                        | `USK`     |
 |----------------------------|-----------|
 | 600 farms                  | 1,800     |
-| 600 mines                  | 1,800     |
-| 1,500 factories            | 4,500     |
+| 1,100 mines                | 3,300     |
+| 1,560 factories            | 4,680     |
 | 100 laboratories           | 100       |
 | `CNST`                     | 500       |
 | `TRNE`                     | 1,000     |
-| **Committed**              | **9,700** |
-| Held                       | 43,000    |
-| Spare                      | 33,300    |
+| **Committed**              | **11,380** |
+| Held                       | 42,500    |
+| Spare                      | 31,120    |
 
 `OBC`: 155 of 200 `PRO` committed (150 factories, 5 transports); 500 of 700 `USK` committed (450 factories, 50 `CNST`).
 
@@ -360,15 +360,15 @@ require no labor, no fuel, and no resources.
 | Consumer            | Rate           | Per turn |
 |---------------------|----------------|----------|
 | 600 `FARM-1`        | 0.5 each       | 300      |
-| 600 `MINE-1`        | `0.5 × TL`     | 300      |
-| 1,500 `FACT-1`      | `0.5 × TL`     | 750      |
+| 1,100 `MINE-1`      | `0.5 × TL`     | 550      |
+| 1,560 `FACT-1`      | `0.5 × TL`     | 780      |
 | 100 `LAB-1`         | `0.5 × TL`     | 50       |
 | 10 `SENS-1`         | `0.05 × TL`    | 0.5      |
-| **Total demand**    |                | **1,400.5** |
-| 1,500 `POWR-1`      | `1 × TL` each  | 1,500    |
-| Surplus             |                | 99.5     |
+| **Total demand**    |                | **1,680.5** |
+| 1,750 `POWR-1`      | `1 × TL` each  | 1,750    |
+| Surplus             |                | 69.5     |
 
-Power plants are capped at `Habitability Factor × 100,000` = 2,500,000 per planet (§7.7); 1,500 are used. Power cannot
+Power plants are capped at `Habitability Factor × 100,000` = 2,500,000 per planet (§7.7); 1,750 are used. Power cannot
 be stored.
 
 The `OPC` therefore consumes no fuel for production. Its only fuel demand is its transports, whose rate is
@@ -385,20 +385,22 @@ Per turn, at the seeded production:
 
 | Draw                                    | `METL`    | `NMTL`    |
 |-----------------------------------------|-----------|-----------|
-| 7,500 `CSGD` at 0.2 / 0.4               | 1,500     | 3,000     |
+| 8,000 `CSGD` at 0.2 / 0.4               | 1,600     | 3,200     |
 | 30,000 `STRC-1` at 0.07 / 0.03          | 2,100     | 900       |
 | 75,000 `STRL-1` at 0.005 / 0.005, shipped to the `OBC` | 375 | 375  |
-| **Total**                               | **3,975** | **4,275** |
+| **Total**                               | **4,075** | **4,475** |
 
-Supply, at 25 ore per mine per turn and 80% deposit yield:
+Supply, at 25 ore per mine per turn and the home planet's deposit yields:
 
-| Mine group              | Mines | Ore   | Refined |
-|-------------------------|-------|-------|---------|
-| 1, `Fuel`               | 150   | 3,750 | 3,000   |
-| 2, `Metals`             | 200   | 5,000 | 4,000   |
-| 3, `Non-Metals`         | 250   | 6,250 | 5,000   |
+| Mine group              | Mines | Yield | Ore    | Refined |
+|-------------------------|-------|-------|--------|---------|
+| 1, `Fuel`               | 150   | 80%   | 3,750  | 3,000   |
+| 2, `Metals`             | 450   | 40%   | 11,250 | 4,500   |
+| 3, `Non-Metals`         | 500   | 40%   | 12,500 | 5,000   |
 
-Surplus 25 `METL` and 725 `NMTL` per turn. The deposits are unlimited, so nothing depletes. Mines operate only in
+Surplus 425 `METL` and 525 `NMTL` per turn. The metals and non-metals deposits yield 40% against fuel's 80%, so those
+two groups need two and a half mines for every one the fuel group needs to deliver the same refined tonnage, and
+together they are 950 of the colony's 1,100 mines. The deposits are unlimited, so nothing depletes. Mines operate only in
 surface colonies (§7.3), which is why the `OBC` mines nothing and is sent its resources.
 
 Mine group limits: 3 of 6 groups per colony used, one group per deposit, at most 1,000,000 mines per deposit (§7.3).
@@ -410,7 +412,7 @@ factoryCount / massPerItem` (§7.4).
 
 | Group          | Factories | Product  | Mass each | Per year | Per turn |
 |----------------|-----------|----------|-----------|----------|----------|
-| `OPC` Group 1  | 900       | `CSGD`   | 0.6       | 30,000   | 7,500    |
+| `OPC` Group 1  | 960       | `CSGD`   | 0.6       | 32,000   | 8,000    |
 | `OPC` Group 2  | 600       | `STRC-1` | 0.1       | 120,000  | 30,000   |
 | `OBC` Group 1  | 150       | `STRL-1` | 0.01      | 300,000  | 75,000   |
 
@@ -449,17 +451,17 @@ is 72 structure units per population unit before anything it eats, wears, or wor
 
 | Contents                       | Volume      |
 |--------------------------------|-------------|
-| Assembled farms, mines, factories, laboratories, power plants, sensors | 82,000 |
+| Assembled farms, mines, factories, laboratories, power plants, sensors | 91,840 |
 | Population, 50,000 units       | 50,000      |
 | `TRNS-1` in Storage Inventory  | 800         |
 | `FUEL` in Storage Inventory    | 5,000       |
 | `CSGD` in Storage Inventory    | 9,000       |
 | `FOOD` stockpile               | 150,000     |
-| `CSGD` stockpile               | 8,550       |
+| `CSGD` stockpile               | 8,700       |
 | `METL` and `NMTL`              | 0, exempt   |
-| **Total enclosed**             | **305,350** |
+| **Total enclosed**             | **315,340** |
 | 350,000 `STRC-1` × `1 / 1`     | 350,000     |
-| **Space Available**            | **44,650**  |
+| **Space Available**            | **34,660**  |
 
 `OBC`, Structure Ratio 8:
 
@@ -480,8 +482,8 @@ is 72 structure units per population unit before anything it eats, wears, or wor
 Stated the other way (§4.2), the `OBC`'s Structural Requirement is `18,132.5 × 8 = 145,060` and its 200,000 assembled
 structure units supply `TL^2` each, so 200,000, leaving 54,940 — which is the 6,867.5 `VU` above.
 
-Two consequences of the seeded numbers are worth reading off. The `OPC`'s food stockpile is 150,000 of its 305,350
-`VU`, half the colony's structure, because `FOOD` is 3 `VU` per unit and a four-turn stockpile is one food unit per
+Two consequences of the seeded numbers are worth reading off. The `OPC`'s food stockpile is 150,000 of its 315,340
+`VU`, nearly half the colony's structure, because `FOOD` is 3 `VU` per unit and a four-turn stockpile is one food unit per
 population unit. And both structure counts are chosen so the summed enclosure capacity is an integer, so no rounding
 rule is needed at setup (`GAP-17`).
 
@@ -530,13 +532,13 @@ route to a Tech Level is growth first.
 | `OBC` sustainable population            | Life Support Capacity, 1,200 units; 1,000 seeded            |
 | `OPC` birth range                       | 0.25% to 10% of 50,000 = 125 to 5,000 units per turn (§5.4) |
 | Food surplus supports                   | 2,250 / 0.25 = 9,000 further population units                |
-| Space Available supports                | 44,650 / 4 ≈ 11,162 further units, at 1 `VU` each plus 3 `VU` of stockpile food |
+| Space Available supports                | 34,660 / 4 ≈ 8,665 further units, at 1 `VU` each plus 3 `VU` of stockpile food |
 | Trainee graduation                      | 5% of 1,000 = 50 new `PRO` per turn                          |
 | Soldier retirement                      | 5% of 1,000 per year = 50 `PRO` per year                     |
 | Constructor throughput, `OPC`           | 500 × 500 = 250,000 `MU` assembled per turn                  |
 | Constructor throughput, `OBC`           | 50 × 500 = 25,000 `MU` assembled per turn                    |
 
-Professionals are the binding constraint on deploying the 33,300 unassigned unskilled: every farm, mine, and factory
+Professionals are the binding constraint on deploying the 31,120 unassigned unskilled: every farm, mine, and factory
 needs 1 professional per 3 unskilled, and professionals arrive only by trainee graduation and soldier retirement.
 
 ---
