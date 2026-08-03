@@ -66,6 +66,8 @@ needs nothing else; a reader who wants to know why a rule reads as it does will 
 | `RP`   | Research Point                                           |
 | `S/C`  | Ship or Colony; the generic term is **Entity**           |
 | `x^2`  | x squared                                                |
+| `§n.n` | A section of this manual                                 |
+| `n.n.n` | A **step number** in the turn sequence ([§3](#3-turn-processing-sequence)), written bare |
 
 **Own, hold, control.** Three distinct relations that the sources all render with the English word "control". They are
 never interchangeable in this manual:
@@ -206,51 +208,125 @@ Turn cadence, order submission, deadlines, and reporting are not specified (`GAP
 Orders are executed by stage, not in the sequence the player wrote them. Within a stage, the sequence is as given below.
 Where a stage processes orders in player-written sequence, that is stated explicitly.
 
-| #  | Stage              | Segments / steps                                                         |
-|----|--------------------|--------------------------------------------------------------------------|
-| 1  | Game Data Cleanup  | Delete zero-value records; remove dead entities; zero accumulator fields |
-| 2  | Combat Orders      | See [§3.1](#31-combat-orders-stage)                                      |
-| 3  | Permission Orders  | Permission to Colonize; Home Port Change; Diplomacy                      |
-| 4  | Disassembly        | Disassemble; Scrap; Junk; Merge; Combine Factory Group                   |
-| 5  | Setup              | Define Cargo Hold; Set Up; Add On                                        |
-| 6  | Transfer           | Unload Cargo; Transfer; Beam; Pick Up; Load Cargo                        |
-| 7  | Draft Orders       | Draft; Disband                                                           |
-| 8  | Assembly           | See [§3.2](#32-assembly-stage)                                           |
-| 9  | Surveys and Probes | S/C probes only; Survey; Launch Robot Probe                              |
-| 10 | Pay Change         | Pay; Ration                                                              |
-| 11 | Naming Orders      | Name; Note; Control Planet; Un-Control Planet; Message                   |
-| 12 | Ship Travel        | Jump; Move                                                               |
-| 13 | Probe              | Orbit probes; system probes                                              |
-| 14 | Give               | Give                                                                     |
-| 15 | Production         | See [§3.3](#33-production-stage)                                         |
-| 16 | Produce Output     | Not specified (`GAP-05`)                                                 |
-| 17 | Send Output        | Not specified (`GAP-05`)                                                 |
+Every stage, segment, and step carries a **step number**. Step numbers are written bare (`2.3.6`) and are distinct from
+this manual's section numbers, which carry `§` ([§0.5](#05-notation-and-conventions)). Stages 2, 8, and 15 have nested
+segments and are set out in [§3.1](#31-combat-orders-stage) through [§3.3](#33-production-stage); every other stage is
+complete here.
+
+| #    | Stage / step                                                        |
+|------|---------------------------------------------------------------------|
+| 1    | **Game Data Cleanup**                                               |
+| 1.1  | Delete zero-value records                                           |
+| 1.2  | Remove dead entities                                                |
+| 1.3  | Zero accumulator fields                                             |
+| 2    | **Combat Orders** — see [§3.1](#31-combat-orders-stage)             |
+| 3    | **Permission Orders**                                               |
+| 3.1  | `Permission To Colonize`                                            |
+| 3.2  | `Home Port Change`                                                  |
+| 3.3  | `Diplomacy`                                                         |
+| 4    | **Disassembly**                                                     |
+| 4.1  | `Disassemble`                                                       |
+| 4.2  | `Scrap`                                                             |
+| 4.3  | `Junk`                                                              |
+| 4.4  | `Merge`                                                             |
+| 4.5  | `Combine Factory Group`                                             |
+| 5    | **Setup**                                                           |
+| 5.1  | `Define Cargo Hold`                                                 |
+| 5.2  | `Set Up`                                                            |
+| 5.3  | `Add On`                                                            |
+| 6    | **Transfer**                                                        |
+| 6.1  | `Unload` cargo                                                      |
+| 6.2  | `Transfer`                                                          |
+| 6.3  | `Beam` (undesigned, `GAP-30`)                                       |
+| 6.4  | `Pick Up`                                                           |
+| 6.5  | `Load Cargo`                                                        |
+| 7    | **Draft Orders**                                                    |
+| 7.1  | `Draft`                                                             |
+| 7.2  | `Disband`                                                           |
+| 8    | **Assembly** — see [§3.2](#32-assembly-stage)                       |
+| 9    | **Surveys and Probes**                                              |
+| 9.1  | S/C probes only                                                     |
+| 9.2  | `Survey`                                                            |
+| 9.3  | `Launch Robot Probe`                                                |
+| 10   | **Pay Change**                                                      |
+| 10.1 | `Pay`                                                               |
+| 10.2 | `Ration`                                                            |
+| 11   | **Naming Orders**                                                   |
+| 11.1 | `Name`                                                              |
+| 11.2 | `Note`                                                              |
+| 11.3 | `Control Planet`                                                    |
+| 11.4 | `Un-Control Planet`                                                 |
+| 11.5 | `Message`                                                           |
+| 12   | **Ship Travel**                                                     |
+| 12.1 | `Jump`                                                              |
+| 12.2 | `Move`                                                              |
+| 13   | **Probe**                                                           |
+| 13.1 | Orbit probes                                                        |
+| 13.2 | System probes                                                       |
+| 14   | **Give**                                                            |
+| 14.1 | `Give`                                                              |
+| 15   | **Production** — see [§3.3](#33-production-stage)                   |
+| 16   | **Produce Output** — not specified (`GAP-05`)                       |
+| 17   | **Send Output** — not specified (`GAP-05`)                          |
 
 ### 3.1 Combat Orders stage
 
-| Segment            | Steps                                                                           |
-|--------------------|---------------------------------------------------------------------------------|
-| Prefire            | Dodge; Auto Return Fire; Close Proximity Targeting                              |
-| Pre-Maneuver Fire  | Pre-maneuver energy weapon fire; pre-maneuver missile fire; allocate damage     |
-| Maneuver           | Undock; Run; Tactical Maneuver; Close; Dock; allocate damage                    |
-| Post-Maneuver Fire | After-maneuver energy weapon fire; after-maneuver missile fire; allocate damage |
-| Ground Combat      | Withdraw; Defensive Support; Invasion; Offensive Support; cycle ground combat   |
+Stage 2.
+
+| #     | Segment / step                    |
+|-------|-----------------------------------|
+| 2.1   | **Prefire**                       |
+| 2.1.1 | `Dodge`                           |
+| 2.1.2 | `Auto Return Fire`                |
+| 2.1.3 | `Close Proximity Targeting`       |
+| 2.2   | **Pre-Maneuver Fire**             |
+| 2.2.1 | Pre-maneuver energy weapon fire   |
+| 2.2.2 | Pre-maneuver missile fire         |
+| 2.2.3 | Allocate damage                   |
+| 2.3   | **Maneuver**                      |
+| 2.3.1 | `Undock`                          |
+| 2.3.2 | `Run`                             |
+| 2.3.3 | `Tactical Maneuver`               |
+| 2.3.4 | `Close`                           |
+| 2.3.5 | `Dock`                            |
+| 2.3.6 | Allocate damage                   |
+| 2.4   | **Post-Maneuver Fire**            |
+| 2.4.1 | After-maneuver energy weapon fire |
+| 2.4.2 | After-maneuver missile fire       |
+| 2.4.3 | Allocate damage                   |
+| 2.5   | **Ground Combat**                 |
+| 2.5.1 | `Withdraw`                        |
+| 2.5.2 | `Defensive Support`               |
+| 2.5.3 | Invasion                          |
+| 2.5.4 | `Offensive Support`               |
+| 2.5.5 | Cycle ground combat               |
 
 Ordering rules inside the Maneuver segment:
 
-1. `Undock`, `Run`, and `Tactical Maneuver` execute first, in the sequence the player wrote them.
-2. `Close` and `Dock` execute afterwards, sorted by ascending tactical speed of the acting ship, so the fastest ship
-   moves last. Ships attached by docking are excluded when computing that sort key.
+1. `Undock`, `Run`, and `Tactical Maneuver` (2.3.1 – 2.3.3) execute first, in the sequence the player wrote them.
+2. `Close` and `Dock` (2.3.4, 2.3.5) execute afterwards, sorted by ascending tactical speed of the acting ship, so the
+   fastest ship moves last. Ships attached by docking are excluded when computing that sort key.
 
-Damage is applied at the end of each fire segment and after the maneuver segment, never mid-segment. All entities in a
-fire segment fire before any damage from that segment is applied.
+Damage is applied at the end of each fire segment and after the maneuver segment — steps 2.2.3, 2.3.6, and 2.4.3 —
+never mid-segment. All entities in a fire segment fire before any damage from that segment is applied.
 
 ### 3.2 Assembly stage
 
-| Segment                    | Steps                                                                                                                                    |
-|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| Order Processing           | Assemble; Expend (research points only); Expend (using prototypes); Factory Group Change; Build Change; Mine Change; Shut Down; Start Up |
-| Non-Prototype TL Increases | Apply every Committed Research Buffer that has reached the cost of the next TL, item type by item type                                   |
+Stage 8.
+
+| #     | Segment / step                                                                                        |
+|-------|-------------------------------------------------------------------------------------------------------|
+| 8.1   | **Order Processing**                                                                                  |
+| 8.1.1 | `Assemble`                                                                                            |
+| 8.1.2 | `Expend`, research points only                                                                        |
+| 8.1.3 | `Expend`, using prototypes                                                                            |
+| 8.1.4 | `Factory Group Change`                                                                                |
+| 8.1.5 | `Build Change`                                                                                        |
+| 8.1.6 | `Mine Change`                                                                                         |
+| 8.1.7 | `Shut Down`                                                                                           |
+| 8.1.8 | `Start Up`                                                                                            |
+| 8.2   | **Non-Prototype TL Increases**                                                                        |
+| 8.2.1 | Apply every Committed Research Buffer that has reached the cost of the next `TL`, item type by item type. Processes no orders. |
 
 Within the Order Processing segment, `Assemble` and `Expend` orders execute in the sequence the player wrote them. This
 is observable: constructor shortages truncate the assemble list at the point of exhaustion, and prototype expends
@@ -258,35 +334,44 @@ consume research points committed by earlier expends in the same turn.
 
 ### 3.3 Production stage
 
-Colonies are processed first, then ships.
+Stage 15. Colonies are processed first, then ships.
 
-Per colony, in order:
+| #        | Cycle / step                                                                                  |
+|----------|-----------------------------------------------------------------------------------------------|
+| 15.1     | **Cycle through colonies**                                                                    |
+| 15.1.1   | Sum and report professionals used to pilot transports                                         |
+| 15.1.2   | Collect survey data                                                                           |
+| 15.1.3   | Total automation capacity and life support capacity                                           |
+| 15.1.4   | Population changes: **graduations and retirements**                                           |
+| 15.1.5   | Production, in the order below                                                                |
+| 15.1.5.1 | Power production                                                                              |
+| 15.1.5.2 | Mine production                                                                               |
+| 15.1.5.3 | Farm production                                                                               |
+| 15.1.5.4 | Laboratory production                                                                         |
+| 15.1.5.5 | Factory production                                                                            |
+| 15.1.6   | Food consumption                                                                              |
+| 15.1.7   | Consumer goods consumption, including ships that use this colony as home port                 |
+| 15.1.8   | Rebel actions                                                                                 |
+| 15.1.9   | Population changes: **births and deaths**. Life supports consume their fuel or power here.    |
+| 15.1.10  | Statistics update                                                                             |
+| 15.2     | **Cycle through ships**                                                                       |
+| 15.2.1   | Sum and report professionals used to pilot transports                                         |
+| 15.2.2   | Total automation capacity and life support capacity                                           |
+| 15.2.3   | Population changes: **graduations and retirements**                                           |
+| 15.2.4   | Farm production                                                                               |
+| 15.2.5   | Food consumption                                                                              |
+| 15.2.6   | Rebel actions                                                                                 |
+| 15.2.7   | Population changes: **deaths**. Life supports consume their fuel or power here. Ships have no births. |
+| 15.2.8   | Statistics update                                                                             |
 
-1. Sum and report professionals used to pilot transports.
-2. Collect survey data.
-3. Total automation capacity and life support capacity.
-4. Population changes: **graduations and retirements**.
-5. Production, in order: **Power → Mines → Farms → Laboratories → Factories**.
-6. Food consumption.
-7. Consumer goods consumption, including ships that use this colony as home port.
-8. Rebel actions.
-9. Population changes: **births and deaths**. Life supports consume their fuel or power at this step.
-10. Statistics update.
+Ships run no power, mine, laboratory, or factory production: factory groups and laboratories cannot be assembled in a
+ship ([§7.4](#74-factories-and-manufacturing), [§7.5](#75-laboratories)), mines operate only in surface colonies
+([§7.3](#73-mines)), and power plants only in an `OPC` ([§7.7](#77-power-plants)). Farms are the sole production step a
+ship has.
 
-Per ship, in order:
-
-1. Sum and report professionals used to pilot transports.
-2. Total automation capacity and life support capacity.
-3. Population changes: **graduations and retirements**.
-4. Farm production.
-5. Food consumption.
-6. Rebel actions.
-7. Population changes: **deaths**. Life supports consume their fuel or power at this step. **Ships have no births.**
-8. Statistics update.
-
-Population changes are split across two steps: graduations and retirements are applied before production, so
-the turn's new professionals are available to the turn's production, while births and deaths are applied after
-consumption and rebel actions.
+Population changes are split across two steps: graduations and retirements (15.1.4, 15.2.3) are applied before
+production, so the turn's new professionals are available to the turn's production, while births and deaths (15.1.9,
+15.2.7) are applied after consumption and rebel actions.
 
 The order in which colonies (and ships) are selected within the stage is not specified (`GAP-06`).
 
