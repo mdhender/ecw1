@@ -878,7 +878,7 @@ Whether solar power is available to surface colonies or ships in orbits 1–5 is
 | Rule           | Value                                                                                                    |
 |----------------|----------------------------------------------------------------------------------------------------------|
 | Range          | `TL-1` through `TL-200`                                                                                  |
-| Starting level | `TL-1` in every item type, in every game                                                        |
+| Starting level | `TL-1` in every item type. Uniform across the players of a game; the level is set with the starting position |
 | Advancement    | One `TL` at a time, in consecutive order; multiple steps may be taken in one turn                        |
 | Scope          | A player's `TL` is knowledge: the highest `TL` of an item type that player can manufacture               |
 | Possession     | A player may hold and use items at a `TL` above the player's own knowledge, acquired by capture or trade |

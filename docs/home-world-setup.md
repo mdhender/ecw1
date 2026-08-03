@@ -8,8 +8,15 @@ The starting assets of a new player, in seed form, and the arithmetic that close
 > document overlap. Everything else in [`rules-manual.md`](./rules-manual.md) governs unconditionally: this document
 > states a starting state, never a rule. Section references below are to the manual.
 
-Every figure here is at Tech Level 1, because every game starts at `TL-1` in every item type (`D-24`, §8.1). One population unit
-is 100 individuals. Volumes are `VU`, masses `MU`.
+Every figure here is at Tech Level 1, the level a game starts at unless a gamemaster sets another (`D-25`, §8.1). One
+population unit is 100 individuals. Volumes are `VU`, masses `MU`.
+
+**These numbers close at `TL` 1 and nowhere else.** They are not a family of seeds with the level as a parameter, and
+they do not scale. Three of the constraints that make them balance hold only at 1: a `LSU-1` sustains exactly one
+population unit, where capacity is `TL^2`; one `STRC-1` encloses exactly `1 / StructureRatio`, where enclosure is
+`TL^2 / StructureRatio`; and a `FARM-1` produces 25 food, where every higher farm produces `5 × TL` — the one
+discontinuity in the progression (§7.2). A game starting at any other level needs its seed re-derived from scratch, by
+the method §6 sets out rather than by multiplying what is here.
 
 ---
 
@@ -24,7 +31,7 @@ is 100 individuals. Volumes are `VU`, masses `MU`.
 | Colonies                | One `OPC` at `0/0/0`; one `OBC` at tactical distance 1 from it    |
 | Ships                   | None                                                              |
 | Population              | 51,000 units (5,100,000 individuals), all of one race             |
-| Tech Level              | 1 in every item type, in every game (`D-24`)                      |
+| Tech Level              | 1 in every item type; uniform across players (`D-25`)             |
 | Discovered systems      | The home system only                                              |
 
 Both colonies are **home colonies** and may never be given away (§15.3). The `OPC` controls the home planet and its
@@ -212,7 +219,7 @@ No work in process.
 
 | Property                      | Value                                                            |
 |-------------------------------|------------------------------------------------------------------|
-| Tech Level                    | 1 in every item type, in every game (`D-24`)                     |
+| Tech Level                    | 1 in every item type; uniform across players (`D-25`)            |
 | Races held                    | One, `Race ID#` assigned sequentially by the engine (`D-15`)     |
 | Ships                         | None                                                             |
 | Discovered systems            | The home system only                                             |
@@ -564,7 +571,7 @@ Rules the numbers depend on, and open questions they avoid.
 | `CONFLICT-02` | Ration bounds. The seeded 100% is in bounds under both readings, so the conflict is untouched.                            |
 | `CONFLICT-11` | Transport fuel. Unrecoverable; the seeded 10,000 `FUEL` and 3,000 per turn cover it under any reading of a `TL` 1 rate.   |
 | `GAP-01`      | The rest of the home system, and the yields of deposits other than the three named.                                       |
-| `D-24`        | Every game starts at `TL` 1, so this is the seed rather than one of a family of them.                                     |
+| `D-25`        | `TL` 1 is the default start and is uniform across players. This seed closes at that level only; a variant needs re-deriving. |
 | `GAP-03`      | Player count and home system separation. Neither bears on the contents of the two colonies.                              |
 | `GAP-07`, `GAP-08` | Birth and death rates. The seed sets initial populations, not the rates that move them.                             |
 | `GAP-09`      | Discontent. Both colonies begin below Standard of Living 1.0; the malcontent response is unspecified.                     |
