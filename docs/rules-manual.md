@@ -24,7 +24,7 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 | Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
 | Orders grammar (`docs/orders-grammar.txt`)   | **Not a source**              | Incomplete and describes an order set that does not match the handbook. Excluded until the order set is decided. See [GAP-51](#21-gaps).                                                               |
 | Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
-| Home world setup (`docs/home-world-setup.md`) | **Not a source**             | Downstream of this manual. Restates the starting position of [§1.7](#17-starting-position) in seed form and shows the arithmetic that closes it (`D-21`). Not normative; where it and this manual disagree, this manual governs. |
+| Home world setup (`docs/home-world-setup.md`) | **Normative**, for the starting state only | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). [§1.7](#17-starting-position) fixes the shape of the starting position and governs where the two overlap; the rest of this manual governs unconditionally. That document states a starting state, never a rule. |
 
 No text in this manual is copied from the handbook. All rules are restated.
 
@@ -64,7 +64,7 @@ list; entries are never rewritten.
 | `D-18` | **A race holds a colony by holding a majority of its population**, `floor(P × 0.5) + 1` of the colony's `P` population units, counting every type. | Replaces the "at least one `SOL` or `PRO` of that race" test taken from the earlier version. A majority is unique, so at most one race holds a colony and no colony is counted toward two races at once ([§18.2](#182-holding)). A colony where no race reaches a majority is held by no race. Race holding is now demographic and type-blind, while player holding still turns on ownership plus a soldier or professional; the asymmetry is intended. |
 | `D-19` | **The Faction layer is not adopted into the rules.** A player owns entities directly. Every entity is owned by exactly one player or is **independent**, owned by none. An entity holding no Soldier and no Professional outside the `RBL` cadre is independent: it accepts no orders, keeps everything it holds, and returns to play only when a player places a soldier or professional in it. Victory is counted by **position** — a player's seat in the game, whether or not an account still plays it. `Master / Client` is not in the game. | Closes `GAP-55`, `GAP-49`, and `GAP-42`; all three are withdrawn and their numbers are not reused. Supersedes `D-17`'s reading of Faction as Player by removing the term: the indirection an implementation may want between the agency directing orders and the entity receiving them is an implementation concern, recorded in `docs/entity-model.md`, which is not normative. [§18.2](#182-holding) needs no third holding subject — an independent entity has no owner, so no player holds it, and the planet test already requires **every** colony on the planet, so one independent colony there denies the planet to every player while its population goes on holding for its race under `D-18`. Elimination stops being a trigger needing its own definition and becomes a readable state: a player owning no entity is eliminated, which covers zero population and also a player left holding only unemployables and unskilled. Narrows `GAP-56` to the race test alone. Raises `GAP-57`, the upkeep of independent entities, and extends `GAP-22` with whether an independent entity drafts militia. `Master / Client` follows `D-09`'s pattern: the name is reserved and its gap withdrawn rather than left open, its ground covered by the `Give` order and by out-of-game delegation, which confers no ownership, no diplomatic status, and no holding. |
 | `D-20` | **Combat targeting is unrestricted by ownership and by diplomatic status, and an independent colony drafts militia in its own defence.** Any entity may be named as the target of a bombardment or an invasion. No status protects an entity from attack and none is required to attack one, so an ally may be fired on without warning. Independence confers no protection either, and an independent colony resists invasion with militia exactly as an owned one does. | Settles the militia question `D-19` added to `GAP-22`; that gap is restated without it and the rest of it stands. Stated as fact rather than left to silence: no source restricts targeting, and [§14.11](#1411-ground-combat-units) makes soldiers, militia, military robots, and assault craft usable against "any entity", the sole exception being assault weapons, restricted to surface colonies on physical grounds. Recording it matters because [§4.8](#48-ownership-and-independence) closes `Transfer`, `Pick Up`, `Give`, `Load Cargo`, and `Unload` against independent entities, leaving invasion the only route back into play; that route now rests on a stated rule rather than on an absence, and a later decision restricting targeting would make independence permanent. Taking an independent colony is not free: militia are drafted up to half its population ([§14.13](#1413-militia)), so a large one resists in proportion to its size, while an independent ship raises none and falls to any force that reaches it. Professionals are not ground combat units, so invasion delivers soldiers; a professional enters an entity only once a player owns it again. |
-| `D-21` | **The contents of the two starting home colonies are fixed.** The home `OPC` opens with 50,000 population units, 350,000 assembled `STRC-1`, 600 `Farms-1`, 600 `Mines-1` in three groups, 1,500 `Factories-1` in two groups, 100 `Laboratories-1`, 1,500 `Power Plants-1`, 10 `Sensors-1`, 200 `Transports-1`, and food and consumer goods stockpiles at the four-turn target. The home `OBC` opens with 1,000 population units, 200,000 assembled `STRC-1`, 1,200 `Life Supports-1`, 150 `Factories-1` building `STRL-1`, and 50 `Transports-1`. The home planet carries three unlimited deposits, one per resource type, at 80% yield. Full tables are in [§1.7](#17-starting-position). | Closes `GAP-02`, which is withdrawn; its number is not reused. No source supplies any of it: the handbook fixes the shape of the starting position and nothing inside it, and its quick-start page is an unwritten placeholder, so this is a design decision rather than an extracted rule. Every quantity is chosen to make a stated rule close. Both colonies satisfy `D-19` several times over. The `OBC` is viable at Tech Level 1 only because it is in orbit 3: [§7.8](#78-solar-power) gives its life supports and factories solar power, so it burns no fuel, and it needs one `LSU-1` per population unit because `TL^2` is 1. It cannot feed itself at all — `Farms-1` are `OPC`-only and `Farms-2` … `Farms-5` need a Tech Level the player lacks — so it is supplied by transfer every turn by construction, which extends `GAP-57`: were it to go independent it would starve, and no player could feed it. Both colonies are built of `STRC` because `STRL` may be manufactured only in an orbiting colony (`D-06`): seeding the `OBC` with light structure would give it the one item whose existence depends on the entity it is holding up, and the seed has to be reachable from itself. Nothing is lost by it — enclosure is `TL^2 / StructureRatio` for both items on the containing entity's ratio ([§4.2](#42-volume-space-and-structure)) — and the `OBC`'s factory group manufactures the `STRL` it converts to. The same route refounds an orbiting colony later: `STRC` from the `OPC` sets one up, and it makes its own light structure thereafter. `Power Plants-1` make the `OPC` fuel-independent for production, so its mined fuel accumulates against later ship travel. Setup deliberately avoids three open questions rather than resolving them by assumption: no factory group holds work in process, which is the residue of `GAP-12`; no `POL`, `SPAG`, `SPY`, or `RBL` is assigned, so no unstated pay rate is needed (`GAP-58`); and every structure count is chosen so that summed enclosure capacity is an integer, so `GAP-17` does not bite at setup. Two setup facts are stated by exception: the `OPC` controls the home planet from turn 1 although [§16.1](#161-control-planet) otherwise requires control to be ordered, and both colonies are **home colonies**, a term [§15.3](#153-give) used without defining. The starting `Ration` of 100% is within bounds under both readings of `CONFLICT-02`, which is untouched. The residue of `GAP-02` — the home system's planet count, layout, and remaining deposits — is world generation and moves to `GAP-01`. |
+| `D-21` | **The contents of the two starting home colonies are fixed.** The home `OPC` opens with 50,000 population units, 350,000 assembled `STRC-1`, 600 `Farms-1`, 600 `Mines-1` in three groups, 1,500 `Factories-1` in two groups, 100 `Laboratories-1`, 1,500 `Power Plants-1`, 10 `Sensors-1`, 200 `Transports-1`, and food and consumer goods stockpiles at the four-turn target. The home `OBC` opens with 1,000 population units, 200,000 assembled `STRC-1`, 1,200 `Life Supports-1`, 150 `Factories-1` building `STRL-1`, and 50 `Transports-1`. The home planet carries three unlimited deposits, one per resource type, at 80% yield. Full tables are in [`home-world-setup.md`](./home-world-setup.md); [§1.7](#17-starting-position) carries the shape of the starting position only. | Closes `GAP-02`, which is withdrawn; its number is not reused. No source supplies any of it: the handbook fixes the shape of the starting position and nothing inside it, and its quick-start page is an unwritten placeholder, so this is a design decision rather than an extracted rule. Every quantity is chosen to make a stated rule close. Both colonies satisfy `D-19` several times over. The `OBC` is viable at Tech Level 1 only because it is in orbit 3: [§7.8](#78-solar-power) gives its life supports and factories solar power, so it burns no fuel, and it needs one `LSU-1` per population unit because `TL^2` is 1. It cannot feed itself at all — `Farms-1` are `OPC`-only and `Farms-2` … `Farms-5` need a Tech Level the player lacks — so it is supplied by transfer every turn by construction, which extends `GAP-57`: were it to go independent it would starve, and no player could feed it. Both colonies are built of `STRC` because `STRL` may be manufactured only in an orbiting colony (`D-06`): seeding the `OBC` with light structure would give it the one item whose existence depends on the entity it is holding up, and the seed has to be reachable from itself. Nothing is lost by it — enclosure is `TL^2 / StructureRatio` for both items on the containing entity's ratio ([§4.2](#42-volume-space-and-structure)) — and the `OBC`'s factory group manufactures the `STRL` it converts to. The same route refounds an orbiting colony later: `STRC` from the `OPC` sets one up, and it makes its own light structure thereafter. `Power Plants-1` make the `OPC` fuel-independent for production, so its mined fuel accumulates against later ship travel. Setup deliberately avoids three open questions rather than resolving them by assumption: no factory group holds work in process, which is the residue of `GAP-12`; no `POL`, `SPAG`, `SPY`, or `RBL` is assigned, so no unstated pay rate is needed (`GAP-58`); and every structure count is chosen so that summed enclosure capacity is an integer, so `GAP-17` does not bite at setup. Two setup facts are stated by exception: the `OPC` controls the home planet from turn 1 although [§16.1](#161-control-planet) otherwise requires control to be ordered, and both colonies are **home colonies**, a term [§15.3](#153-give) used without defining. The starting `Ration` of 100% is within bounds under both readings of `CONFLICT-02`, which is untouched. The residue of `GAP-02` — the home system's planet count, layout, and remaining deposits — is world generation and moves to `GAP-01`. |
 | `D-22` | **Stockpiles and cargo hold contents count toward the volume an entity must enclose.** Food and consumer goods held in the population's stockpile occupy enclosed volume exactly as the same goods in Storage Inventory do. The two exemptions in [§4.2](#42-volume-space-and-structure) are the only ones: `Metals` and `Non-Metals` in an `OPC` or `ESC`. | Closes `GAP-12` except for work in process, to which it is narrowed. [§4.2](#42-volume-space-and-structure) already requires structure to enclose *all* of an entity's items, resources, and population and names one exemption; a stockpile is goods the entity holds, held on a separate ledger ([§6.4](#64-stockpiles)) rather than in a separate place. Two rules presuppose it: [§7.2](#72-farms) discards food produced with no Space Available to hold it, and [§7.3](#73-mines) limits fuel extraction to what fits, both of which are only meaningful if commodities consume enclosed volume. Cargo holds were never open: [§4.4](#44-cargo-holds) bounds a hold by the ship's Space Available and charges its contents 50% of normal volume, so `GAP-12`'s listing of them was stale. Work in process is the true residue — no source says when a batch's resources leave Storage Inventory or what volume a partly built batch occupies. The consequence is large and load-bearing for `D-21`: `FOOD` is 3 `VU` per unit and a four-turn stockpile is one food unit per population unit, so the home `OPC`'s food stockpile is 150,000 of its 305,350 `VU` of enclosed contents — three times the volume of the people eating it and half the colony's structure. |
 
 ### 0.5 Notation and conventions
@@ -166,191 +166,35 @@ Some home-planet deposits are unlimited in size. Which ones, and how many deposi
 
 ### 1.7 Starting position
 
-Fixed by `D-21`. Every quantity below is exact and is what an engine seeds. The derivation, and the arithmetic showing
-the two colonies close against food, pay, labor, power, resources, life support, and enclosure, are in
-[`home-world-setup.md`](./home-world-setup.md).
+This section fixes the shape of the starting position. What the two colonies contain — population by Living type and
+cadre, assembled items, Storage Inventory, stockpiles, and structure — is fixed by `D-21` and tabulated in
+[`home-world-setup.md`](./home-world-setup.md), which is normative for it.
 
-**The home system.**
+At game start each player has:
 
-- One star system with one star and several planets.
-- At least one terrestrial planet with Habitability Factor 25 in orbit 3. This is the **home planet**.
-- The home planet carries three deposits of unlimited size, one `Fuel`, one `Metals`, one `Non-Metals`, each at 80%
-  yield. These are the deposits the starting mine groups occupy.
+- One star system with one star and several planets, the player's **home system**.
+- At least one terrestrial planet with Habitability Factor 25 in orbit 3, the **home planet**.
+- Three deposits of unlimited size on the home planet, one `Fuel`, one `Metals`, one `Non-Metals`, each at 80% yield.
+  These are the deposits the starting mine groups occupy.
 - One Open Surface Colony (`OPC`) on the home planet, at `0/0/0`.
 - One Orbiting Colony (`OBC`) in the home planet's orbit, at tactical distance 1 from `0/0/0`.
-- The number of other planets in the home system, their types and orbits, and their deposits are generated like any
-  other system (`GAP-01`).
+- Tech Level 1 in every item type, unless the game is configured otherwise (`GAP-03`).
+- A single race, comprising the whole of that home world's population (`D-15`).
+- No ships.
+
+The number of other planets in the home system, their types and orbits, and their deposits are generated like any other
+system (`GAP-01`).
 
 Both starting colonies are **home colonies**: a home colony may never be given away
 ([§15.3](#153-give)), including after it changes hands. The starting `OPC` controls the home planet and its orbit from
 turn 1; this control is seeded and is not ordered, by exception to [§16.1](#161-control-planet).
 
-**Open Surface Colony.**
-
-**Population**, all of the player's single race (`D-15`):
-
-| Living type | Units  |
-|-------------|--------|
-| `UEM`       | 2,500  |
-| `USK`       | 43,000 |
-| `PRO`       | 3,500  |
-| `SOL`       | 1,000  |
-| **Total**   | **50,000** |
-
-**Cadre assignments.** Assignments change no Living count (`D-12`, `D-14`).
-
-| Cadre  | Assigned units             | Role                                        |
-|--------|----------------------------|---------------------------------------------|
-| `WRKR` | 2,700 `PRO` + 8,100 `USK`  | Farm, mine, and factory labor               |
-| `CNST` | 500 `USK`                  | Construction                                |
-| `TRNE` | 1,000 `USK`                | In training; 10 `PRO` train them            |
-| `POL`  | 0                          | —                                           |
-| `SPAG` | 0                          | —                                           |
-| `SPY`  | 0                          | —                                           |
-| `RBL`  | 0                          | —                                           |
-
-A further 300 `PRO` + 100 `USK` staff the laboratories; whether that staff is recorded as `WRKR` is `GAP-32` and no
-count depends on it. 20 `PRO` pilot the transports. 470 `PRO` and 33,300 `USK` are unassigned.
-
-**Assembled items:**
-
-| Item     | Quantity | Grouping                                                                          |
-|----------|----------|-----------------------------------------------------------------------------------|
-| `STRC-1` | 350,000  | —                                                                                 |
-| `FARM-1` | 600      | One farm group                                                                    |
-| `MINE-1` | 600      | Group 1: 150 on the `Fuel` deposit; Group 2: 200 on `Metals`; Group 3: 250 on `Non-Metals` |
-| `FACT-1` | 1,500    | Group 1: 900, product `CSGD`; Group 2: 600, product `STRC-1`. No work in process. |
-| `LAB-1`  | 100      | —                                                                                 |
-| `POWR-1` | 1,500    | —                                                                                 |
-| `SENS-1` | 10       | —                                                                                 |
-
-**Storage Inventory:**
-
-| Item     | Quantity |
-|----------|----------|
-| `TRNS-1` | 200      |
-| `FUEL`   | 10,000   |
-| `METL`   | 20,000   |
-| `NMTL`   | 20,000   |
-| `CSGD`   | 30,000   |
-| `RP`     | 0        |
-
-**Stockpiles**, at the four-turn target ([§6.4](#64-stockpiles)):
-
-| Commodity | Quantity |
-|-----------|----------|
-| `FOOD`    | 50,000   |
-| `CSGD`    | 28,500   |
-
-Enclosure capacity 350,000 `VU`; enclosed contents 305,350 `VU`; Space Available 44,650 `VU`. Total mass 552,900 `MU`
-(`GAP-13` leaves what an engine counts toward reported mass open).
-
-**Orbiting Colony.**
-
-**Population:**
-
-| Living type | Units |
-|-------------|-------|
-| `UEM`       | 50    |
-| `USK`       | 700   |
-| `PRO`       | 200   |
-| `SOL`       | 50    |
-| **Total**   | **1,000** |
-
-**Cadre assignments:**
-
-| Cadre  | Assigned units          | Role           |
-|--------|-------------------------|----------------|
-| `WRKR` | 150 `PRO` + 450 `USK`   | Factory labor  |
-| `CNST` | 50 `USK`                | Construction   |
-
-5 `PRO` pilot the transports. 45 `PRO` and 200 `USK` are unassigned.
-
-**Assembled items:**
-
-| Item     | Quantity | Grouping                                             |
-|----------|----------|------------------------------------------------------|
-| `STRC-1` | 200,000  | —                                                    |
-| `LSU-1`  | 1,200    | —                                                    |
-| `FACT-1` | 150      | Group 1, product `STRL-1`. No work in process.       |
-
-**Storage Inventory:**
-
-| Item     | Quantity |
-|----------|----------|
-| `TRNS-1` | 50       |
-| `FUEL`   | 1,000    |
-| `METL`   | 1,500    |
-| `NMTL`   | 1,500    |
-
-**Stockpiles:**
-
-| Commodity | Quantity |
-|-----------|----------|
-| `FOOD`    | 1,000    |
-| `CSGD`    | 775      |
-
-Enclosure capacity 25,000 `VU`; enclosed contents 18,132.5 `VU`; Space Available 6,867.5 `VU`. Life Support Capacity
-1,200 population units. Total mass 43,365 `MU`.
-
-Both colonies are built of `STRC`, which is the only structure item that can exist before an orbiting colony does:
-`STRL` may be manufactured only in an orbiting colony (`D-06`, [§7.4](#74-factories-and-manufacturing)), so seeding the
-`OBC` with it would give it structure that only it can make. Which item a structure unit is has no bearing on what it
-encloses — that is `TL^2 / StructureRatio` for both, on the containing entity's ratio
-([§4.2](#42-volume-space-and-structure)) — so the `OBC` converts to light structure at its own pace out of its factory
-group's output.
-
-Every item type not listed for a colony is zero in that colony. Neither colony starts with automation, weapons,
-ammunition, propulsion, robot probe vehicles, or combat supplies.
+Both are built of `STRC`. `STRL` may be manufactured only in an orbiting colony (`D-06`,
+[§7.4](#74-factories-and-manufacturing)), so it cannot exist before one does.
 
 The `OBC` produces no food. `Farms-1` may exist only in an `OPC` and `Farms-2` … `Farms-5` require a Tech Level the
 player does not have, so the `OBC` is fed by transfer from the `OPC` every turn, by construction. It burns no fuel for
 life support or manufacturing: it is in orbit 3, so both draw solar power ([§7.8](#78-solar-power)).
-
-**Player state on turn 1.**
-
-| Property                    | Value                                                                     |
-|-----------------------------|---------------------------------------------------------------------------|
-| Tech Level                  | 1 in every item type, unless the game is configured otherwise (`GAP-03`)  |
-| Races                       | One, comprising the whole home world population (`D-15`)                  |
-| Discovered systems          | The home system only                                                      |
-| Diplomatic status           | None, in either direction, with every other player ([§15.1](#151-diplomatic-status)) |
-| Committed Research Buffers  | 0 in every item type                                                      |
-| Malcontents, rebels, back pay | 0                                                                       |
-| `Pay` standing orders       | The default rates of [§6.2](#62-consumer-goods-and-pay)                   |
-| `Ration` standing order     | 100%, which is within bounds under both readings of `CONFLICT-02`         |
-| Standing combat orders      | None set                                                                  |
-| Ships                       | None                                                                      |
-
-**Balances.**
-
-Per turn, at the quantities above:
-
-| Balance         | Supply                                | Demand                                     | Margin              |
-|-----------------|---------------------------------------|--------------------------------------------|---------------------|
-| Food            | 15,000 (`OPC` farms)                  | 12,750 (both colonies)                     | +2,250              |
-| Consumer goods  | 7,500 (`OPC` factory group 1)         | 7,318.75 (both colonies)                   | +181.25             |
-| `METL`          | 4,000 (`OPC` mine group 2)            | 3,975                                      | +25                 |
-| `NMTL`          | 5,000 (`OPC` mine group 3)            | 4,275                                      | +725                |
-| `FUEL`          | 3,000 (`OPC` mine group 1)            | Transports only ([`CONFLICT-11`](#20-source-conflicts)) | accumulates |
-| Power           | 1,500 (`OPC` power plants)            | 1,400.5                                    | +99.5               |
-| `OPC` `PRO`     | 3,500                                 | 3,030                                      | +470                |
-| `OPC` `USK`     | 43,000                                | 9,700                                      | +33,300             |
-| `OBC` `PRO`     | 200                                   | 155                                        | +45                 |
-| `OBC` `USK`     | 700                                   | 500                                        | +200                |
-| Life support, `OBC` | 1,200 population units            | 1,000                                      | +200                |
-| Transport, `OPC`   | 4,000 `MU`                         | 2,366.25 `MU` to the `OBC`                 | +1,633.75           |
-| Transport, `OBC`   | 1,000 `MU`                         | 750 `MU` to the `OPC`                      | +250                |
-
-The `OPC`'s factory groups hold no work in process, so the first manufactured goods reach Storage Inventory on turn 5
-([§7.4](#74-factories-and-manufacturing)). The 30,000 `CSGD` in Storage Inventory covers four turns of pay for both
-colonies until then.
-
-Standard of Living is 0.570 in the `OPC` and 0.775 in the `OBC`, because the default pay rates of
-[§6.2](#62-consumer-goods-and-pay) are below the 0.25 consumer goods per population unit per turn that
-[§6.5](#65-standard-of-living) requires for 1.0. Both are therefore below 1 at setup, which is a malcontent driver
-([§5.6](#56-malcontents)) of unspecified magnitude (`GAP-09`). Raising pay is a `Pay` order
-([§17.3](#173-pay)).
 
 ---
 

@@ -2,9 +2,11 @@
 
 The starting assets of a new player, in seed form, and the arithmetic that closes them.
 
-> **Not a source.** This document is downstream of [`rules-manual.md`](./rules-manual.md). The starting position is
-> fixed by `D-21` and stated normatively in [§1.7](./rules-manual.md#17-starting-position). Where this document and the
-> manual disagree, the manual governs. Section references below are to the manual.
+> **Normative for the contents of the two starting colonies**, which `D-21` fixes and which are stated here rather than
+> in the manual. [§1.7](./rules-manual.md#17-starting-position) fixes the *shape* of the starting position — the home
+> system, the two colonies, and the facts about them that other rules turn on — and governs wherever it and this
+> document overlap. Everything else in [`rules-manual.md`](./rules-manual.md) governs unconditionally: this document
+> states a starting state, never a rule. Section references below are to the manual.
 
 Every figure here is at Tech Level 1, because a player starts at `TL-1` in every item type (§8.1). One population unit
 is 100 individuals. Volumes are `VU`, masses `MU`.
@@ -210,19 +212,45 @@ No work in process.
 
 | Property                      | Value                                                            |
 |-------------------------------|------------------------------------------------------------------|
+| Tech Level                    | 1 in every item type, unless the game is configured otherwise (`GAP-03`) |
 | Races held                    | One, `Race ID#` assigned sequentially by the engine (`D-15`)     |
+| Ships                         | None                                                             |
+| Discovered systems            | The home system only                                             |
 | Committed Research Buffers    | 0 in every item type                                             |
 | Research points held          | 0                                                                |
-| Diplomatic status             | None, either direction, with every other player                  |
+| Diplomatic status             | None, either direction, with every other player (§15.1)          |
 | Malcontents, rebels, back pay | 0                                                                |
 | `Pay` standing orders         | `USK` 0.125, `SOL` 0.250, `PRO` 0.375 — the defaults of §6.2     |
-| `Ration` standing order       | 100%                                                             |
+| `Ration` standing order       | 100%, within bounds under both readings of `CONFLICT-02`         |
 | Standing combat orders        | None set                                                         |
 | Planetary control             | The `OPC` controls the home planet and orbit 3                   |
+
+Every item type not listed for a colony in §3 or §4 is zero in that colony. Neither colony starts with automation,
+weapons, ammunition, propulsion, robot probe vehicles, or combat supplies.
 
 ---
 
 ## 6. The arithmetic
+
+Every balance closes with a margin. The sections that follow derive each line.
+
+| Balance             | Supply                        | Demand                                                  | Margin      |
+|---------------------|-------------------------------|---------------------------------------------------------|-------------|
+| Food                | 15,000 (`OPC` farms)          | 12,750 (both colonies)                                  | +2,250      |
+| Consumer goods      | 7,500 (`OPC` factory group 1) | 7,318.75 (both colonies)                                | +181.25     |
+| `METL`              | 4,000 (`OPC` mine group 2)    | 3,975                                                   | +25         |
+| `NMTL`              | 5,000 (`OPC` mine group 3)    | 4,275                                                   | +725        |
+| `FUEL`              | 3,000 (`OPC` mine group 1)    | Transports only (`CONFLICT-11`)                         | accumulates |
+| Power               | 1,500 (`OPC` power plants)    | 1,400.5                                                 | +99.5       |
+| `OPC` `PRO`         | 3,500                         | 3,030                                                   | +470        |
+| `OPC` `USK`         | 43,000                        | 9,700                                                   | +33,300     |
+| `OBC` `PRO`         | 200                           | 155                                                     | +45         |
+| `OBC` `USK`         | 700                           | 500                                                     | +200        |
+| Life support, `OBC` | 1,200 population units        | 1,000                                                   | +200        |
+| Transport, `OPC`    | 4,000 `MU`                    | 2,366.25 `MU` to the `OBC`                              | +1,633.75   |
+| Transport, `OBC`    | 1,000 `MU`                    | 750 `MU` to the `OPC`                                   | +250        |
+
+All figures are per turn.
 
 ### 6.1 Food
 
