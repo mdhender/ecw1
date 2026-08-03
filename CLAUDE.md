@@ -20,8 +20,8 @@ The manual's own §0.2 is the authority; the ranking is:
 | File | Status |
 |------|--------|
 | `docs/rules-manual.md` | **Normative.** Our own work, licensed to distribute. If it disagrees with an implementation, amend the manual first. |
-| Player handbook | **Removed.** An extract of the original website. Third party, and its author has **not** licensed its contents to us: read it for evidence, never quote it. Never committed. Anything it alone could answer — `CONFLICT-14`, `CONFLICT-15` — needs a fresh copy from `../ecw2`. |
-| `docs/units.md` | Informative, work in progress. Transcribed from the unit spreadsheet, one of the two sidecars James permitted us to use as game documentation. Source of canonical item codes only (`D-03`); several statistics are known errors. |
+| Player handbook | **Removed.** An extract of the original website. Used under James Colombo's permission but never redistributed: read it for evidence, never quote it. Never committed. Anything it alone could answer — `CONFLICT-14`, `CONFLICT-15` — needs a fresh copy from `../ecw2`. |
+| `docs/units.md` | Informative, work in progress. Transcribed from the unit spreadsheet, one of the handbook's two sidecars. Source of canonical item codes only (`D-03`); several statistics are known errors. |
 
 ## Working on the rules manual
 
@@ -66,8 +66,7 @@ wrong foundational formulas are expensive to unwind once a data model depends on
   gitignored and are task input, not project documentation.
 - `*.pdf` is gitignored, which is what kept the unlicensed handbook out of the repository. It has
   since been removed altogether. Do not commit a copy or quote it verbatim.
-- The handbook and its two sidecars are not the same in law. The handbook's contents are **not**
-  licensed to us; the sidecars — the unit spreadsheet and the turn sequence document — are, by
-  James's permission, as game documentation. Restating beats quoting either way.
-- The project is MIT licensed. Our own work and the permitted sidecars go in; nothing from the
-  handbook does.
+- **Empyrean Challenge is owned by James Colombo**, who gave permission in February 2023 to use the
+  manual and create this engine. The root `README.md` carries the notice; keep it there. The
+  permission covers use, not redistribution: restate, never quote, and never commit the handbook.
+- The project is MIT licensed, which covers **our own work** only — not Empyrean Challenge itself.

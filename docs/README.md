@@ -74,11 +74,13 @@ done.
 Epimethean Challenge is inspired by Vern Holford's **Empyrean Challenge**, a play-by-mail game. Three
 documents were the evidence these rules were extracted from, and they do not all stand alike.
 
+Empyrean Challenge is owned by **James Colombo**, who gave permission in February 2023 to use the
+manual and create this game engine. The [project README](../README.md) carries the notice.
+
 **The player handbook**, circulated as the *Empyrean Cluster Wars Manual*, is an extract of the
-original Empyrean Challenge website, which was the game's source of truth. It is third party and its
-author has **not** permitted direct use of its contents. It was kept out of this repository by
-`.gitignore`, was never committed, and has been removed. Nothing here is copied from it: it was read
-as evidence and every rule restated in our own words.
+original Empyrean Challenge website, which was the game's source of truth. It is not redistributed
+here: it was kept out of this repository by `.gitignore`, was never committed, and has been removed.
+Nothing here is copied from it — it was read as evidence and every rule restated in our own words.
 
 Its source, recorded for provenance and no longer reachable:
 
@@ -86,8 +88,8 @@ Its source, recorded for provenance and no longer reachable:
 
 **Two sidecars** travelled with it, distributed separately rather than folded into the handbook or
 the website: a spreadsheet of unit statistics and a Word document giving the turn sequence in more
-detail than the handbook's own chapter. **James gave permission to use these as game documentation.**
-`docs/units.md` is the spreadsheet, transcribed. The turn sequence document has been absorbed into
-the manual's §3 and removed — as redundant, not for any question of rights.
+detail than the handbook's own chapter. Both are used under the same permission. `docs/units.md` is
+the spreadsheet, transcribed. The turn sequence document has been absorbed into the manual's §3 and
+removed — as redundant, not for any question of rights.
 
 Everything else in these folders is our own work, under the repository's [MIT licence](../LICENSE).
