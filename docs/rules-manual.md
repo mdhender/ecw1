@@ -19,9 +19,9 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 
 | Source                                       | Status                        | Notes                                                                                                                                                                                                  |
 |----------------------------------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Player handbook (*Empyrean Cluster Wars Manual*) | Informative, **removed** | Third-party document, never ours to distribute. Extraction is complete and accepted, and the file has been removed from the repository; it was never committed. Cited throughout as "the handbook". Source recorded for provenance in [`docs/README.md`](./README.md). |
-| Unit table (`docs/units.md`)                 | Informative, work in progress | Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](./conflicts-and-gaps.md#20-source-conflicts). |
-| Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
+| Player handbook (*Empyrean Cluster Wars Manual*) | Informative, **removed** | Third-party document, never ours to distribute. Extraction is complete and accepted and the file has been removed; it was never committed. Cited throughout as "the handbook". Source recorded for provenance in [`docs/README.md`](./README.md). |
+| Turn sequence sidecar | Informative, **removed** | A Word document the handbook's author distributed alongside it. Held the turn sequence in more detail than the handbook's own chapter, and `D-08` adopted it where the two differed. Fully absorbed into [§3](#3-turn-processing-sequence), including the step numbering, and removed; recoverable from git history. |
+| Unit table (`docs/units.md`)                 | Informative, work in progress | Transcribed from a spreadsheet the handbook's author distributed alongside it, the second of the two sidecars. Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](./conflicts-and-gaps.md#20-source-conflicts). |
 | Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
 | Conflicts and gaps (`docs/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](./conflicts-and-gaps.md#04-decisions-on-record), [§20](./conflicts-and-gaps.md#20-source-conflicts), and [§21](./conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `CONFLICT-nn` and `GAP-nn` tag in the rules text resolves there, as does every `D-nn` cited in this table. The rules text itself cites no decisions. It records how the rules got here; this manual states where they got to. |
 | Home world setup (`docs/home-world-setup.md`) | **Normative**, for the official setup | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). It is the authority on what the official setup contains; [§1.7](#17-starting-position) fixes the shape of that setup and governs where the two overlap. A gamemaster may run a variant instead (`D-26`), which neither document describes. The rest of this manual governs unconditionally. |
@@ -2190,69 +2190,71 @@ This catalogue records the handbook's order set, plus orders added or removed by
 
 Legend for **Actor**: `S/C` any entity, `Ship`, `Colony`, `Surface` surface colony only.
 
+**Step** is the order's step number in the turn sequence ([§3](#3-turn-processing-sequence)).
+
 Every actor below is an entity acting for its owner, except `Diplomacy`, which a player issues directly. An independent
 entity has no owner and is the actor of no order ([§4.8](#48-ownership-and-independence)).
 
-| Order                               | Actor   | Stage                       | Standing | Parameters                                                                                     |
-|-------------------------------------|---------|-----------------------------|----------|------------------------------------------------------------------------------------------------|
-| `Accept`                            | S/C     | —                           | no       | Not in the game                                                                       |
-| `Beam`                              | S/C     | Transfer                    | no       | Undesigned (`GAP-30`). Resolves between `Transfer` and `Pick Up`                               |
-| `Add On`                            | S/C     | Setup                       | no       | quantity, item-`TL`, target entity, unassembled flag                                           |
-| `After-Maneuver Energy Weapon Fire` | S/C     | Combat / post-maneuver fire | no       | target, percentage, target category, distance abort                                            |
-| `After-Maneuver Missile Fire`       | S/C     | Combat / post-maneuver fire | no       | target, percentage, target category, distance abort                                            |
-| `Assemble`                          | S/C     | Assembly                    | no       | quantity, item-`TL`; plus factory group or product; plus deposit for mines                     |
-| `Auto Return Fire`                  | S/C     | Combat / prefire            | **yes**  | percentage                                                                                     |
-| `Build Change`                      | Colony  | Assembly                    | no       | factory group, new item-`TL` or `Nothing` / `Shut Down` / `Start Up`, optional factory count   |
-| `Close`                             | Ship    | Combat / maneuver           | no       | target ship, optional standoff distance                                                        |
-| `Close Proximity Targeting`         | S/C     | Combat / prefire            | **yes**  | percentage                                                                                     |
-| `Combine Factory Group`             | Colony  | Disassembly                 | no       | absorbing group, absorbed group, WIP-only flag with optional quarters                          |
-| `Control Planet`                    | Surface | Naming                      | no       | —                                                                                              |
-| `Defensive Support`                 | S/C     | Combat / ground             | no       | defended entity, then a list of quantity + item-`TL`, terminated                               |
-| `Define Cargo Hold`                 | Ship    | Setup                       | no       | quantity of space                                                                              |
-| `Diplomacy`                         | Player  | Permission                  | **yes**  | target player, status                                                                          |
-| `Disassemble`                       | S/C     | Disassembly                 | no       | quantity, item-`TL`; plus factory group or mine group                                          |
-| `Disband`                           | S/C     | Draft                       | no       | quantity, population type                                                                      |
-| `Dock`                              | Ship    | Combat / maneuver           | no       | target entity                                                                                  |
-| `Dodge`                             | Ship    | Combat / prefire            | **yes**  | percentage of speed                                                                            |
-| `Draft`                             | S/C     | Draft                       | no       | quantity, population type                                                                      |
-| `Expend`                            | Colony  | Assembly                    | no       | research point quantity + item type; or prototype quantity + prototype item-`TL`               |
-| `Factory Group Change`              | Colony  | Assembly                    | no       | existing group, new group, quantity of factories                                               |
-| `Give`                              | S/C     | Give                        | no       | receiving entity                                                                               |
-| `Home Port Change`                  | Ship    | Permission                  | no       | colony                                                                                         |
-| `Invade`                            | S/C     | Combat / ground             | no       | target entity, then a list of quantity + item-`TL`, terminated                                 |
-| `Jump`                              | Ship    | Ship Travel                 | no       | system coordinates, arrival distance band                                                      |
-| `Junk`                              | S/C     | Disassembly                 | no       | entity to be junked                                                                            |
-| `Launch Robot Probe`                | S/C     | Surveys and Probes          | no       | probe type, system coordinates, star letter, orbit, magnitude                                  |
-| `Load Cargo`                        | Colony  | Transfer                    | no       | quantity, item-`TL`, ship                                                                      |
-| `Merge`                             | Ship    | Disassembly                 | no       | ship to be absorbed                                                                            |
-| `Message`                           | S/C     | Naming                      | no       | target entity, text                                                                            |
-| `Mine Change`                       | Colony  | Assembly                    | no       | mine group, target deposit, quantity; or mine group + shut down / start up + optional quantity |
-| `Move`                              | Ship    | Ship Travel                 | no       | star letter, orbit, arrival distance band                                                      |
-| `Name`                              | S/C     | Naming                      | no       | entity kind, text (≤ 50 chars, no comma)                                                       |
-| `Note`                              | S/C     | Naming                      | no       | text (≤ 200 chars)                                                                             |
-| `Offensive Support`                 | S/C     | Combat / ground             | no       | defending entity, then a list of quantity + item-`TL`, terminated                              |
-| `Pay`                               | Colony  | Pay Change                  | **yes**  | amount + population type, or percentage + `ALL`                                                |
-| `Permission To Colonize`            | Colony  | Permission                  | no       | ship being granted permission                                                                  |
-| `Pick Up`                           | S/C     | Transfer                    | no       | quantity, item-`TL` or population type + race ID (`GAP-33`), source entity                     |
-| `Pre-Maneuver Energy Weapon Fire`   | S/C     | Combat / pre-maneuver fire  | no       | target, percentage, target category, distance abort                                            |
-| `Pre-Maneuver Missile Fire`         | S/C     | Combat / pre-maneuver fire  | no       | target, percentage, target category, distance abort                                            |
-| `Probe` (orbit)                     | S/C     | Probe                       | no       | star letter or `ALL`, orbit number or `ALL`                                                    |
-| `Probe` (system)                    | S/C     | Probe                       | no       | magnitude (≤ 10)                                                                               |
-| `Probe` (S/C)                       | S/C     | Surveys and Probes          | no       | target entity                                                                                  |
-| `Ration`                            | S/C     | Pay Change                  | **yes**  | percentage                                                                                     |
-| `Run`                               | Ship    | Combat / maneuver           | no       | target entity                                                                                  |
-| `Scrap`                             | S/C     | Disassembly                 | no       | quantity, item-`TL`                                                                            |
-| `Set Up`                            | S/C     | Setup                       | no       | entity type, quantity, then an item list; factories need a product, mines need a deposit       |
-| `Shut Down`                         | S/C     | Assembly                    | no       | quantity, `Farms-TL` or `Laboratories-TL`                                                      |
-| `Start Up`                          | S/C     | Assembly                    | no       | quantity, `Farms-TL` or `Laboratories-TL`                                                      |
-| `Supply`                            | S/C     | —                           | no       | Defunct (`GAP-39`)                                                                             |
-| `Survey`                            | S/C     | Surveys and Probes          | no       | —                                                                                              |
-| `Tactical Maneuver`                 | Ship    | Combat / maneuver           | no       | tactical coordinates                                                                           |
-| `Transfer`                          | S/C     | Transfer                    | no       | quantity, item-`TL`, receiving entity or `Jettison`                                            |
-| `Un-Control Planet`                 | Surface | Naming                      | no       | —                                                                                              |
-| `Undock`                            | Ship    | Combat / maneuver           | no       | —                                                                                              |
-| `Unload`                            | Colony  | Transfer                    | no       | quantity, item-`TL`, ship                                                                      |
-| `Withdraw`                          | S/C     | Combat / ground             | no       | defending entity                                                                               |
+| Order                               | Actor   | Step        | Standing | Parameters                                                                                     |
+|-------------------------------------|---------|-------------|----------|------------------------------------------------------------------------------------------------|
+| `Accept`                            | S/C     | —         | no       | Not in the game                                                                       |
+| `Beam`                              | S/C     | 6.3       | no       | Undesigned (`GAP-30`). Resolves between `Transfer` and `Pick Up`                               |
+| `Add On`                            | S/C     | 5.3       | no       | quantity, item-`TL`, target entity, unassembled flag                                           |
+| `After-Maneuver Energy Weapon Fire` | S/C     | 2.4.1     | no       | target, percentage, target category, distance abort                                            |
+| `After-Maneuver Missile Fire`       | S/C     | 2.4.2     | no       | target, percentage, target category, distance abort                                            |
+| `Assemble`                          | S/C     | 8.1.1     | no       | quantity, item-`TL`; plus factory group or product; plus deposit for mines                     |
+| `Auto Return Fire`                  | S/C     | 2.1.2     | **yes**  | percentage                                                                                     |
+| `Build Change`                      | Colony  | 8.1.5     | no       | factory group, new item-`TL` or `Nothing` / `Shut Down` / `Start Up`, optional factory count   |
+| `Close`                             | Ship    | 2.3.4     | no       | target ship, optional standoff distance                                                        |
+| `Close Proximity Targeting`         | S/C     | 2.1.3     | **yes**  | percentage                                                                                     |
+| `Combine Factory Group`             | Colony  | 4.5       | no       | absorbing group, absorbed group, WIP-only flag with optional quarters                          |
+| `Control Planet`                    | Surface | 11.3      | no       | —                                                                                              |
+| `Defensive Support`                 | S/C     | 2.5.2     | no       | defended entity, then a list of quantity + item-`TL`, terminated                               |
+| `Define Cargo Hold`                 | Ship    | 5.1       | no       | quantity of space                                                                              |
+| `Diplomacy`                         | Player  | 3.3       | **yes**  | target player, status                                                                          |
+| `Disassemble`                       | S/C     | 4.1       | no       | quantity, item-`TL`; plus factory group or mine group                                          |
+| `Disband`                           | S/C     | 7.2       | no       | quantity, population type                                                                      |
+| `Dock`                              | Ship    | 2.3.5     | no       | target entity                                                                                  |
+| `Dodge`                             | Ship    | 2.1.1     | **yes**  | percentage of speed                                                                            |
+| `Draft`                             | S/C     | 7.1       | no       | quantity, population type                                                                      |
+| `Expend`                            | Colony  | 8.1.2, 8.1.3 | no       | research point quantity + item type; or prototype quantity + prototype item-`TL`               |
+| `Factory Group Change`              | Colony  | 8.1.4     | no       | existing group, new group, quantity of factories                                               |
+| `Give`                              | S/C     | 14.1      | no       | receiving entity                                                                               |
+| `Home Port Change`                  | Ship    | 3.2       | no       | colony                                                                                         |
+| `Invade`                            | S/C     | 2.5.3     | no       | target entity, then a list of quantity + item-`TL`, terminated                                 |
+| `Jump`                              | Ship    | 12.1      | no       | system coordinates, arrival distance band                                                      |
+| `Junk`                              | S/C     | 4.3       | no       | entity to be junked                                                                            |
+| `Launch Robot Probe`                | S/C     | 9.3       | no       | probe type, system coordinates, star letter, orbit, magnitude                                  |
+| `Load Cargo`                        | Colony  | 6.5       | no       | quantity, item-`TL`, ship                                                                      |
+| `Merge`                             | Ship    | 4.4       | no       | ship to be absorbed                                                                            |
+| `Message`                           | S/C     | 11.5      | no       | target entity, text                                                                            |
+| `Mine Change`                       | Colony  | 8.1.6     | no       | mine group, target deposit, quantity; or mine group + shut down / start up + optional quantity |
+| `Move`                              | Ship    | 12.2      | no       | star letter, orbit, arrival distance band                                                      |
+| `Name`                              | S/C     | 11.1      | no       | entity kind, text (≤ 50 chars, no comma)                                                       |
+| `Note`                              | S/C     | 11.2      | no       | text (≤ 200 chars)                                                                             |
+| `Offensive Support`                 | S/C     | 2.5.4     | no       | defending entity, then a list of quantity + item-`TL`, terminated                              |
+| `Pay`                               | Colony  | 10.1      | **yes**  | amount + population type, or percentage + `ALL`                                                |
+| `Permission To Colonize`            | Colony  | 3.1       | no       | ship being granted permission                                                                  |
+| `Pick Up`                           | S/C     | 6.4       | no       | quantity, item-`TL` or population type + race ID (`GAP-33`), source entity                     |
+| `Pre-Maneuver Energy Weapon Fire`   | S/C     | 2.2.1     | no       | target, percentage, target category, distance abort                                            |
+| `Pre-Maneuver Missile Fire`         | S/C     | 2.2.2     | no       | target, percentage, target category, distance abort                                            |
+| `Probe` (orbit)                     | S/C     | 13.1      | no       | star letter or `ALL`, orbit number or `ALL`                                                    |
+| `Probe` (system)                    | S/C     | 13.2      | no       | magnitude (≤ 10)                                                                               |
+| `Probe` (S/C)                       | S/C     | 9.1       | no       | target entity                                                                                  |
+| `Ration`                            | S/C     | 10.2      | **yes**  | percentage                                                                                     |
+| `Run`                               | Ship    | 2.3.2     | no       | target entity                                                                                  |
+| `Scrap`                             | S/C     | 4.2       | no       | quantity, item-`TL`                                                                            |
+| `Set Up`                            | S/C     | 5.2       | no       | entity type, quantity, then an item list; factories need a product, mines need a deposit       |
+| `Shut Down`                         | S/C     | 8.1.7     | no       | quantity, `Farms-TL` or `Laboratories-TL`                                                      |
+| `Start Up`                          | S/C     | 8.1.8     | no       | quantity, `Farms-TL` or `Laboratories-TL`                                                      |
+| `Supply`                            | S/C     | —         | no       | Defunct (`GAP-39`)                                                                             |
+| `Survey`                            | S/C     | 9.2       | no       | —                                                                                              |
+| `Tactical Maneuver`                 | Ship    | 2.3.3     | no       | tactical coordinates                                                                           |
+| `Transfer`                          | S/C     | 6.2       | no       | quantity, item-`TL`, receiving entity or `Jettison`                                            |
+| `Un-Control Planet`                 | Surface | 11.4      | no       | —                                                                                              |
+| `Undock`                            | Ship    | 2.3.1     | no       | —                                                                                              |
+| `Unload`                            | Colony  | 6.1       | no       | quantity, item-`TL`, ship                                                                      |
+| `Withdraw`                          | S/C     | 2.5.1     | no       | defending entity                                                                               |
 
 ---
 

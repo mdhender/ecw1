@@ -75,11 +75,16 @@ Epimethean Challenge is inspired by Vern Holford's **Empyrean Challenge**, a pla
 player handbook — published as the *Empyrean Cluster Wars Manual* — was the evidence from which
 these rules were extracted.
 
-That handbook is a third-party document and was never ours to distribute. It was kept out of this
-repository by `.gitignore`, was never committed, and has now been removed from the working tree. No
-text in this documentation is copied from it; every rule is restated in our own words.
+The handbook travelled with two **sidecars**, distributed separately by the same author rather than
+folded into the PDF or the website: a spreadsheet of unit statistics and a Word document giving the
+turn sequence in more detail than the handbook's own chapter. All three were evidence.
 
-Its source, recorded for provenance and no longer reachable:
+None of them was ours to distribute. The handbook was kept out of this repository by `.gitignore`
+and never committed. The turn sequence sidecar has been absorbed into the manual's §3 and removed.
+`units.md` remains, transcribed from the spreadsheet. No text in this documentation is copied from
+any of them; every rule is restated in our own words.
+
+The handbook's source, recorded for provenance and no longer reachable:
 
 <http://empyreanchallenge.com/ECWxManual/>
 
