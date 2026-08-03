@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Epimethean Challenge** — a play-by-mail-style 4X space game inspired by Vern Holford's
 Empyrean Challenge. The repository is currently **specification-only**: there is a Go module
 (`github.com/mdhender/ecw1`, Go 1.26.4) with no source files yet. All current work is producing
-`docs/rules-manual.md`, the normative spec from which the game engine and database model will be
-generated.
+`docs/reference/rules-manual.md`, the normative spec from which the game engine and database model
+will be generated.
 
 Go commands work as usual once code exists (`go build ./...`, `go test ./...`,
 `go test -run TestName ./pkg/...`); there is nothing to build or test today.
@@ -19,9 +19,19 @@ The manual's own §0.2 is the authority; the ranking is:
 
 | File | Status |
 |------|--------|
-| `docs/rules-manual.md` | **Normative.** Our own work, licensed to distribute. If it disagrees with an implementation, amend the manual first. |
+| `docs/reference/rules-manual.md` | **Normative.** Our own work, licensed to distribute. If it disagrees with an implementation, amend the manual first. |
 | Player handbook | **Removed.** An extract of the original website. Used under James Colombo's permission but never redistributed: read it for evidence, never quote it. Never committed. Anything it alone could answer — `CONFLICT-14`, `CONFLICT-15` — needs a fresh copy from `../ecw2`. |
-| `docs/units.md` | Informative, work in progress. Transcribed from the unit spreadsheet, one of the handbook's two sidecars. Source of canonical item codes only (`D-03`); several statistics are known errors. |
+| `docs/reference/units.md` | Informative, work in progress. Transcribed from the unit spreadsheet, one of the handbook's two sidecars. Source of canonical item codes only (`D-03`); several statistics are known errors. |
+
+## Document layout
+
+`docs/` is organised on Diataxis — `tutorial/`, `how-to/`, `reference/`, `explanation/` — and
+`docs/README.md` states what belongs in each. The first two are empty. `reference/` holds
+`rules-manual.md` and `units.md`; `explanation/` holds `conflicts-and-gaps.md` and
+`home-world-setup.md`, the latter still normative for the official setup despite the folder.
+
+`docs/entity-model.md` sits loose at the root of `docs/` on purpose: it documents the engine, not
+the game, and moves in beside the code once code exists. Do not file it in one of the four folders.
 
 ## Working on the rules manual
 
@@ -38,13 +48,14 @@ Three tracking vocabularies run through the document and must be kept consistent
 - `D-nn` (§0.4) — a design-owner decision. **Entries are never rewritten**, only appended. A
   decision names the conflict or question it closes and its consequences.
 
-All three now live in `docs/conflicts-and-gaps.md`, not in the manual. The manual keeps §0.4, §20,
-and §21 as headings that point there, and that document keeps the manual's numbering.
+All three now live in `docs/explanation/conflicts-and-gaps.md`, not in the manual. The manual keeps
+§0.4, §20, and §21 as headings that point there, and that document keeps the manual's numbering.
 
 When a decision lands, the follow-through is: append `D-nn` in §0.4 of
-`docs/conflicts-and-gaps.md` → rewrite the affected body section of the manual to state the rule as
-fact with no hedging (remove the candidate-readings passage) → update the Resolution column in §20
-→ update §21 for gaps closed or newly exposed → note any correction `docs/units.md` now needs.
+`docs/explanation/conflicts-and-gaps.md` → rewrite the affected body section of the manual to state
+the rule as fact with no hedging (remove the candidate-readings passage) → update the Resolution
+column in §20 → update §21 for gaps closed or newly exposed → note any correction
+`docs/reference/units.md` now needs.
 
 Ask the design owner (the repo owner) rather than guessing when evidence is genuinely ambiguous —
 wrong foundational formulas are expensive to unwind once a data model depends on them.

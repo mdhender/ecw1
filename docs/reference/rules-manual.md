@@ -19,14 +19,14 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 
 | Source                                       | Status                        | Notes                                                                                                                                                                                                  |
 |----------------------------------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Player handbook (*Empyrean Cluster Wars Manual*) | Informative, **removed** | An extract of the original Empyrean Challenge website, which was the game's source of truth. Used under James Colombo's permission but not redistributed: read as evidence and never quoted, never committed, removed once extraction was accepted. Cited throughout as "the handbook". See the [project README](../README.md). |
+| Player handbook (*Empyrean Cluster Wars Manual*) | Informative, **removed** | An extract of the original Empyrean Challenge website, which was the game's source of truth. Used under James Colombo's permission but not redistributed: read as evidence and never quoted, never committed, removed once extraction was accepted. Cited throughout as "the handbook". See the [project README](../../README.md). |
 | Turn sequence sidecar | Informative, **removed** | A Word document distributed alongside the handbook, one of its two sidecars. Held the turn sequence in more detail than the handbook's own chapter, and `D-08` adopted it where the two differed. Fully absorbed into [§3](#3-turn-processing-sequence), including the step numbering, and removed as redundant rather than for any question of rights; recoverable from git history. |
-| Unit table (`docs/units.md`)                 | Informative, work in progress | Transcribed from a spreadsheet distributed alongside the handbook, the second of its two sidecars. Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](./conflicts-and-gaps.md#20-source-conflicts). |
+| Unit table (`docs/reference/units.md`)                 | Informative, work in progress | Transcribed from a spreadsheet distributed alongside the handbook, the second of its two sidecars. Source of the canonical item codes (`D-03`). Its statistics diverge from the handbook in places and are not normative; several are known errors requiring correction. See [§20](../explanation/conflicts-and-gaps.md#20-source-conflicts). |
 | Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
-| Conflicts and gaps (`docs/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](./conflicts-and-gaps.md#04-decisions-on-record), [§20](./conflicts-and-gaps.md#20-source-conflicts), and [§21](./conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `CONFLICT-nn` and `GAP-nn` tag in the rules text resolves there, as does every `D-nn` cited in this table. The rules text itself cites no decisions. It records how the rules got here; this manual states where they got to. |
-| Home world setup (`docs/home-world-setup.md`) | **Normative**, for the official setup | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). It is the authority on what the official setup contains; [§1.7](#17-starting-position) fixes the shape of that setup and governs where the two overlap. A gamemaster may run a variant instead (`D-26`), which neither document describes. The rest of this manual governs unconditionally. |
+| Conflicts and gaps (`docs/explanation/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](../explanation/conflicts-and-gaps.md#04-decisions-on-record), [§20](../explanation/conflicts-and-gaps.md#20-source-conflicts), and [§21](../explanation/conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `CONFLICT-nn` and `GAP-nn` tag in the rules text resolves there, as does every `D-nn` cited in this table. The rules text itself cites no decisions. It records how the rules got here; this manual states where they got to. |
+| Home world setup (`docs/explanation/home-world-setup.md`) | **Normative**, for the official setup | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). It is the authority on what the official setup contains; [§1.7](#17-starting-position) fixes the shape of that setup and governs where the two overlap. A gamemaster may run a variant instead (`D-26`), which neither document describes. The rest of this manual governs unconditionally. |
 
-No text in this manual is copied from the handbook. All rules are restated. Empyrean Challenge is owned by James Colombo and this work proceeds under his permission; see the [project README](../README.md).
+No text in this manual is copied from the handbook. All rules are restated. Empyrean Challenge is owned by James Colombo and this work proceeds under his permission; see the [project README](../../README.md).
 
 ### 0.3 How to read this manual
 
@@ -37,14 +37,15 @@ No text in this manual is copied from the handbook. All rules are restated. Empy
 - **Conflicts** — places where the sources contradict each other — are tagged `CONFLICT-nn`. Each conflict names the
   candidate readings; none is authoritative until chosen.
 
-Both tags resolve in [`conflicts-and-gaps.md`](./conflicts-and-gaps.md), which holds
-[§20](./conflicts-and-gaps.md#20-source-conflicts) and [§21](./conflicts-and-gaps.md#21-gaps). That document tracks
-what is unsettled and records the decisions that settled the rest; this one states the rules themselves. A tag is the
-only thing in the rules text that points outside it.
+Both tags resolve in [`conflicts-and-gaps.md`](../explanation/conflicts-and-gaps.md), which holds
+[§20](../explanation/conflicts-and-gaps.md#20-source-conflicts) and
+[§21](../explanation/conflicts-and-gaps.md#21-gaps). That document tracks what is unsettled and records the decisions
+that settled the rest; this one states the rules themselves. A tag is the only thing in the rules text that points
+outside it.
 
 ### 0.4 Decisions on record
 
-Moved to [`conflicts-and-gaps.md`](./conflicts-and-gaps.md#04-decisions-on-record).
+Moved to [`conflicts-and-gaps.md`](../explanation/conflicts-and-gaps.md#04-decisions-on-record).
 
 A `D-nn` is a decision taken by the design owner, closing a source conflict or an open question. The decisions
 themselves, with the evidence weighed and the consequences of each, are recorded in that document. Entries are
@@ -161,7 +162,7 @@ derived.
 
 This section fixes the shape of the starting position. What the two colonies contain — population by Living type and
 cadre, assembled items, Storage Inventory, stockpiles, and structure — is tabulated in
-[`home-world-setup.md`](./home-world-setup.md), which is normative for the official setup.
+[`home-world-setup.md`](../explanation/home-world-setup.md), which is normative for the official setup.
 
 At game start each player has:
 
@@ -877,7 +878,7 @@ factoryOutputPerYear  = 20 × TL MU per factory
 batchQuantityPerYear  = (20 × TL × factoryCount) / massPerItem
 ```
 
-`docs/units.md` states factory output as `20 × TL` mass **per turn**, four times this figure, and is in error
+`docs/reference/units.md` states factory output as `20 × TL` mass **per turn**, four times this figure, and is in error
 (`CONFLICT-03`).
 
 **Work In Process.** A batch advances one quarter per turn through four states. The whole batch advances together; a
@@ -973,7 +974,7 @@ Whether solar power is available to surface colonies or ships in orbits 1–5 is
 | Immutability   | An item's `TL` is fixed when it is manufactured and never changes                                        |
 | Factory `TL`   | Does not limit the `TL` of what a factory can build; it only sets the factory's output capacity          |
 
-`docs/units.md` states the `TL` range as integers 0–10 and is in error (`CONFLICT-04`).
+`docs/reference/units.md` states the `TL` range as integers 0–10 and is in error (`CONFLICT-04`).
 
 ### 8.2 Research points
 
@@ -1303,7 +1304,7 @@ Shut-down items stay assembled, require no fuel, and employ no population.
 | Self-mass             | Hyper engine mass counts toward the mass being lifted                     |
 | Partial travel        | Never. If lift, fuel, or crew is insufficient, the whole order fails.     |
 
-`docs/units.md` gives hyper engine range as `sqrt(TL) + 4` `LY` and is in error (`CONFLICT-07`).
+`docs/reference/units.md` gives hyper engine range as `sqrt(TL) + 4` `LY` and is in error (`CONFLICT-07`).
 
 ### 11.2 Jump
 
@@ -2076,7 +2077,7 @@ happens if two conditions are satisfied at once are not specified (`GAP-27`).
 
 The per-unit table lives in [`units.md`](./units.md). It is the working unit reference and is not yet reconciled with
 this manual; see
-[§20](./conflicts-and-gaps.md#20-source-conflicts).
+[§20](../explanation/conflicts-and-gaps.md#20-source-conflicts).
 
 ### 19.1 Assembly and volume model
 
@@ -2092,7 +2093,7 @@ this manual; see
 
 ### 19.2 Item classes and canonical codes
 
-Item codes are those of `docs/units.md`. Names in parentheses are the handbook's, where they differ.
+Item codes are those of `docs/reference/units.md`. Names in parentheses are the handbook's, where they differ.
 
 | Class          | Members                                                                                                                                                                                        |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2166,16 +2167,16 @@ model governs food, consumer goods, mass, and volume accounting is `GAP-32`.
 
 ## 20. Source conflicts
 
-Moved to [`conflicts-and-gaps.md`](./conflicts-and-gaps.md#20-source-conflicts).
+Moved to [`conflicts-and-gaps.md`](../explanation/conflicts-and-gaps.md#20-source-conflicts).
 
 A `CONFLICT-nn` tag in this manual marks a place where the sources contradict each other. Both readings are recorded in
-that document; neither is authoritative until a decision in [§0.4](./conflicts-and-gaps.md#04-decisions-on-record) closes it.
+that document; neither is authoritative until a decision in [§0.4](../explanation/conflicts-and-gaps.md#04-decisions-on-record) closes it.
 
 ---
 
 ## 21. Gaps
 
-Moved to [`conflicts-and-gaps.md`](./conflicts-and-gaps.md#21-gaps).
+Moved to [`conflicts-and-gaps.md`](../explanation/conflicts-and-gaps.md#21-gaps).
 
 A `GAP-nn` tag in this manual marks a rule no source supplies. Implementations must not fill a gap by invention; they
 must escalate it to the design owner. Gaps closed by decision are withdrawn from that document and their numbers are

@@ -16,9 +16,9 @@ repository, and it has been removed from the working tree now that extraction is
 read as evidence and every rule restated in our own words rather than quoted.
 
 Two **sidecars** were distributed alongside it — a spreadsheet of unit statistics and a Word document
-giving the turn sequence in detail — and are used under the same permission. `docs/units.md` is the
-spreadsheet, transcribed; the turn sequence document has been absorbed into the rules manual and
-removed as redundant.
+giving the turn sequence in detail — and are used under the same permission.
+`docs/reference/units.md` is the spreadsheet, transcribed; the turn sequence document has been
+absorbed into the rules manual and removed as redundant.
 
 Our own work — the rules manual, the supporting documents, and the engine once it exists — is
 MIT licensed. See [LICENSE](./LICENSE).
@@ -31,10 +31,10 @@ from.
 
 | Document | What it is |
 |----------|------------|
-| [`docs/rules-manual.md`](./docs/rules-manual.md) | **Normative.** The rules, and only the rules. |
-| [`docs/home-world-setup.md`](./docs/home-world-setup.md) | The official starting position and the arithmetic that closes it. |
-| [`docs/conflicts-and-gaps.md`](./docs/conflicts-and-gaps.md) | Decisions taken, source conflicts, and rules no source supplies. |
-| [`docs/units.md`](./docs/units.md) | Per-unit statistics. Informative; the manual governs. |
+| [`docs/reference/rules-manual.md`](./docs/reference/rules-manual.md) | **Normative.** The rules, and only the rules. |
+| [`docs/explanation/home-world-setup.md`](./docs/explanation/home-world-setup.md) | The official starting position and the arithmetic that closes it. |
+| [`docs/explanation/conflicts-and-gaps.md`](./docs/explanation/conflicts-and-gaps.md) | Decisions taken, source conflicts, and rules no source supplies. |
+| [`docs/reference/units.md`](./docs/reference/units.md) | Per-unit statistics. Informative; the manual governs. |
 | [`docs/entity-model.md`](./docs/entity-model.md) | How an implementation may represent ownership. Not normative. |
 
 ## Documentation

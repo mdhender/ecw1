@@ -25,6 +25,9 @@ It takes responsibility for the reader's success, so it must work exactly as wri
 
 Expect pages that say *we will*. A first turn, walked through end to end.
 
+Empty today. Nothing written so far is a tutorial, and the handbook's own quick-start page was an
+unwritten placeholder, so the first one will be new writing rather than a move.
+
 ### [`how-to/`](./how-to) — recipes
 
 A how-to guide addresses a goal a competent player or implementer already has, and shows the way to
@@ -33,6 +36,8 @@ skip, branch, and assume.
 
 Expect pages titled with the goal itself — *how to found a colony in a new system*, *how to run a
 turn* — that answer *if you want this, do that*.
+
+Empty today, for the same reason.
 
 ### [`reference/`](./reference) — the machinery
 
@@ -47,6 +52,13 @@ and no argument. Worked arithmetic appears only where a formula would otherwise 
 This is the bulk of what exists today, because the reference material is what an engine and a
 database model are generated from.
 
+The two documents here do not stand alike, and the folder does not say so on its own:
+
+- [`rules-manual.md`](./reference/rules-manual.md) is **normative**. It governs.
+- [`units.md`](./reference/units.md) is **informative**. It is the transcribed unit spreadsheet, kept
+  for the canonical item codes; several of its statistics contradict the manual and are known errors,
+  five of them recorded and not yet applied. Where the two disagree, the manual is right.
+
 ### [`explanation/`](./explanation) — the reasoning
 
 Explanation provides context and joins things together. It answers *why*: why a rule takes the shape
@@ -56,6 +68,15 @@ allowed opinion and perspective, which reference is not.
 Expect discussion — the reasoning behind a mechanic, the trade-offs in a model, the history of a
 decision — read at leisure rather than at the table.
 
+- [`conflicts-and-gaps.md`](./explanation/conflicts-and-gaps.md) is the tracking document: the
+  decisions taken and what they rejected, the places the sources contradict each other, and the rules
+  no source supplies. Every `D-nn`, `CONFLICT-nn`, and `GAP-nn` resolves here.
+- [`home-world-setup.md`](./explanation/home-world-setup.md) is one starting configuration and the
+  case for it. It is filed here because a gamemaster may run a different setup without breaking a
+  rule, which makes the seed configuration rather than specification. That placement is a statement
+  about the reader's need and **not** a demotion: within the official setup the document is
+  normative, and it says so in its own banner.
+
 ## Why the separation matters here
 
 The rules are normative: an engine and a database model are generated from them. A rule softened by
@@ -63,11 +84,35 @@ a tutorial's hand-holding, or hedged by an explanation's reasoning, is a rule an
 read two ways. Keeping the four apart is what lets the reference material be read as specification,
 and lets the reasoning behind it be recorded in full without diluting it.
 
-## Status
+## What is where
 
-The documents are being moved into these folders; most still sit at the root of `docs/` and are
-listed in the manual's own Sources section. A table of contents will be added once the moves are
-done.
+```
+docs/
+├── tutorial/                    (empty)
+├── how-to/                      (empty)
+├── reference/
+│   ├── rules-manual.md          normative — the rules, and only the rules
+│   └── units.md                 informative — per-unit statistics, corrections outstanding
+├── explanation/
+│   ├── conflicts-and-gaps.md    decisions, source conflicts, and gaps
+│   └── home-world-setup.md      the official starting position and its arithmetic
+└── entity-model.md              engine, not game — see below
+```
+
+A table of contents will be added in a later pass, as will any split of the manual into per-topic
+pages. Neither is done yet.
+
+### Why `entity-model.md` sits loose
+
+It is not an oversight, and it does not belong in one of the four folders. By type it is
+explanation — it weighs a rejected alternative and names what the chosen shape costs — but its
+subject is the wrong one. The four folders document **the game**; `entity-model.md` documents **the
+engine**, recording how an implementation may represent ownership and the direction of orders. A
+reader opening `explanation/` for the reasoning behind a rule would find a schema argument instead.
+
+Diátaxis sorts material within one product's documentation, not between products, so the type alone
+does not place it. It stays here until there is code for it to sit beside, and then it leaves `docs/`
+altogether.
 
 ## Sources and provenance
 
@@ -88,8 +133,8 @@ Its source, recorded for provenance and no longer reachable:
 
 **Two sidecars** travelled with it, distributed separately rather than folded into the handbook or
 the website: a spreadsheet of unit statistics and a Word document giving the turn sequence in more
-detail than the handbook's own chapter. Both are used under the same permission. `docs/units.md` is
-the spreadsheet, transcribed. The turn sequence document has been absorbed into the manual's §3 and
-removed — as redundant, not for any question of rights.
+detail than the handbook's own chapter. Both are used under the same permission.
+`docs/reference/units.md` is the spreadsheet, transcribed. The turn sequence document has been
+absorbed into the manual's §3 and removed — as redundant, not for any question of rights.
 
 Everything else in these folders is our own work, under the repository's [MIT licence](../LICENSE).
