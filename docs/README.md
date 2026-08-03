@@ -71,21 +71,23 @@ done.
 
 ## Sources and provenance
 
-Epimethean Challenge is inspired by Vern Holford's **Empyrean Challenge**, a play-by-mail game whose
-player handbook — published as the *Empyrean Cluster Wars Manual* — was the evidence from which
-these rules were extracted.
+Epimethean Challenge is inspired by Vern Holford's **Empyrean Challenge**, a play-by-mail game. Three
+documents were the evidence these rules were extracted from, and they do not all stand alike.
 
-The handbook travelled with two **sidecars**, distributed separately by the same author rather than
-folded into the PDF or the website: a spreadsheet of unit statistics and a Word document giving the
-turn sequence in more detail than the handbook's own chapter. All three were evidence.
+**The player handbook**, circulated as the *Empyrean Cluster Wars Manual*, is an extract of the
+original Empyrean Challenge website, which was the game's source of truth. It is third party and its
+author has **not** permitted direct use of its contents. It was kept out of this repository by
+`.gitignore`, was never committed, and has been removed. Nothing here is copied from it: it was read
+as evidence and every rule restated in our own words.
 
-None of them was ours to distribute. The handbook was kept out of this repository by `.gitignore`
-and never committed. The turn sequence sidecar has been absorbed into the manual's §3 and removed.
-`units.md` remains, transcribed from the spreadsheet. No text in this documentation is copied from
-any of them; every rule is restated in our own words.
-
-The handbook's source, recorded for provenance and no longer reachable:
+Its source, recorded for provenance and no longer reachable:
 
 <http://empyreanchallenge.com/ECWxManual/>
 
-Everything in these folders is our own work, under the repository's [MIT licence](../LICENSE).
+**Two sidecars** travelled with it, distributed separately rather than folded into the handbook or
+the website: a spreadsheet of unit statistics and a Word document giving the turn sequence in more
+detail than the handbook's own chapter. **James gave permission to use these as game documentation.**
+`docs/units.md` is the spreadsheet, transcribed. The turn sequence document has been absorbed into
+the manual's §3 and removed — as redundant, not for any question of rights.
+
+Everything else in these folders is our own work, under the repository's [MIT licence](../LICENSE).
