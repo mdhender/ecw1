@@ -62,6 +62,7 @@ list; entries are never rewritten.
 | `D-17` | **Victory is decided by holding habitable planets.** A race holds a colony through its resident `SOL` or `PRO` units and a planet through a majority of its colonies; a player holds a planet by holding every colony on it. Solo and Race victory each require holding `floor(H × 0.5) + 1` habitable planets while no rival holds more than `ceil(H × 0.1) + 1`. | Replaces the handbook's Domination victory. **Victory points no longer exist**: the per-100,000 rate, the Habitability Factor cap, and the oldest-colony contention rule are all dropped, and `GAP-27` and `GAP-42` are restated without them. Adapted from an earlier version of the game that used "species" for race and interposed a Faction layer between player and entity; Faction is deferred and reads as Player throughout ([§18.2](#182-holding)). Closes `GAP-54`, which is withdrawn. **Correction on record:** the source wrote both thresholds with `ceil`, which is not a majority — `ceil(C × 0.5) + 1` demands 2 colonies on a 1-colony planet, making single-colony planets unholdable and contradicting the every-colony rule for players, and `ceil(H × 0.5) + 1` makes a one-planet cluster unwinnable. `floor` is used instead and yields a true majority at every size. |
 | `D-18` | **A race holds a colony by holding a majority of its population**, `floor(P × 0.5) + 1` of the colony's `P` population units, counting every type. | Replaces the "at least one `SOL` or `PRO` of that race" test taken from the earlier version. A majority is unique, so at most one race holds a colony and no colony is counted toward two races at once ([§18.2](#182-holding)). A colony where no race reaches a majority is held by no race. Race holding is now demographic and type-blind, while player holding still turns on ownership plus a soldier or professional; the asymmetry is intended. |
 | `D-19` | **The Faction layer is not adopted into the rules.** A player owns entities directly. Every entity is owned by exactly one player or is **independent**, owned by none. An entity holding no Soldier and no Professional outside the `RBL` cadre is independent: it accepts no orders, keeps everything it holds, and returns to play only when a player places a soldier or professional in it. Victory is counted by **position** — a player's seat in the game, whether or not an account still plays it. `Master / Client` is not in the game. | Closes `GAP-55`, `GAP-49`, and `GAP-42`; all three are withdrawn and their numbers are not reused. Supersedes `D-17`'s reading of Faction as Player by removing the term: the indirection an implementation may want between the agency directing orders and the entity receiving them is an implementation concern, recorded in `docs/entity-model.md`, which is not normative. [§18.2](#182-holding) needs no third holding subject — an independent entity has no owner, so no player holds it, and the planet test already requires **every** colony on the planet, so one independent colony there denies the planet to every player while its population goes on holding for its race under `D-18`. Elimination stops being a trigger needing its own definition and becomes a readable state: a player owning no entity is eliminated, which covers zero population and also a player left holding only unemployables and unskilled. Narrows `GAP-56` to the race test alone. Raises `GAP-57`, the upkeep of independent entities, and extends `GAP-22` with whether an independent entity drafts militia. `Master / Client` follows `D-09`'s pattern: the name is reserved and its gap withdrawn rather than left open, its ground covered by the `Give` order and by out-of-game delegation, which confers no ownership, no diplomatic status, and no holding. |
+| `D-20` | **Combat targeting is unrestricted by ownership and by diplomatic status, and an independent colony drafts militia in its own defence.** Any entity may be named as the target of a bombardment or an invasion. No status protects an entity from attack and none is required to attack one, so an ally may be fired on without warning. Independence confers no protection either, and an independent colony resists invasion with militia exactly as an owned one does. | Settles the militia question `D-19` added to `GAP-22`; that gap is restated without it and the rest of it stands. Stated as fact rather than left to silence: no source restricts targeting, and [§14.11](#1411-ground-combat-units) makes soldiers, militia, military robots, and assault craft usable against "any entity", the sole exception being assault weapons, restricted to surface colonies on physical grounds. Recording it matters because [§4.8](#48-ownership-and-independence) closes `Transfer`, `Pick Up`, `Give`, `Load Cargo`, and `Unload` against independent entities, leaving invasion the only route back into play; that route now rests on a stated rule rather than on an absence, and a later decision restricting targeting would make independence permanent. Taking an independent colony is not free: militia are drafted up to half its population ([§14.13](#1413-militia)), so a large one resists in proportion to its size, while an independent ship raises none and falls to any force that reaches it. Professionals are not ground combat units, so invasion delivers soldiers; a professional enters an entity only once a player owns it again. |
 
 ### 0.5 Notation and conventions
 
@@ -425,7 +426,16 @@ itself, by trainee graduation or soldier retirement, leaves it independent, beca
 Independent entities are not valid targets for `Transfer`, `Pick Up`, `Give`, `Load Cargo`, or `Unload`, so goods and
 population cannot be moved into or out of one. Any order requiring a diplomatic status of the target's owner fails
 against an independent entity, which has no owner to hold a status. Invasion is therefore the only route by which a
-player places population in one ([§14.16](#1416-invasion-resolution)).
+player places population in one, and independence confers no protection against it
+([§14.16](#1416-invasion-resolution), `D-20`). An independent colony still drafts militia up to half its population
+([§14.13](#1413-militia)), so a populous one is expensive to take rather than free. Professionals are not ground combat
+units, so an invasion delivers soldiers; a professional enters an entity only once a player owns it again.
+
+Invasion is the only such route **in the order set as it stands**. `Beam` is undesigned (`GAP-30`) and resolves in the
+Transfer stage (`D-08`), which suggests it conveys mass; if it conveys population, a ship could beam a single
+professional into an independent entity and take it without a battle, defeating both the blockade above and the militia
+defence. Whether `Beam` carries population, and whether it may target an entity with no owner, must be settled when it
+is designed.
 
 **Consequences for holding.** An independent entity has no owner, so no player holds it ([§18.2](#182-holding)). A
 planet is held by a player only when that player holds every colony on or orbiting it, so a single independent colony
@@ -1409,6 +1419,17 @@ Additional rules:
 
 ## 14. Combat
 
+**Targeting.** Any entity may be named as the target of a bombardment or an invasion order. Ownership does not restrict
+targeting and neither does diplomatic status: no status protects an entity from attack, and none is required to attack
+one. A player may fire on a `Friend` or an `Ally` without warning, and the attack does not itself change the status,
+since [§15.1](#151-diplomatic-status) states exhaustively how each status is established and combat is not among the
+ways. [§15.2](#152-rights-conferred) governs cooperation only. An entity owned by no player is targetable on the same
+terms, and independence confers no protection ([§4.8](#48-ownership-and-independence), `D-20`).
+
+The constraints on attacking are physical rather than political: sensors ([§14.9](#149-sensor-requirements-for-firing)),
+range and delivery ([§14.11](#1411-ground-combat-units)), and the bar on a surface colony firing energy weapons at
+another surface colony ([§14.7](#147-energy-weapons)).
+
 ### 14.1 Execution sequence
 
 See [§3.1](#31-combat-orders-stage). Player order-writing sequence does not affect combat resolution except where
@@ -1609,6 +1630,10 @@ If an invaded colony's combat factors do not match the invader's, the colony dra
 population, or enough to match the invader's combat factors, whichever is less. Militia cannot use assault weapons or
 assault craft. Militia return to their source population types when the battle ends.
 
+An **independent** colony drafts militia on the same terms (`D-20`). The draft is automatic and needs no order, so
+having no owner does not prevent it, and a large independent colony resists in proportion to its population
+([§4.8](#48-ownership-and-independence)).
+
 ### 14.14 Surrender check
 
 If one side's combat factors exceed the other's by more than 6 to 1, the weaker side surrenders. This is checked for
@@ -1651,10 +1676,11 @@ A captured entity's population transfers with it and keeps its race (`D-16`, [§
 the only way a player comes to hold population of a race other than its own.
 
 **Independent entities.** An independent entity holds no soldiers by definition
-([§4.8](#48-ownership-and-independence)), so it has no standing defending troops and the first row applies to it on the
-turn it is invaded. It becomes the property of the owner of the largest invading force, which is how a player places
-population in one. Whether it drafts militia in its own defence, having no owner to raise them, is not specified
-(`GAP-22`).
+([§4.8](#48-ownership-and-independence)), so it has no standing defending troops. An independent **colony** is not
+undefended for that reason: it drafts militia like any other, up to half its population
+([§14.13](#1413-militia), `D-20`), and a populous one is expensive to take. An independent **ship** raises no militia,
+colonies alone drafting them, and falls to any force that reaches it. Either way the invader becomes the owner under
+the first row, which is how a player places population in one.
 
 How "largest invading force" is measured is not specified (`GAP-22`).
 
@@ -2189,7 +2215,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 
 | ID       | Gap                                                                                                                                                                                                                               |
 |----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. Whether **militia** take casualties at all: they contribute combat factors but are absent from the loss-distribution rule ([§14.15](#1415-casualties)). If they do take casualties, which Living types and cadre are eligible for the militia draft, and how losses distribute across them, must also be settled. Whether an **independent** entity drafts militia in its own defence, having no owner to raise them, is undecided (`D-19`): if it does, a large independent colony resists invasion in proportion to its population; if it does not, any invading force takes it uncontested. |
+| `GAP-22` | **Ground combat details.** How "largest invading force" is measured; the wounded-versus-dead split of casualties; how multi-turn battle state is stored; how combat factors map back to specific unit `TL`s when applying losses. Whether **militia** take casualties at all: they contribute combat factors but are absent from the loss-distribution rule ([§14.15](#1415-casualties)). If they do take casualties, which Living types and cadre are eligible for the militia draft, and how losses distribute across them, must also be settled. `D-20` settles that an independent colony drafts militia like any other ([§14.13](#1413-militia)), so the eligibility and casualty questions above apply to it unchanged. |
 | `GAP-40` | **Unimplemented combat features.** Excluding friends and allies from close proximity targeting. Rebel activities described as intended rather than implemented.                                                                   |
 | `GAP-41` | **Orbit decay.** The docking-protection rule for ships without space drives is recorded as not implemented.                                                                                                                       |
 | `GAP-53` | **Military supplies status.** The handbook's item chart annotates `CSUP` "to be deleted", meaning its assembly and operational status should be re-examined, not that the item is removed (`D-11`). Whether `CSUP` should be an assembly item, what its operating requirements are, and whether rebels consume it as well as soldiers, is unreviewed. Not a blocker and not on the roadmap; the item stands as written until then. |
@@ -2202,7 +2228,7 @@ A gap is a rule the sources do not supply. Implementations must not fill a gap b
 | `GAP-27` | **Victory evaluation.** Whether victory is checked every turn; how the game ends; what happens when two conditions are satisfied on the same turn, which the handbook addresses only in passing, in the Diplomacy chapter, with "there can only be one Winner". `H`, the number of habitable planets in the cluster, follows from `GAP-01`, as does whether players are told what `H` is. |
 | `GAP-28` | **Markets.** The orders grammar contains `SELL` and `BUY`. No market, price, or trading mechanic exists in any source.                                                                                                                                                                                                                                                                         |
 | `GAP-29` | **Espionage.** `SPY` is adopted by `D-04` with no rules. The handbook describes a superspy concept explicitly as not implemented. An espionage mechanic must be designed: what a spy does, where it operates, how it is detected, and how it interacts with police, special agents, and rebels.                                                                                                |
-| `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. `D-08` places the `Beam` order in the Transfer stage, between `Transfer` and `Pick Up`, which suggests beaming conveys mass rather than damaging a target. What beaming does, what it targets, its range, and whether it draws on transport capacity must still be designed. |
+| `GAP-30` | **Beamer.** `BMR` is adopted by `D-04` with a mass, a cost, an operating requirement, and an output of `5000 × TL^2` `MU` beamed. `D-08` places the `Beam` order in the Transfer stage, between `Transfer` and `Pick Up`, which suggests beaming conveys mass rather than damaging a target. What beaming does, what it targets, its range, and whether it draws on transport capacity must still be designed. Two questions are now load-bearing rather than incidental: whether `Beam` conveys **population**, and whether it may target an entity with **no owner**. If both were yes, a ship could beam a single professional into an independent entity and take it without a battle, bypassing the order blockade of [§4.8](#48-ownership-and-independence) and the militia defence of `D-20`, and making independence trivially reversible at range by whoever arrives first — the outcome `D-19` exists to prevent. |
 | `GAP-31` | **Prototype as a unit.** `PRTO` is adopted by `D-04`. Whether it is a distinct manufacturable unit, or a marker for any item held above the player's `TL` as in [§8.4](#84-prototypes), must be decided; the two models are not compatible as written.                                                                                                                                         |
 | `GAP-32` | **Cadre model, residual cases.** `D-12` settles the model itself ([§5.2](#52-living-types-and-cadre-assignments)). `D-13` settles how a cadre is released and `D-14` separates migration from assignment. Two cases remain. (a) `units.md` scopes `WRKR` to `FACT`, `FARM`, and `MINE`, while [§19.4](#194-operating-requirements) also gives laboratories a labor requirement; whether laboratory staff are `WRKR` is undecided. (b) `SPY` has no rules at all (`GAP-29`). |
 | `GAP-33` | **Race in order syntax.** `D-15` defines a race and `D-16` settles its statistics and how one is acquired. What remains is the order syntax, which the handbook states three incompatible ways: `Pick Up`'s format carries a `Race ID#` bound to the population unit; `Draft` and `Disband` say a `Race ID#` is mandatory while their formats have no field for it; `Pay` says race IDs are not used at all. Which orders take a race, and where in the syntax, must be settled with the order set (`GAP-51`). |
