@@ -24,7 +24,7 @@ implementation is wrong; resolve the disagreement by amending this manual first.
 | Turn sequence (`docs/turn-sequence.md`)      | **Normative input**           | The design owner's own specification of the turn sequence. Where it and the handbook differ, it governs (`D-08`). Its content is absorbed into [§3](#3-turn-processing-sequence).                       |
 | Orders grammar (`docs/orders-grammar.txt`)   | **Not a source**              | Incomplete and describes an order set that does not match the handbook. Excluded until the order set is decided. See [GAP-51](./conflicts-and-gaps.md#21-gaps).                                                               |
 | Entity model (`docs/entity-model.md`)        | **Not a source**              | Downstream of this manual, not input to it. Records how an implementation may represent ownership and the direction of orders (`D-19`). Not normative; where it and this manual disagree, this manual governs. |
-| Conflicts and gaps (`docs/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](./conflicts-and-gaps.md#04-decisions-on-record), [§20](./conflicts-and-gaps.md#20-source-conflicts), and [§21](./conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `D-nn`, `CONFLICT-nn`, and `GAP-nn` tag in this manual resolves there. It records how the rules got here; this manual states where they got to. |
+| Conflicts and gaps (`docs/conflicts-and-gaps.md`) | **Not a source**         | Tracking document. Holds [§0.4](./conflicts-and-gaps.md#04-decisions-on-record), [§20](./conflicts-and-gaps.md#20-source-conflicts), and [§21](./conflicts-and-gaps.md#21-gaps): the decisions taken, the source conflicts, and the gaps. Every `CONFLICT-nn` and `GAP-nn` tag in the rules text resolves there, as does every `D-nn` cited in this table. The rules text itself cites no decisions. It records how the rules got here; this manual states where they got to. |
 | Home world setup (`docs/home-world-setup.md`) | **Normative**, for the starting state only | Holds the contents of the two starting colonies in seed form, and the arithmetic that closes them (`D-21`). [§1.7](#17-starting-position) fixes the shape of the starting position and governs where the two overlap; the rest of this manual governs unconditionally. That document states a starting state, never a rule. |
 
 No text in this manual is copied from the handbook. All rules are restated.
@@ -40,18 +40,20 @@ No text in this manual is copied from the handbook. All rules are restated.
 
 Both tags resolve in [`conflicts-and-gaps.md`](./conflicts-and-gaps.md), which holds
 [§20](./conflicts-and-gaps.md#20-source-conflicts) and [§21](./conflicts-and-gaps.md#21-gaps). That document tracks
-what is unsettled; this one states what is settled.
+what is unsettled and records the decisions that settled the rest; this one states the rules themselves. A tag is the
+only thing in the rules text that points outside it.
 
 ### 0.4 Decisions on record
 
 Moved to [`conflicts-and-gaps.md`](./conflicts-and-gaps.md#04-decisions-on-record).
 
-A `D-nn` tag in this manual marks a decision taken by the design owner, closing a source conflict or an open question.
-The decisions themselves, with the reasoning and the consequences of each, are recorded in that document. Entries are
+A `D-nn` is a decision taken by the design owner, closing a source conflict or an open question. The decisions
+themselves, with the evidence weighed and the consequences of each, are recorded in that document. Entries are
 append-only and are never rewritten, so a later decision supersedes an earlier one rather than replacing it.
 
-The rules below are stated as they stand after every decision on record. A reader who wants only the rules does not
-need that document; a reader who wants to know why a rule reads as it does will find it there.
+The rules text does not cite them. [§1](#1-universe-model) through [§23](#23-constants-and-limits) state the rules as
+they stand after every decision on record, without saying which decision put them there. A reader who wants the rules
+needs nothing else; a reader who wants to know why a rule reads as it does will find that in the tracking document.
 
 ### 0.5 Notation and conventions
 
@@ -71,7 +73,7 @@ never interchangeable in this manual:
 
 | Term        | Relation                                                                | Defined in                            |
 |-------------|-------------------------------------------------------------------------|---------------------------------------|
-| **Owns**    | A player to an entity. An entity has one owner or none (`D-19`).        | [§4.8](#48-ownership-and-independence) |
+| **Owns**    | A player to an entity. An entity has one owner or none.        | [§4.8](#48-ownership-and-independence) |
 | **Holds**   | A player or a race to a colony or a planet. Computed, never ordered.    | [§18.2](#182-holding)                  |
 | **Controls** | A surface colony to a planet and its orbit. An exclusive claim, ordered. | [§16.1](#161-control-planet)           |
 
@@ -153,19 +155,19 @@ Some home-planet deposits are unlimited in size. Which ones, and how many deposi
 ### 1.7 Starting position
 
 This section fixes the shape of the starting position. What the two colonies contain — population by Living type and
-cadre, assembled items, Storage Inventory, stockpiles, and structure — is fixed by `D-21` and tabulated in
+cadre, assembled items, Storage Inventory, stockpiles, and structure — is tabulated in
 [`home-world-setup.md`](./home-world-setup.md), which is normative for it.
 
 At game start each player has:
 
 - One star system with one star and several planets, the player's **home system**.
 - At least one terrestrial planet with Habitability Factor 25 in orbit 3, the **home planet**.
-- Three deposits of unlimited size on the home planet: `Fuel` at 80% yield, `Metals` at 40%, `Non-Metals` at 40%
-  (`D-23`). These are the deposits the starting mine groups occupy.
+- Three deposits of unlimited size on the home planet: `Fuel` at 80% yield, `Metals` at 40%, `Non-Metals` at 40%.
+  These are the deposits the starting mine groups occupy.
 - One Open Surface Colony (`OPC`) on the home planet, at `0/0/0`.
 - One Orbiting Colony (`OBC`) in the home planet's orbit, at tactical distance 1 from `0/0/0`.
-- Tech Level 1 in every item type (`D-24`).
-- A single race, comprising the whole of that home world's population (`D-15`).
+- Tech Level 1 in every item type.
+- A single race, comprising the whole of that home world's population.
 - No ships.
 
 The number of other planets in the home system, their types and orbits, and their deposits are generated like any other
@@ -175,8 +177,8 @@ Both starting colonies are **home colonies**: a home colony may never be given a
 ([§15.3](#153-give)), including after it changes hands. The starting `OPC` controls the home planet and its orbit from
 turn 1; this control is seeded and is not ordered, by exception to [§16.1](#161-control-planet).
 
-Both are built of `STRC`. `STRL` may be manufactured only in an orbiting colony (`D-06`,
-[§7.4](#74-factories-and-manufacturing)), so it cannot exist before one does.
+Both are built of `STRC`. `STRL` may be manufactured only in an orbiting colony
+([§7.4](#74-factories-and-manufacturing)), so it cannot exist before one does.
 
 The `OBC` produces no food. `Farms-1` may exist only in an `OPC` and `Farms-2` … `Farms-5` require a Tech Level the
 player does not have, so the `OBC` is fed by transfer from the `OPC` every turn, by construction. It burns no fuel for
@@ -279,7 +281,7 @@ Per ship, in order:
 7. Population changes: **deaths**. Life supports consume their fuel or power at this step. **Ships have no births.**
 8. Statistics update.
 
-Population changes are split across two steps (`D-08`): graduations and retirements are applied before production, so
+Population changes are split across two steps: graduations and retirements are applied before production, so
 the turn's new professionals are available to the turn's production, while births and deaths are applied after
 consumption and rebel actions.
 
@@ -312,7 +314,7 @@ An **Entity** (`S/C`) is a ship or a colony. Both hold items, population, resour
 - Assembled structure must enclose the volume of all of the entity's items, resources, and population, **except** that
   in `OPC` and `ESC` colonies,
   `Metals` and `Non-Metals` are stored outside the structure and consume no enclosed volume.
-- That exception is the only one (`D-22`). Goods held in the population's stockpiles ([§6.4](#64-stockpiles)) are
+- That exception is the only one. Goods held in the population's stockpiles ([§6.4](#64-stockpiles)) are
   enclosed exactly as the same goods in Storage Inventory are; the stockpile is a separate ledger, not a separate
   place. Cargo hold contents are enclosed at 50% of normal volume and are bounded by the ship's Space Available
   ([§4.4](#44-cargo-holds)). Whether work in process consumes enclosed volume is still open (`GAP-12`).
@@ -328,10 +330,8 @@ An **Entity** (`S/C`) is a ship or a colony. Both hold items, population, resour
 | `OBC`       | 8                        |
 | `Ship`      | 8                        |
 
-Ships take the orbiting colony ratio by decision (`D-10`); no source supplies one.
-
 **Enclosure.** One assembled `Structure` or `Light Structure` unit encloses `TL^2 / StructureRatio` volume units, where
-`TL` is the tech level of that structure unit and `StructureRatio` is that of the entity it is assembled in (`D-05`).
+`TL` is the tech level of that structure unit and `StructureRatio` is that of the entity it is assembled in.
 
 - **Enclosure capacity** of an entity is the sum of `TL^2 / StructureRatio` over its assembled structure units.
 - **Space Available** = enclosure capacity − the volume of the contents that must be enclosed.
@@ -339,7 +339,7 @@ Ships take the orbiting colony ratio by decision (`D-10`); no source supplies on
   times less in an `OBC` than in an `OPC`. Structure moved between entities of different type changes the volume it
   encloses.
 - `Structure` and `Light Structure` of the same `TL` enclose the same volume. They differ in mass, build cost, stowed
-  volume, and where they may be manufactured (`D-06`, [§7.4](#74-factories-and-manufacturing)).
+  volume, and where they may be manufactured ([§7.4](#74-factories-and-manufacturing)).
 - The negative assembled volume of structure ([§19.1](#191-assembly-and-volume-model)) has magnitude
   `TL^2 / StructureRatio`. An assembled structure unit is never itself counted among the contents to be enclosed.
 - Unassembled structure in Storage Inventory occupies its unassembled volume like any other item and is enclosed like
@@ -416,7 +416,7 @@ A colony created this turn cannot unload a ship, because no ship can be docked t
 ### 4.8 Ownership and independence
 
 Entities are the only objects that receive orders. An entity is owned by exactly one player, or by none, in which case
-it is **independent** (`D-19`). An entity executes orders from its owner and from no one else; an independent entity
+it is **independent**. An entity executes orders from its owner and from no one else; an independent entity
 executes no orders at all.
 
 **Independence test.** An owned entity becomes independent when it holds no Soldier and no Professional. Population
@@ -427,7 +427,7 @@ however large it is.
 
 **Entering independence.** An entity that fails the test becomes independent immediately, in the stage in which it
 fails. Nothing is destroyed or removed. It keeps its items, resources, stockpiles, cargo, population, planetary
-control, and `S/C ID#`, and its population keeps its race (`D-16`).
+control, and `S/C ID#`, and its population keeps its race.
 
 **Leaving independence.** An independent entity becomes the property of the first player to place a Soldier or
 Professional in it. Population already inside it cannot do this: a professional that an independent entity produces for
@@ -437,12 +437,12 @@ Independent entities are not valid targets for `Transfer`, `Pick Up`, `Give`, `L
 population cannot be moved into or out of one. Any order requiring a diplomatic status of the target's owner fails
 against an independent entity, which has no owner to hold a status. Invasion is therefore the only route by which a
 player places population in one, and independence confers no protection against it
-([§14.16](#1416-invasion-resolution), `D-20`). An independent colony still drafts militia up to half its population
+([§14.16](#1416-invasion-resolution)). An independent colony still drafts militia up to half its population
 ([§14.13](#1413-militia)), so a populous one is expensive to take rather than free. Professionals are not ground combat
 units, so an invasion delivers soldiers; a professional enters an entity only once a player owns it again.
 
 Invasion is the only such route **in the order set as it stands**. `Beam` is undesigned (`GAP-30`) and resolves in the
-Transfer stage (`D-08`), which suggests it conveys mass; if it conveys population, a ship could beam a single
+Transfer stage, which suggests it conveys mass; if it conveys population, a ship could beam a single
 professional into an independent entity and take it without a battle, defeating both the blockade above and the militia
 defence. Whether `Beam` carries population, and whether it may target an entity with no owner, must be settled when it
 is designed.
@@ -472,7 +472,7 @@ Every population unit, of every type:
 | Requires                | Food; consumer goods (except Unemployables); life support outside `OPC` |
 | Race                    | Exactly one, fixed for the life of the unit                            |
 
-**Races.** A race is the entire population of one home world at the start of a new game (`D-15`). Each player begins
+**Races.** A race is the entire population of one home world at the start of a new game. Each player begins
 with exactly one race, so at game start the number of races equals the number of players. The engine assigns each race
 a sequential `Race ID#`. The numbering is not confidential: every player knows how many players and races a game has,
 so a sequential ID discloses nothing.
@@ -480,14 +480,14 @@ so a sequential ID discloses nothing.
 Population is tracked per race. A `Pick Up` order names the population type and its race together, in the position
 `Item-TL` occupies for an item ([§9.3](#93-pick-up)).
 
-Races are identical in every statistic and differ only in identity (`D-16`). A player comes to hold population of
+Races are identical in every statistic and differ only in identity. A player comes to hold population of
 another race only by **capturing another player's ship or colony** ([§14.16](#1416-invasion-resolution)); until a player
 takes an enemy entity, everything it owns is its own race. A unit's race never changes, including when its entity
 changes owner, because race decides the Race victory ([§18.4](#184-race-victory)).
 
 ### 5.2 Living types and cadre assignments
 
-Population is tracked by two independent mechanisms (`D-14`):
+Population is tracked by two independent mechanisms:
 
 - **Category migration** moves a population unit from one Living type to another. The Living counts change. Migration
   is automatic except for the draft and disband of soldiers.
@@ -515,7 +515,7 @@ Population is tracked by two independent mechanisms (`D-14`):
 | Rebels `RBL`          | Any Living type             | Arrest, which migrates the unit to Unemployables; or death      | None. Never work. See [§5.7](#57-rebels).                            |
 | Spies `SPY`           | Not specified (`GAP-29`)    | Not specified                                                   | Not specified                                                        |
 
-How cadre are counted (`D-12`):
+How cadre are counted:
 
 - A population unit is counted **once**. Its 1 `MU`, 1 `VU`, food, and life support requirement belong to the unit, never
   to the assignment. A cadre adds no mass, volume, food, or consumer goods of its own.
@@ -525,7 +525,7 @@ How cadre are counted (`D-12`):
 - An assigned unit is unavailable for any other work.
 - `WRKR` records the population filling the direct labor requirements of [§19.4](#194-operating-requirements). It is a
   record of those requirements being met, never an additional requirement on top of them.
-- Disbanding a cadre ends the assignment and frees the units for reassignment (`D-13`). No unit is lost or downgraded by
+- Disbanding a cadre ends the assignment and frees the units for reassignment. No unit is lost or downgraded by
   being assigned and released. Disbanding **soldiers** is not this: it is a migration back to Unskilled.
 
 ### 5.3 Derived and transient population states
@@ -603,7 +603,7 @@ Rebel activity escalates with rebel numbers and malcontent percentage:
 | Riots          | Destruction of randomly selected units, plus deaths                      |
 
 Rebels are excluded from the independence test, so an entity whose every soldier and professional is assigned to `RBL`
-becomes independent and passes out of its owner's hands ([§4.8](#48-ownership-and-independence), `D-19`). Whether
+becomes independent and passes out of its owner's hands ([§4.8](#48-ownership-and-independence)). Whether
 rebels count toward the **race** holding test is still open (`GAP-56`).
 
 Thresholds, rates, magnitudes, durations, theft quantities, police effectiveness, and special agent effectiveness are
@@ -645,7 +645,7 @@ Default pay rates, in consumer goods per population unit per turn:
 - Constructor and special agent rates are derived from the rates they are composed of; whether they track changes to
   those rates is not specified (`GAP-43`).
 - A ship's crew is paid by the ship's home port colony.
-- The table is complete as the sources give it. Pay follows the assignment (`D-12`), and no rate is stated for the
+- The table is complete as the sources give it. Pay follows the assignment, and no rate is stated for the
   `WRKR`, `POL`, `RBL`, or `SPY` cadre (`GAP-58`).
 - Standard of Living is the pay rate times 4 ([§6.5](#65-standard-of-living)), so at these rates an entity reaches 1.0
   only if its average pay across its whole population, unemployables included, is 0.25.
@@ -773,7 +773,7 @@ Space effects:
 | Grouping           | Factories are assembled into **Factory Groups**; all factories in a group share one `TL`                    |
 | Product            | One item-`TL` at a time per group                                                                           |
 | Not manufacturable | Food, resources, population                                                                                 |
-| Restricted product | `Light Structure` may only be manufactured in an orbiting colony (`D-06`)                                   |
+| Restricted product | `Light Structure` may only be manufactured in an orbiting colony                                   |
 | Location           | Colonies only. Factory groups cannot be assembled in ships; unassembled factories may be carried in a ship. |
 | Labor              | 1 professional + 3 unskilled per factory                                                                    |
 | Fuel               | `0.5 × TL` per factory per turn                                                                             |
@@ -790,7 +790,7 @@ batchQuantityPerYear  = (20 × TL × factoryCount) / massPerItem
 ```
 
 `docs/units.md` states factory output as `20 × TL` mass **per turn**, four times this figure, and is in error
-(`CONFLICT-03`, closed by `D-03`).
+(`CONFLICT-03`).
 
 **Work In Process.** A batch advances one quarter per turn through four states. The whole batch advances together; a
 quarter of the batch is not finished each turn.
@@ -878,14 +878,14 @@ Whether solar power is available to surface colonies or ships in orbits 1–5 is
 | Rule           | Value                                                                                                    |
 |----------------|----------------------------------------------------------------------------------------------------------|
 | Range          | `TL-1` through `TL-200`                                                                                  |
-| Starting level | `TL-1` in every item type, in every game (`D-24`)                                                        |
+| Starting level | `TL-1` in every item type, in every game                                                        |
 | Advancement    | One `TL` at a time, in consecutive order; multiple steps may be taken in one turn                        |
 | Scope          | A player's `TL` is knowledge: the highest `TL` of an item type that player can manufacture               |
 | Possession     | A player may hold and use items at a `TL` above the player's own knowledge, acquired by capture or trade |
 | Immutability   | An item's `TL` is fixed when it is manufactured and never changes                                        |
 | Factory `TL`   | Does not limit the `TL` of what a factory can build; it only sets the factory's output capacity          |
 
-`docs/units.md` states the `TL` range as integers 0–10 and is in error (`CONFLICT-04`, closed by `D-02`).
+`docs/units.md` states the `TL` range as integers 0–10 and is in error (`CONFLICT-04`).
 
 ### 8.2 Research points
 
@@ -1215,7 +1215,7 @@ Shut-down items stay assembled, require no fuel, and employ no population.
 | Self-mass             | Hyper engine mass counts toward the mass being lifted                     |
 | Partial travel        | Never. If lift, fuel, or crew is insufficient, the whole order fails.     |
 
-`docs/units.md` gives hyper engine range as `sqrt(TL) + 4` `LY` and is in error (`CONFLICT-07`, closed by `D-03`).
+`docs/units.md` gives hyper engine range as `sqrt(TL) + 4` `LY` and is in error (`CONFLICT-07`).
 
 ### 11.2 Jump
 
@@ -1438,7 +1438,7 @@ targeting and neither does diplomatic status: no status protects an entity from 
 one. A player may fire on a `Friend` or an `Ally` without warning, and the attack does not itself change the status,
 since [§15.1](#151-diplomatic-status) states exhaustively how each status is established and combat is not among the
 ways. [§15.2](#152-rights-conferred) governs cooperation only. An entity owned by no player is targetable on the same
-terms, and independence confers no protection ([§4.8](#48-ownership-and-independence), `D-20`).
+terms, and independence confers no protection ([§4.8](#48-ownership-and-independence)).
 
 The constraints on attacking are physical rather than political: sensors ([§14.9](#149-sensor-requirements-for-firing)),
 range and delivery ([§14.11](#1411-ground-combat-units)), and the bar on a surface colony firing energy weapons at
@@ -1644,7 +1644,7 @@ If an invaded colony's combat factors do not match the invader's, the colony dra
 population, or enough to match the invader's combat factors, whichever is less. Militia cannot use assault weapons or
 assault craft. Militia return to their source population types when the battle ends.
 
-An **independent** colony drafts militia on the same terms (`D-20`). The draft is automatic and needs no order, so
+An **independent** colony drafts militia on the same terms. The draft is automatic and needs no order, so
 having no owner does not prevent it, and a large independent colony resists in proportion to its population
 ([§4.8](#48-ownership-and-independence)).
 
@@ -1686,13 +1686,13 @@ soldier can be wounded in ground combat. Whether that is intended is `GAP-22`.
 | Neither side eliminated                                             | The battle continues into the following turn                                                                                                                                   |
 | Multiple simultaneous invaders                                      | One invader wins control. The others continue invading until they order a withdrawal. Supporters remain as long as invaders remain.                                            |
 
-A captured entity's population transfers with it and keeps its race (`D-16`, [§5.1](#51-common-properties)). Capture is
+A captured entity's population transfers with it and keeps its race ([§5.1](#51-common-properties)). Capture is
 the only way a player comes to hold population of a race other than its own.
 
 **Independent entities.** An independent entity holds no soldiers by definition
 ([§4.8](#48-ownership-and-independence)), so it has no standing defending troops. An independent **colony** is not
 undefended for that reason: it drafts militia like any other, up to half its population
-([§14.13](#1413-militia), `D-20`), and a populous one is expensive to take. An independent **ship** raises no militia,
+([§14.13](#1413-militia)), and a populous one is expensive to take. An independent **ship** raises no militia,
 colonies alone drafting them, and falls to any force that reaches it. Either way the invader becomes the owner under
 the first row, which is how a player places population in one.
 
@@ -1761,7 +1761,7 @@ There is no limit on the number of friends or allies.
 
 Diplomacy orders take effect in the Permission Orders stage and are in force for every later stage of the same turn.
 
-A `Master / Client` status is **not in the game** (`D-19`). The handbook described it as under consideration; it is not
+A `Master / Client` status is **not in the game**. The handbook described it as under consideration; it is not
 on the roadmap, and the name is reserved rather than reused.
 
 An independent entity has no owner and therefore holds no diplomatic status in either direction. Every right in the
@@ -1829,7 +1829,7 @@ captured or destroyed and the planet stays closed to colonisation meanwhile.
 
 ### 17.1 Draft
 
-Processed in the Draft Orders stage. The order does one of two different things (`D-14`):
+Processed in the Draft Orders stage. The order does one of two different things:
 
 | Drafting into                            | Effect                                                                                              |
 |------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -1839,12 +1839,12 @@ Processed in the Draft Orders stage. The order does one of two different things 
 
 ### 17.2 Disband
 
-The inverse of `Draft`, and likewise two different things (`D-14`). Processed in the Draft Orders stage.
+The inverse of `Draft`, and likewise two different things. Processed in the Draft Orders stage.
 
 | Disbanding                                     | Effect                                                                                           |
 |------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | Soldiers                                       | **Migration.** The soldier count falls and the unskilled count rises.                            |
-| Constructors, police, trainees, special agents | **Assignment ends.** No Living count changes; the units become available for reassignment (`D-13`). |
+| Constructors, police, trainees, special agents | **Assignment ends.** No Living count changes; the units become available for reassignment. |
 
 Disbanding costs nothing and destroys nothing. A disbanded special agent is an available professional again, not a
 demoted one.
@@ -1896,7 +1896,7 @@ characters including spaces.
 
 | Order    | Status                                                                                  |
 |----------|-----------------------------------------------------------------------------------------|
-| `Accept` | **Not in the game** (`D-09`). Proposed, but not on the roadmap for implementation. (`GAP-38`) |
+| `Accept` | **Not in the game**. Proposed, but not on the roadmap for implementation. (`GAP-38`) |
 | `Supply` | No longer functional. It formerly sent fuel to forces engaged in a battle. (`GAP-39`)   |
 
 ---
@@ -1907,7 +1907,7 @@ characters including spaces.
 
 A player wins total victory when no other **active** position owns any entity ([§0.5](#05-notation-and-conventions)).
 
-A player is **eliminated** when it owns no entity (`D-19`). Elimination needs no separate trigger: a player whose
+A player is **eliminated** when it owns no entity. Elimination needs no separate trigger: a player whose
 entities all fall independent — through losing their last soldiers and professionals, through rebellion, or through
 capture — owns nothing and is eliminated by that fact. Entities that have gone independent are owned by no position and
 so obstruct no one's total victory, though they go on denying planets under [§18.2](#182-holding).
@@ -1921,10 +1921,10 @@ Planet` order ([§16.1](#161-control-planet)). The sources render all three with
 | Term                     | Definition                                                                                                          |
 |--------------------------|---------------------------------------------------------------------------------------------------------------------|
 | Colony held by a player  | The player owns the colony and it contains at least one `SOL` or `PRO` population unit outside the `RBL` cadre      |
-| Colony held by a race    | The race holds a **majority** of the colony's population, counting units of every type (`D-18`)                     |
+| Colony held by a race    | The race holds a **majority** of the colony's population, counting units of every type                     |
 | Planet held by a player  | The player holds **every** colony on or orbiting the planet. At least one colony must exist there.                  |
 | Planet held by a race    | The race holds a **majority** of the colonies on or orbiting the planet. At least one colony must exist there.      |
-| Majority                 | `floor(N × 0.5) + 1` of whatever is being counted: colonies on a planet, or population units in a colony (`D-17`)   |
+| Majority                 | `floor(N × 0.5) + 1` of whatever is being counted: colonies on a planet, or population units in a colony   |
 
 A majority is unique, so **at most one race holds a colony**. A colony in which no race has a majority is held by no
 race; it still counts toward `N` when a planet's colonies are counted, but toward no race's total.
@@ -1935,7 +1935,7 @@ owns the colony.
 
 **Independent entities.** An independent colony has no owner, so it is held by no player, and no player can hold a
 planet carrying one, since the planet test requires every colony on it
-([§4.8](#48-ownership-and-independence), `D-19`). Its population is unaffected and continues to count toward its race,
+([§4.8](#48-ownership-and-independence)). Its population is unaffected and continues to count toward its race,
 which may hold the colony and the planet outright. An abandoned colony therefore denies its planet to every player
 rather than becoming a free gain for whoever arrives first. A position whose account has left the game is a separate
 case: its entities keep their soldiers and professionals and are not independent, so it goes on holding through them.
@@ -1944,7 +1944,7 @@ Holding is counted by **position**, not by account ([§0.5](#05-notation-and-con
 left the game keeps its entities and goes on holding through them.
 
 Population assigned to the `RBL` cadre is excluded from the **player** test: a colony whose only soldiers and
-professionals are rebels is independent, so its owner no longer holds it and neither does anyone else (`D-19`). Whether
+professionals are rebels is independent, so its owner no longer holds it and neither does anyone else. Whether
 rebels count toward the **race** test is still open (`GAP-56`).
 
 ### 18.3 Solo victory
@@ -1955,7 +1955,7 @@ single player wins when both hold:
 - It holds at least `floor(H × 0.5) + 1` habitable planets, **and**
 - No other single **position** holds more than `ceil(H × 0.1) + 1` habitable planets.
 
-The rival test counts positions, not active accounts (`D-19`). A position whose account has left the game is still a
+The rival test counts positions, not active accounts. A position whose account has left the game is still a
 rival, and blocks a solo victory on exactly the terms it did while it was played.
 
 ### 18.4 Race victory
@@ -1966,11 +1966,11 @@ On the same terms, applied to races. A race wins when both hold:
 - No other single race holds more than `ceil(H × 0.1) + 1` habitable planets.
 
 Race holding is computed from population and not from ownership, in three steps: a race holds an entity by holding a
-majority of the population in it (`D-18`); the entities it holds decide which race holds each planet; and the habitable
+majority of the population in it; the entities it holds decide which race holds each planet; and the habitable
 planets it holds are what the two conditions above count. Every step is blind to who owns the entities, so independent
 entities count for their race exactly as owned ones do.
 
-A race victory is credited to every **active** player of that race — the race each player began with (`D-15`), fixed
+A race victory is credited to every **active** player of that race — the race each player began with, fixed
 for the game and unchanged by capturing population of any other. Players of that race whose accounts have left the game
 are credited nothing. Because the conditions are evaluated on population rather than on players, a race with no active
 players at all can satisfy them, in which case the victory is credited to no one.
@@ -2004,7 +2004,7 @@ this manual; see
 
 ### 19.2 Item classes and canonical codes
 
-Item codes are those of `docs/units.md` (`D-03`). Names in parentheses are the handbook's, where they differ.
+Item codes are those of `docs/units.md`. Names in parentheses are the handbook's, where they differ.
 
 | Class          | Members                                                                                                                                                                                        |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2107,7 +2107,7 @@ entity has no owner and is the actor of no order ([§4.8](#48-ownership-and-inde
 
 | Order                               | Actor   | Stage                       | Standing | Parameters                                                                                     |
 |-------------------------------------|---------|-----------------------------|----------|------------------------------------------------------------------------------------------------|
-| `Accept`                            | S/C     | —                           | no       | Not in the game (`D-09`)                                                                       |
+| `Accept`                            | S/C     | —                           | no       | Not in the game                                                                       |
 | `Beam`                              | S/C     | Transfer                    | no       | Undesigned (`GAP-30`). Resolves between `Transfer` and `Pick Up`                               |
 | `Add On`                            | S/C     | Setup                       | no       | quantity, item-`TL`, target entity, unassembled flag                                           |
 | `After-Maneuver Energy Weapon Fire` | S/C     | Combat / post-maneuver fire | no       | target, percentage, target category, distance abort                                            |
