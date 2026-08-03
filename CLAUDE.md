@@ -20,7 +20,7 @@ The manual's own §0.2 is the authority; the ranking is:
 | File | Status |
 |------|--------|
 | `docs/rules-manual.md` | **Normative.** Our own work, licensed to distribute. If it disagrees with an implementation, amend the manual first. |
-| `docs/player-handbook.pdf` | Informative. Third-party, **not redistributable**, gitignored, to be deleted once extraction is accepted. Read it for evidence; never copy its prose. |
+| `docs/player-handbook.pdf` | **Removed.** Third-party, not redistributable, never committed. Extraction is complete and accepted, and the file is gone; the source URL is recorded in `docs/README.md`. Anything it alone could answer — `CONFLICT-14`, `CONFLICT-15` — now needs a fresh copy. |
 | `docs/units.md` | Informative, work in progress. Source of canonical item codes only (`D-03`); several statistics are known errors. |
 | `docs/orders-grammar.txt` | **Not a source.** Describes an order vocabulary that does not match the handbook; excluded until the order set is decided (`GAP-51`). |
 
@@ -65,6 +65,6 @@ wrong foundational formulas are expensive to unwind once a data model depends on
 
 - `*-prompt.md` at the repo root are working prompts from the owner to the agent. They are
   gitignored and are task input, not project documentation.
-- `*.pdf` is gitignored, which is what keeps the unlicensed handbook out of the repository. Do not
-  commit it or quote it verbatim.
+- `*.pdf` is gitignored, which is what kept the unlicensed handbook out of the repository. It has
+  since been removed altogether. Do not commit a copy or quote it verbatim.
 - The project is MIT licensed; only our own work goes in.
